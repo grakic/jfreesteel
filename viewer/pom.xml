@@ -6,7 +6,9 @@
         <artifactId>jfreesteel-project</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+    <groupId>net.devbase.jfreesteel</groupId>
     <artifactId>serbianeidviewer</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <name>Serbian eID Viewer Application</name>
     <description>GUI application using the JFreesteel library</description>
     <build>
