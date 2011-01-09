@@ -151,7 +151,7 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
     private static void configureLog4j()
     {
         Properties properties = new Properties();
-        InputStream propertiesStream = SerbianEidViewer.class.getResourceAsStream("/log4j.properties");
+        InputStream propertiesStream = SerbianEidViewer.class.getResourceAsStream("/net/devbase/jfreesteel/viewer/log4j.properties");
         if (propertiesStream != null)
         {
             try
