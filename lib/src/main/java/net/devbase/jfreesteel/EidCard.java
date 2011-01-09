@@ -272,6 +272,7 @@ public class EidCard {
 		card = null;
 	}
 	
+	@Override
 	protected void finalize() throws Throwable
 	{
 		if(card != null) disconnect(false);

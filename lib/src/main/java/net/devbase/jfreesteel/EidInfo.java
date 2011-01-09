@@ -310,6 +310,7 @@ public class EidInfo {
 	}
 	
 	// For testing
+	@Override
 	public String toString()
 	{
 		return  givenName + " " + parentGivenName + " " + surname + "(" + personalNumber + "/" + sex + ")\n" +
