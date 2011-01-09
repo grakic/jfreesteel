@@ -22,10 +22,30 @@
                     <archive>
                         <manifest>
                             <mainClass>net.devbase.jfreesteel.viewer.SerbianEidViewer</mainClass>
+                            <classpathPrefix>${project.artifactId}-lib/</classpathPrefix>
                             <addClasspath>true</addClasspath>
                         </manifest>
                     </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <!--
+                            If the jfreesteel.jar is excluded, it will not be available
+                            in the serbianediviewer-lib/ classpath
+                            <excludeArtifactIds>jfreesteel</excludeArtifactIds>
+                            -->
+                            <outputDirectory>../target/${project.artifactId}-lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -39,6 +59,13 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.14</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.5.8</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>

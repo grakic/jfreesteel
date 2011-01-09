@@ -23,5 +23,6 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
+        <!-- Do we need slf4j-nop? (As of SLF4J version 1.6, it will default to a NOP implementation) -->
     </dependencies>
 </project>
