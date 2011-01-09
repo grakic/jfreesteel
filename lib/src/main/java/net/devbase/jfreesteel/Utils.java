@@ -38,27 +38,32 @@ public class Utils {
     
     public static String bytes2HexString(final byte[] bytes)
     {
-        String result = "", sep = "";
+        StringBuilder result = new StringBuilder();
+        String sep = "";
         for(byte b:bytes)
         {
         	if(sep == "" && b == 0x00) continue;
         	
-        	result += sep + String.format("%02X", b);
+        	result.append(sep);
+        	result.append(String.format("%02X", b));
         	sep = ":";
         }
-        return result;
-    }   
+        return result.toString();
+    }
     
     public static String map2UTF8String(Map<Integer, byte[]> map)
     {
-    	String out = "";
+    	StringBuilder out = new StringBuilder();
     	
     	for(Integer i:map.keySet())
     	{
-    		out += i + " = " + bytes2UTF8String(map.get(i)) + "\n";
+    		out.append(i);
+    		out.append(" = ");
+    		out.append(bytes2UTF8String(map.get(i)));
+    		out.append("\n");
     	}
     	
-    	return out;
+    	return out.toString();
     }
     
     public static String bytes2UTF8String(final byte[] bytes)

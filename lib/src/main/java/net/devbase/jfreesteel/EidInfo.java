@@ -131,39 +131,58 @@ public class EidInfo {
 	 */
 	public String getPlaceFull(String entranceLabelFormat, String floorLabelFormat, String appartmentLabelFormat)
 	{
-		String out = new String();
+		StringBuilder out = new StringBuilder();
 
 		if(entranceLabelFormat.isEmpty())   entranceLabelFormat = "%s";
 		if(floorLabelFormat.isEmpty())      floorLabelFormat = "%s";
 		if(appartmentLabelFormat.isEmpty()) appartmentLabelFormat = "%s";
 		
-		if(!street.isEmpty()) out += street;				           // Neka ulica
-		if(!houseNumber.isEmpty()) out += " " + houseNumber;           // Neka ulica 11
-		if(!houseLetter.isEmpty()) out += houseLetter;                 // Neka ulica 11A
+		if(!street.isEmpty()) out.append(street);			       // Neka ulica
+		if(!houseNumber.isEmpty())                                 // Neka ulica 11
+		{
+			out.append(" ");
+			out.append(houseNumber);
+		}
+		if(!houseLetter.isEmpty()) out.append(houseLetter);        // Neka ulica 11A
 		
 		// For entranceLabel = "ulaz %s" gives "Neka ulica 11A ulaz 2"
-		if(!entrance.isEmpty()) out += " " + String.format(entranceLabelFormat, entrance);
+		if(!entrance.isEmpty())
+		{
+			out.append(" ");
+			out.append(String.format(entranceLabelFormat, entrance));
+		}
 
 		// For floorLabel = "%s. sprat" gives "Neka ulica 11 ulaz 2, 5. sprat"
-		if(!floor.isEmpty()) out += ", " + String.format(floorLabelFormat, floor);
+		if(!floor.isEmpty())
+		{
+			out.append(", ");
+			out.append(String.format(floorLabelFormat, floor));
+		}
 
-		if(!appartmentNumber.isEmpty()) {
+		if(!appartmentNumber.isEmpty())
+		{
 			// For appartmentLabel "br. %s" gives "Neka ulica 11 ulaz 2, 5. sprat, br. 4"
-			if(!entrance.isEmpty() || !floor.isEmpty()) out += ", " + String.format(appartmentLabelFormat, appartmentNumber);
-			else out += "/" + appartmentNumber; // short form: Neka ulica 11A/4
+			if(!entrance.isEmpty() || !floor.isEmpty()) out.append(", " + String.format(appartmentLabelFormat, appartmentNumber));
+			else out.append("/" + appartmentNumber); // short form: Neka ulica 11A/4
 		}
 
-		out += "\n" + place;
-		if(!community.isEmpty()) out += ", " + community;
+		out.append("\n");
+		out.append(place);
+		if(!community.isEmpty())
+		{
+			out.append(", ");
+			out.append(community);
+		}
 
-		out += "\n";
-		if(state.contentEquals("SRB")) {
+		out.append("\n");
+		if(state.contentEquals("SRB"))
+		{
 			// small cheat for better output
-			out += "REPUBLIKA SRBIJA";
+			out.append("REPUBLIKA SRBIJA");
 		}
-		else out += state;
+		else out.append(state);
 		
-		return out;
+		return out.toString();
 	}
 
 	public String getPlaceOfBirthFull()
