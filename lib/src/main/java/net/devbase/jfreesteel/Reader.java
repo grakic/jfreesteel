@@ -23,6 +23,9 @@ import java.util.ListIterator;
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Reader class maintains the connection with the terminal and provides
  * an interface for your code to receive card insertion/removal events.
@@ -41,6 +44,7 @@ import javax.smartcardio.CardTerminal;
  */
 public class Reader {
 	
+	private static final Logger logger = LoggerFactory.getLogger(Reader.class);
 	/**
 	 * CardTerminal this Reader is assigned to
 	 */
@@ -110,13 +114,13 @@ public class Reader {
 	
     public void connect() throws CardException
     {
-    	System.out.println("Reader CONNECT");
+    	logger.info("Reader CONNECT");
     	eidcard = new EidCard(terminal.connect("*"));    	
     }
     
     public void disconnect() throws CardException
     {
-    	System.out.println("Reader DISCONNECT");
+    	logger.info("Reader DISCONNECT");
     	eidcard.disconnect(false);
     	eidcard = null;
     }

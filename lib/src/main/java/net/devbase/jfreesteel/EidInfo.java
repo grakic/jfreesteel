@@ -20,6 +20,9 @@ package net.devbase.jfreesteel;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Simple class to hold and reformat data read from eID
  * 
@@ -27,6 +30,8 @@ import java.util.Map;
  */
 public class EidInfo {
 
+	private final static Logger logger = LoggerFactory.getLogger(EidInfo.class);
+	
 	private String docRegNo;
 	private String issuingDate;
 	private String expiryDate;
@@ -90,7 +95,7 @@ public class EidInfo {
 
 	private void setResidenceInfo(final Map<Integer, byte[]> residence)
 	{
-		System.err.println(Utils.map2UTF8String(residence));
+		logger.error(Utils.map2UTF8String(residence));
 		
 		// tags: 1568 .. 1578
 		state            = Utils.bytes2UTF8String(residence.get(1568));

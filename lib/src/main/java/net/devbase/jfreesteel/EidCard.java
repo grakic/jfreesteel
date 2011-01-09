@@ -33,6 +33,9 @@ import javax.smartcardio.CardException;
 import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * EidCard is a wrapper providing an interface for reading data
@@ -49,6 +52,8 @@ import javax.smartcardio.ResponseAPDU;
  */
 public class EidCard {
 
+	private final static Logger logger = LoggerFactory.getLogger(EidCard.class);
+	
 	private Card card = null;
 	private CardChannel channel;
 	
@@ -172,7 +177,7 @@ public class EidCard {
     public Image readEidPhoto() throws CardException
     {
     	try {
-    		System.out.println("photo exclusive");
+    		logger.info("photo exclusive");
     		card.beginExclusive();
 
     		// Read binary into buffer
@@ -186,14 +191,14 @@ public class EidCard {
     	}
     	finally {
     		card.endExclusive();
-    		System.out.println("photo exclusive free");    		
+    		logger.info("photo exclusive free");    		
     	}
     }
     
     public EidInfo readEidInfo() throws CardException
     {
     	try {
-    		System.out.println("exclusive");
+    		logger.info("exclusive");
     		card.beginExclusive();
     		channel = card.getBasicChannel();
     		
@@ -205,16 +210,16 @@ public class EidCard {
     	}
     	finally {
     		card.endExclusive();
-    		System.out.println("exclusive free");    		
+    		logger.info("exclusive free");    		
     	}
     }
 
     public String debugEidInfo() throws CardException
     {
     	try {
-    		System.out.println("debug exclusive ask");
+    		logger.debug("debug exclusive ask");
     		card.beginExclusive();
-    		System.out.println("debug exclusive granted");
+    		logger.debug("debug exclusive granted");
 
     		channel = card.getBasicChannel();
     		
@@ -231,7 +236,7 @@ public class EidCard {
     	}
     	finally {
     		card.endExclusive();
-    		System.out.println("debug exclusive free");
+    		logger.debug("debug exclusive free");
     	}    	
     }
     

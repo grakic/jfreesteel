@@ -25,8 +25,11 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.smartcardio.CardException;
@@ -46,6 +49,9 @@ import net.devbase.jfreesteel.Reader;
 import net.devbase.jfreesteel.Reader.ReaderListener;
 import net.devbase.jfreesteel.gui.GUIPanel;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 /**
  * SerbianEidViewer is a singleton class behind SerbianEidViewer application
  * 
@@ -55,6 +61,8 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
 	
 	private static final long serialVersionUID = -2497143822816312498L;
 
+	private static final Logger logger = Logger.getLogger(SerbianEidViewer.class);
+	
 	private static final ResourceBundle bundle = ResourceBundle.getBundle("net.devbase.jfreesteel.viewer.viewer");
 
 	EidCard card = null;
@@ -132,6 +140,7 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
     
     public static void main(String[] args)
     {
+    	configureLog4j();
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();
@@ -139,6 +148,28 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
         });
     }
 
+	private static void configureLog4j()
+	{
+		Properties properties = new Properties();
+		InputStream propertiesStream = SerbianEidViewer.class.getResourceAsStream("/log4j.properties");
+		if (propertiesStream != null)
+		{
+			try
+			{
+				properties.load(propertiesStream);
+			}
+			catch (IOException e)
+			{
+				System.out.println(bundle.getString("Log4jReadError"));
+			}
+			PropertyConfigurator.configure(properties);
+		}
+		else
+		{
+			System.out.println(bundle.getString("Log4jMissing"));
+		}
+	}
+	 
     /**
      * Create the GUI and show it.
      */
@@ -165,7 +196,7 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
             		bundle.getString("GUIError") + ": " + e.getMessage(),
             		bundle.getString("GUIErrorTitle"),
                     JOptionPane.WARNING_MESSAGE);
-            e.printStackTrace();
+            logger.error("Error setting look and feel", e);
         }
         
         // Test for Java 1.6
@@ -189,7 +220,7 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
 					bundle.getString("ReaderError") + ": " + e.getMessage(),
 					bundle.getString("ReaderErrorTitle"),
 				    JOptionPane.ERROR_MESSAGE);
-			e.printStackTrace();
+			logger.error("Reader error", e);
 			System.exit(1);
 		}
 
@@ -230,12 +261,12 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
 				bundle.getString("CardError") + ": " + e.getMessage(),
 				bundle.getString("CardErrorTitle"),
 			    JOptionPane.ERROR_MESSAGE);
-		e.printStackTrace();
+		logger.error("Card error", e);
     }
     
 	public void inserted(final EidCard card)
 	{
-		System.out.println("Card inserted");
+		logger.info("Card inserted");
 		CardLayout cl = (CardLayout) this.getLayout();
 	    cl.show(this, "details");		
 		
@@ -271,7 +302,7 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
 
 	public void removed()
 	{
-		System.out.println("Card removed");
+		logger.info("Card removed");
 
 		CardLayout cl = (CardLayout) this.getLayout();
 	    cl.show(this, "splash");
