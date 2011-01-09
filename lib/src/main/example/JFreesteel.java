@@ -43,69 +43,69 @@ import net.devbase.jfreesteel.lib.Utils;
  */
 public class JFreesteel {
 
-	public static CardTerminal pickTerminal(List<CardTerminal> terminals)
-	{
-		if(terminals.size() > 1) {
-			System.out.println("Available readers:\n");
-			int c = 1;
-			for(Object t:terminals.toArray())
-			{
-				System.out.format("%d) %s\n", c++, t);
-			}
+    public static CardTerminal pickTerminal(List<CardTerminal> terminals)
+    {
+        if(terminals.size() > 1) {
+            System.out.println("Available readers:\n");
+            int c = 1;
+            for(Object t:terminals.toArray())
+            {
+                System.out.format("%d) %s\n", c++, t);
+            }
 
-			Scanner in = new Scanner(System.in);
-			while(true)
-			{
-				System.out.print("Select number: ");
-				System.out.flush();
+            Scanner in = new Scanner(System.in);
+            while(true)
+            {
+                System.out.print("Select number: ");
+                System.out.flush();
 
-				c = in.nextInt();
-				if(c > 0 && c < terminals.size()) return terminals.get(c);
-			}
-		}
-		else return terminals.get(0);
-	}
-		
-	public static void main(String[] args)
-	{
-		CardTerminal terminal = null;
-		
+                c = in.nextInt();
+                if(c > 0 && c < terminals.size()) return terminals.get(c);
+            }
+        }
+        else return terminals.get(0);
+    }
+        
+    public static void main(String[] args)
+    {
+        CardTerminal terminal = null;
+        
         // get the terminal
-		try {
-	        TerminalFactory factory = TerminalFactory.getDefault();
-	        terminal = pickTerminal(factory.terminals().list());
+        try {
+            TerminalFactory factory = TerminalFactory.getDefault();
+            terminal = pickTerminal(factory.terminals().list());
 
-			System.out.println("Using reader   : " + terminal);
-		} catch(CardException e) {
-			System.err.println("Missing card reader.");
-		}
-		
-		try {
-	        // establish a connection with the card
-			Card card = terminal.connect("*");
+            System.out.println("Using reader   : " + terminal);
+        } catch(CardException e) {
+            System.err.println("Missing card reader.");
+        }
+        
+        try {
+            // establish a connection with the card
+            Card card = terminal.connect("*");
 
-			// read eid data
-			EidCard eidcard = new EidCard(card);
-			EidInfo info    = eidcard.readEidInfo();
+            // read eid data
+            EidCard eidcard = new EidCard(card);
+            EidInfo info    = eidcard.readEidInfo();
 
-		    System.out.format("ATR            : %s\n", Utils.bytes2HexString(card.getATR().getBytes()));
-		    System.out.format("eID number     : %s\n", info.getDocRegNo());
-		    System.out.format("Issued         : %s\n", info.getIssuingDate());
-		    System.out.format("Valid          : %s\n", info.getExpiryDate());
-		    System.out.format("Issuer         : %s\n", info.getIssuingAuthority());
-		    System.out.format("JMBG           : %s\n", info.getPersonalNumber());
-		    System.out.format("Family name    : %s\n", info.getSurname());
-		    System.out.format("First name     : %s\n", info.getGivenName());
-		    System.out.format("Middle name    : %s\n", info.getParentGivenName());
-		    System.out.format("Gender         : %s\n", info.getSex());
-		    System.out.format("Place od birth : %s\n", info.getPlaceOfBirthFull().replace("\n", ", "));
-		    System.out.format("Date of birth  : %s\n", info.getDateOfBirth());
-		    System.out.format("Street address : %s, %s\n", info.getStreet(), info.getHouseNumber());
-		    System.out.format("City           : %s, %s, %s\n", info.getCommunity(), info.getPlace(), info.getState());
+            System.out.format("ATR            : %s\n", Utils.bytes2HexString(card.getATR().getBytes()));
+            System.out.format("eID number     : %s\n", info.getDocRegNo());
+            System.out.format("Issued         : %s\n", info.getIssuingDate());
+            System.out.format("Valid          : %s\n", info.getExpiryDate());
+            System.out.format("Issuer         : %s\n", info.getIssuingAuthority());
+            System.out.format("JMBG           : %s\n", info.getPersonalNumber());
+            System.out.format("Family name    : %s\n", info.getSurname());
+            System.out.format("First name     : %s\n", info.getGivenName());
+            System.out.format("Middle name    : %s\n", info.getParentGivenName());
+            System.out.format("Gender         : %s\n", info.getSex());
+            System.out.format("Place od birth : %s\n", info.getPlaceOfBirthFull().replace("\n", ", "));
+            System.out.format("Date of birth  : %s\n", info.getDateOfBirth());
+            System.out.format("Street address : %s, %s\n", info.getStreet(), info.getHouseNumber());
+            System.out.format("City           : %s, %s, %s\n", info.getCommunity(), info.getPlace(), info.getState());
 
-		} catch (CardException e) {
-			e.printStackTrace();
-		}
-	}
+        } catch (CardException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

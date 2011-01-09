@@ -29,8 +29,8 @@ public class Utils {
     
     public static String int2HexString(final int i)
     {
-    	return bytes2HexString(new byte[] {
-    			(byte)(i >>> 24),
+        return bytes2HexString(new byte[] {
+                (byte)(i >>> 24),
                 (byte)(i >>> 16),
                 (byte)(i >>> 8),
                 (byte) i});
@@ -42,41 +42,41 @@ public class Utils {
         String sep = "";
         for(byte b:bytes)
         {
-        	if(sep == "" && b == 0x00) continue;
-        	
-        	result.append(sep);
-        	result.append(String.format("%02X", b));
-        	sep = ":";
+            if(sep == "" && b == 0x00) continue;
+            
+            result.append(sep);
+            result.append(String.format("%02X", b));
+            sep = ":";
         }
         return result.toString();
     }
     
     public static String map2UTF8String(Map<Integer, byte[]> map)
     {
-    	StringBuilder out = new StringBuilder();
-    	
-    	for(Integer i:map.keySet())
-    	{
-    		out.append(i);
-    		out.append(" = ");
-    		out.append(bytes2UTF8String(map.get(i)));
-    		out.append("\n");
-    	}
-    	
-    	return out.toString();
+        StringBuilder out = new StringBuilder();
+        
+        for(Integer i:map.keySet())
+        {
+            out.append(i);
+            out.append(" = ");
+            out.append(bytes2UTF8String(map.get(i)));
+            out.append("\n");
+        }
+        
+        return out.toString();
     }
     
     public static String bytes2UTF8String(final byte[] bytes)
     {
-    	if(bytes == null) return "";
-    	
-    	try {
-    		return new String(bytes, "UTF-8");
-    	}
-    	catch(Exception e)
-    	{
-    		return new String(bytes);
-    	}
+        if(bytes == null) return "";
+        
+        try {
+            return new String(bytes, "UTF-8");
+        }
+        catch(Exception e)
+        {
+            return new String(bytes);
+        }
     }
     
 }

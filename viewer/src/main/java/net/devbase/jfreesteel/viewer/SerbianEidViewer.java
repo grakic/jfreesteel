@@ -58,30 +58,30 @@ import org.apache.log4j.PropertyConfigurator;
  * @author Goran Rakic <grakic@devbase.net>
  */
 public class SerbianEidViewer extends JPanel implements ReaderListener {
-	
-	private static final long serialVersionUID = -2497143822816312498L;
+    
+    private static final long serialVersionUID = -2497143822816312498L;
 
-	private static final Logger logger = Logger.getLogger(SerbianEidViewer.class);
-	
-	private static final ResourceBundle bundle = ResourceBundle.getBundle("net.devbase.jfreesteel.viewer.viewer");
+    private static final Logger logger = Logger.getLogger(SerbianEidViewer.class);
+    
+    private static final ResourceBundle bundle = ResourceBundle.getBundle("net.devbase.jfreesteel.viewer.viewer");
 
-	EidCard card = null;
-	EidInfo info = null;
-	Image photo  = null;
-	
-	GUIPanel details;
+    EidCard card = null;
+    EidInfo info = null;
+    Image photo  = null;
+    
+    GUIPanel details;
 
-	private static SerbianEidViewer instance = null;
-	
-	public SerbianEidViewer()
-	{
-		setSize(new Dimension(720, 350));
-		setLayout(new CardLayout(0, 0));
+    private static SerbianEidViewer instance = null;
+    
+    public SerbianEidViewer()
+    {
+        setSize(new Dimension(720, 350));
+        setLayout(new CardLayout(0, 0));
 
         /* Create "insert card" splash screen */
-		JPanel splash = new JPanel();
-		splash.setBackground(Color.WHITE);
-		splash.setLayout(new GridBagLayout());
+        JPanel splash = new JPanel();
+        splash.setBackground(Color.WHITE);
+        splash.setLayout(new GridBagLayout());
         ImageIcon insertCardIcon = new ImageIcon(getClass().getResource("/net/devbase/jfreesteel/viewer/smart-card-reader2.jpg"));
         JLabel label = new JLabel(bundle.getString("InsertCard"), insertCardIcon, SwingConstants.CENTER);
         label.setFont(label.getFont().deriveFont(label.getFont().getStyle() | Font.BOLD, label.getFont().getSize() + 4f));
@@ -91,56 +91,56 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
         
 
         /*
-		FIXME: card.debugEidInfo() is blocking on exclusive..
+        FIXME: card.debugEidInfo() is blocking on exclusive..
 
-		MyGUIPanel is extending toolbar with new button... but this is not working
+        MyGUIPanel is extending toolbar with new button... but this is not working
 
         class MyGUIPanel extends GUIPanel {
 
-        	private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			public MyGUIPanel()
-			{
-				super();
-		        JButton button = new JButton("Debug");
-		        button.setPreferredSize(new Dimension(130, 36));
-		        button.setSize(new Dimension(200, 0));
-		        button.addActionListener(new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						
-						try {
-							JOptionPane.showMessageDialog(MyGUIPanel.this, card.debugEidInfo());
-						} catch (HeadlessException e1) {
-							e1.printStackTrace();
-						} catch (CardException e1) {
-							e1.printStackTrace();
-						}
-						
-					}
-				});
-		        toolbar.add(button, BorderLayout.WEST);
-			}        	
+            public MyGUIPanel()
+            {
+                super();
+                JButton button = new JButton("Debug");
+                button.setPreferredSize(new Dimension(130, 36));
+                button.setSize(new Dimension(200, 0));
+                button.addActionListener(new ActionListener() {
+                    
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        
+                        try {
+                            JOptionPane.showMessageDialog(MyGUIPanel.this, card.debugEidInfo());
+                        } catch (HeadlessException e1) {
+                            e1.printStackTrace();
+                        } catch (CardException e1) {
+                            e1.printStackTrace();
+                        }
+                        
+                    }
+                });
+                toolbar.add(button, BorderLayout.WEST);
+            }            
         }         */
 
 
-		/* Add card details screen */
+        /* Add card details screen */
         details = new GUIPanel();
         add(details, "details");
-	}
+    }
 
-	public static SerbianEidViewer getInstance()
-	{
-		if(instance == null) {
-			instance = new SerbianEidViewer();
-		}
-		return instance;
-	}
+    public static SerbianEidViewer getInstance()
+    {
+        if(instance == null) {
+            instance = new SerbianEidViewer();
+        }
+        return instance;
+    }
     
     public static void main(String[] args)
     {
-    	configureLog4j();
+        configureLog4j();
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();
@@ -148,28 +148,28 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
         });
     }
 
-	private static void configureLog4j()
-	{
-		Properties properties = new Properties();
-		InputStream propertiesStream = SerbianEidViewer.class.getResourceAsStream("/log4j.properties");
-		if (propertiesStream != null)
-		{
-			try
-			{
-				properties.load(propertiesStream);
-			}
-			catch (IOException e)
-			{
-				System.out.println(bundle.getString("Log4jReadError"));
-			}
-			PropertyConfigurator.configure(properties);
-		}
-		else
-		{
-			System.out.println(bundle.getString("Log4jMissing"));
-		}
-	}
-	 
+    private static void configureLog4j()
+    {
+        Properties properties = new Properties();
+        InputStream propertiesStream = SerbianEidViewer.class.getResourceAsStream("/log4j.properties");
+        if (propertiesStream != null)
+        {
+            try
+            {
+                properties.load(propertiesStream);
+            }
+            catch (IOException e)
+            {
+                System.out.println(bundle.getString("Log4jReadError"));
+            }
+            PropertyConfigurator.configure(properties);
+        }
+        else
+        {
+            System.out.println(bundle.getString("Log4jMissing"));
+        }
+    }
+     
     /**
      * Create the GUI and show it.
      */
@@ -183,7 +183,7 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
         Locale.setDefault(new Locale("sr", "RS"));
 //        dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
         
-    	// Create and set up the window
+        // Create and set up the window
         JFrame frame = new JFrame(bundle.getString("FreesteelTitle"));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
@@ -193,8 +193,8 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
-            		bundle.getString("GUIError") + ": " + e.getMessage(),
-            		bundle.getString("GUIErrorTitle"),
+                    bundle.getString("GUIError") + ": " + e.getMessage(),
+                    bundle.getString("GUIErrorTitle"),
                     JOptionPane.WARNING_MESSAGE);
             logger.error("Error setting look and feel", e);
         }
@@ -203,8 +203,8 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
         if(!System.getProperty("java.version").startsWith("1.6"))
         {
             JOptionPane.showMessageDialog(frame,
-            		bundle.getString("JavaError"),
-            		bundle.getString("JavaErrorTitle"),
+                    bundle.getString("JavaError"),
+                    bundle.getString("JavaErrorTitle"),
                     JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
@@ -212,17 +212,17 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
         // Get the list of terminals
         CardTerminal terminal = null;
         try {
-			TerminalFactory factory = TerminalFactory.getDefault();
-			terminal = pickTerminalGUI(frame, factory.terminals().list());
+            TerminalFactory factory = TerminalFactory.getDefault();
+            terminal = pickTerminalGUI(frame, factory.terminals().list());
 
         } catch (Exception e) {
-			JOptionPane.showMessageDialog(frame,
-					bundle.getString("ReaderError") + ": " + e.getMessage(),
-					bundle.getString("ReaderErrorTitle"),
-				    JOptionPane.ERROR_MESSAGE);
-			logger.error("Reader error", e);
-			System.exit(1);
-		}
+            JOptionPane.showMessageDialog(frame,
+                    bundle.getString("ReaderError") + ": " + e.getMessage(),
+                    bundle.getString("ReaderErrorTitle"),
+                    JOptionPane.ERROR_MESSAGE);
+            logger.error("Reader error", e);
+            System.exit(1);
+        }
 
         // Create and set up the content pane
         SerbianEidViewer app = SerbianEidViewer.getInstance();
@@ -239,78 +239,78 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
 
     public static CardTerminal pickTerminalGUI(JFrame frame, List<CardTerminal> terminals)
     {
-    	if(terminals.size() == 1) return terminals.get(0);
-    	
-    	CardTerminal terminal = (CardTerminal)JOptionPane.showInputDialog(frame,
-    									bundle.getString("SelectReader"),
-    									bundle.getString("SelectReaderTitle"),
-										JOptionPane.PLAIN_MESSAGE,
-										null,
-										terminals.toArray(),
-										terminals.get(0));
+        if(terminals.size() == 1) return terminals.get(0);
+        
+        CardTerminal terminal = (CardTerminal)JOptionPane.showInputDialog(frame,
+                                        bundle.getString("SelectReader"),
+                                        bundle.getString("SelectReaderTitle"),
+                                        JOptionPane.PLAIN_MESSAGE,
+                                        null,
+                                        terminals.toArray(),
+                                        terminals.get(0));
 
-    	// Cancel clicked
-    	if(terminal == null) System.exit(1);
+        // Cancel clicked
+        if(terminal == null) System.exit(1);
 
-    	return terminal;
-	}
+        return terminal;
+    }
 
     private void showCardError(Exception e)
     {
-		JOptionPane.showMessageDialog(this,
-				bundle.getString("CardError") + ": " + e.getMessage(),
-				bundle.getString("CardErrorTitle"),
-			    JOptionPane.ERROR_MESSAGE);
-		logger.error("Card error", e);
+        JOptionPane.showMessageDialog(this,
+                bundle.getString("CardError") + ": " + e.getMessage(),
+                bundle.getString("CardErrorTitle"),
+                JOptionPane.ERROR_MESSAGE);
+        logger.error("Card error", e);
     }
     
-	public void inserted(final EidCard card)
-	{
-		logger.info("Card inserted");
-		CardLayout cl = (CardLayout) this.getLayout();
-	    cl.show(this, "details");		
-		
-	    try {
-			this.card = card;
-			
-			info = card.readEidInfo();
-			details.setDetails(info);
+    public void inserted(final EidCard card)
+    {
+        logger.info("Card inserted");
+        CardLayout cl = (CardLayout) this.getLayout();
+        cl.show(this, "details");        
+        
+        try {
+            this.card = card;
+            
+            info = card.readEidInfo();
+            details.setDetails(info);
 
-			photo = card.readEidPhoto();			
-			details.setPhoto(photo);
-			
+            photo = card.readEidPhoto();            
+            details.setPhoto(photo);
+            
 /*
- 			// TODO: Debug this, locate where does deadlock happen and fix it!
+             // TODO: Debug this, locate where does deadlock happen and fix it!
 
-			card.readEidPhotoAsync(new EidPhotoAsyncCallback() {
-				public void ready(Image image)
-				{
-					details.setPhoto(image);
-				}
+            card.readEidPhotoAsync(new EidPhotoAsyncCallback() {
+                public void ready(Image image)
+                {
+                    details.setPhoto(image);
+                }
 
-				public void error(CardException e)
-				{
-					showCardError(e);
-				}
-			});
-*/			
-			
-		} catch (CardException e) {
-			showCardError(e);
-		}
-	}
+                public void error(CardException e)
+                {
+                    showCardError(e);
+                }
+            });
+*/            
+            
+        } catch (CardException e) {
+            showCardError(e);
+        }
+    }
 
-	public void removed()
-	{
-		logger.info("Card removed");
+    public void removed()
+    {
+        logger.info("Card removed");
 
-		CardLayout cl = (CardLayout) this.getLayout();
-	    cl.show(this, "splash");
-	    
-		card = null;
-		info = null;
-		photo = null;
-	    details.clearDetailsAndPhoto();
-	}
+        CardLayout cl = (CardLayout) this.getLayout();
+        cl.show(this, "splash");
+        
+        card = null;
+        info = null;
+        photo = null;
+        details.clearDetailsAndPhoto();
+    }
 
 }
