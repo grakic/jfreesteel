@@ -207,8 +207,8 @@ public class EidCard {
             final Map<Integer, byte[]> residence = parseTLV(readElementaryFile(RESIDENCE_FILE, false));
 
             return new EidInfo(document, personal, residence);
-        }
-        finally {
+
+        } finally {
             card.endExclusive();
             logger.info("exclusive free");            
         }
@@ -233,8 +233,8 @@ public class EidCard {
             out += "Residence:\n" + Utils.map2UTF8String(residence);
 
             return out;
-        }
-        finally {
+
+        } finally {
             card.endExclusive();
             logger.debug("debug exclusive free");
         }        

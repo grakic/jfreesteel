@@ -143,29 +143,25 @@ public class EidInfo {
         if(appartmentLabelFormat.isEmpty()) appartmentLabelFormat = "%s";
         
         if(!street.isEmpty()) out.append(street);                   // Neka ulica
-        if(!houseNumber.isEmpty())                                 // Neka ulica 11
-        {
+        if(!houseNumber.isEmpty()) {                                // Neka ulica 11
             out.append(" ");
             out.append(houseNumber);
         }
         if(!houseLetter.isEmpty()) out.append(houseLetter);        // Neka ulica 11A
         
         // For entranceLabel = "ulaz %s" gives "Neka ulica 11A ulaz 2"
-        if(!entrance.isEmpty())
-        {
+        if(!entrance.isEmpty()) {
             out.append(" ");
             out.append(String.format(entranceLabelFormat, entrance));
         }
 
         // For floorLabel = "%s. sprat" gives "Neka ulica 11 ulaz 2, 5. sprat"
-        if(!floor.isEmpty())
-        {
+        if(!floor.isEmpty()) {
             out.append(", ");
             out.append(String.format(floorLabelFormat, floor));
         }
 
-        if(!appartmentNumber.isEmpty())
-        {
+        if(!appartmentNumber.isEmpty()) {
             // For appartmentLabel "br. %s" gives "Neka ulica 11 ulaz 2, 5. sprat, br. 4"
             if(!entrance.isEmpty() || !floor.isEmpty()) out.append(", " + String.format(appartmentLabelFormat, appartmentNumber));
             else out.append("/" + appartmentNumber); // short form: Neka ulica 11A/4
@@ -173,15 +169,13 @@ public class EidInfo {
 
         out.append("\n");
         out.append(place);
-        if(!community.isEmpty())
-        {
+        if(!community.isEmpty()) {
             out.append(", ");
             out.append(community);
         }
 
         out.append("\n");
-        if(state.contentEquals("SRB"))
-        {
+        if(state.contentEquals("SRB")) {
             // small cheat for better output
             out.append("REPUBLIKA SRBIJA");
         }

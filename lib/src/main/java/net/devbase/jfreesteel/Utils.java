@@ -72,9 +72,7 @@ public class Utils {
         
         try {
             return new String(bytes, "UTF-8");
-        }
-        catch(Exception e)
-        {
+        } catch(Exception e) {
             return new String(bytes);
         }
     }

@@ -135,8 +135,8 @@ public class Reader {
         {
             public void run()
             {
-                try
-                {
+                try {
+
                     // main thread loop
                     while(true)
                     {
@@ -150,8 +150,8 @@ public class Reader {
                                 terminal.waitForCardAbsent(0);
                                 disconnect();
                             }
-                        }
-                        catch(CardException e1) {
+
+                        } catch(CardException e1) {
                             // try to re-connect, will step out on new exception
                             if(terminal.isCardPresent()) connect();
                         }
@@ -164,8 +164,7 @@ public class Reader {
                             notifyCardListener(listener, false);
                         }
                     }
-                }
-                catch(CardException e2) {
+                } catch(CardException e2) {
                     // Break the loop, exit thread
                 }    
             }

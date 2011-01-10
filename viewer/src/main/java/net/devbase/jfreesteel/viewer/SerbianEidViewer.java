@@ -152,20 +152,15 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
     {
         Properties properties = new Properties();
         InputStream propertiesStream = SerbianEidViewer.class.getResourceAsStream("/net/devbase/jfreesteel/viewer/log4j.properties");
-        if (propertiesStream != null)
-        {
-            try
-            {
+        if(propertiesStream != null) {
+            try {
                 properties.load(propertiesStream);
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 System.out.println(bundle.getString("Log4jReadError"));
             }
             PropertyConfigurator.configure(properties);
         }
-        else
-        {
+        else {
             System.out.println(bundle.getString("Log4jMissing"));
         }
     }
@@ -200,8 +195,7 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
         }
         
         // Test for Java 1.6
-        if(!System.getProperty("java.version").startsWith("1.6"))
-        {
+        if(!System.getProperty("java.version").startsWith("1.6")) {
             JOptionPane.showMessageDialog(frame,
                     bundle.getString("JavaError"),
                     bundle.getString("JavaErrorTitle"),
