@@ -15,7 +15,7 @@
  * License along with this software; if not, see
  * http://www.gnu.org/licenses/.
  */
-package net.devbase.jfreesteel;
+package net.devbase.jfreesteel.sample;
 
 import java.util.List;
 import java.util.Scanner;
@@ -25,9 +25,9 @@ import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.TerminalFactory;
 
-import net.devbase.jfreesteel.lib.EidCard;
-import net.devbase.jfreesteel.lib.EidInfo;
-import net.devbase.jfreesteel.lib.Utils;
+import net.devbase.jfreesteel.EidCard;
+import net.devbase.jfreesteel.EidInfo;
+import net.devbase.jfreesteel.Utils;
 
 /**
  * This is just a simple demonstration how one can use jfreesteel library

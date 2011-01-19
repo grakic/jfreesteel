@@ -14,6 +14,17 @@
     <build>
         <directory>../target/${artifactId}</directory>
         <finalName>../${artifactId}-${version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/sample/</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+      </plugins>
     </build>
     <dependencies>
         <dependency>
