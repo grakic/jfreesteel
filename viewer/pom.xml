@@ -49,6 +49,13 @@
             </plugin>
         </plugins>
     </build>
+    <repositories>
+        <repository>
+            <id>itextpdf.com</id>
+            <name>Maven Repository for iText</name>
+            <url>http://maven.itextpdf.com/</url>
+        </repository>
+    </repositories>
     <dependencies>
         <dependency>
             <groupId>net.devbase.jfreesteel</groupId>
@@ -66,6 +73,13 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.5.8</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.0.4</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
