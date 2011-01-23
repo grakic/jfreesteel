@@ -19,6 +19,8 @@
 package net.devbase.jfreesteel;
 
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +59,7 @@ public class EidInfo {
     private String floor;
     private String appartmentNumber;
     
-    public EidInfo(final Map<Integer, byte[]> document, final Map<Integer, byte[]> personal, final Map<Integer, byte[]> residence)
+    public EidInfo(final Map<Integer, byte[]> document, final Map<Integer, byte[]> personal, final Map<Integer, byte[]> residence) throws Exception
     {
         setDocumentInfo(document);
         setPersonalInfo(personal);
@@ -66,52 +68,52 @@ public class EidInfo {
 
     private void setDocumentInfo(final Map<Integer, byte[]> document)
     {
-        // tags: 1545 - 1553
-        // 1545 = SRB
-        docRegNo         = Utils.bytes2UTF8String(document.get(1546));
-        // 1547 = ID
-        // 1548 = ID<docRegNo>
-        issuingDate      = Utils.bytes2UTF8String(document.get(1549));
-        expiryDate       = Utils.bytes2UTF8String(document.get(1550));
-        issuingAuthority = Utils.bytes2UTF8String(document.get(1551));
-        // 1552 = SC
-        // 1553 = SC
+                            // tags: 1545 - 1553
+                            // 1545 = SRB
+                setDocRegNo(Utils.bytes2UTF8String(document.get(1546)));
+                            // 1547 = ID
+                            // 1548 = ID<docRegNo>
+             setIssuingDate(Utils.bytes2UTF8String(document.get(1549)));
+              setExpiryDate(Utils.bytes2UTF8String(document.get(1550)));
+        setIssuingAuthority(Utils.bytes2UTF8String(document.get(1551)));
+                            // 1552 = SC
+                            // 1553 = SC
     }
 
-    private void setPersonalInfo(final Map<Integer, byte[]> personal)
+    private void setPersonalInfo(final Map<Integer, byte[]> personal) throws Exception
     {
-        // tags: 1558 - 1567
-        personalNumber   = Utils.bytes2UTF8String(personal.get(1558));
-        surname          = Utils.bytes2UTF8String(personal.get(1559));
-        givenName        = Utils.bytes2UTF8String(personal.get(1560));
-        parentGivenName = Utils.bytes2UTF8String(personal.get(1561));
-        sex              = Utils.bytes2UTF8String(personal.get(1562));
-        placeOfBirth     = Utils.bytes2UTF8String(personal.get(1563));
-        communityOfBirth = Utils.bytes2UTF8String(personal.get(1564));
-        stateOfBirth     = Utils.bytes2UTF8String(personal.get(1565));        
-        dateOfBirth      = Utils.bytes2UTF8String(personal.get(1566));
-        // 1567 = SRB (stateOfBirth code?)
+                            // tags: 1558 - 1567
+    	  setPersonalNumber(Utils.bytes2UTF8String(personal.get(1558)));
+                 setSurname(Utils.bytes2UTF8String(personal.get(1559)));
+               setGivenName(Utils.bytes2UTF8String(personal.get(1560)));
+         setParentGivenName(Utils.bytes2UTF8String(personal.get(1561)));
+                     setSex(Utils.bytes2UTF8String(personal.get(1562)));
+            setPlaceOfBirth(Utils.bytes2UTF8String(personal.get(1563)));
+        setCommunityOfBirth(Utils.bytes2UTF8String(personal.get(1564)));
+            setStateOfBirth(Utils.bytes2UTF8String(personal.get(1565)));        
+             setDateOfBirth(Utils.bytes2UTF8String(personal.get(1566)));
+                            // 1567 = SRB (stateOfBirth code?)
     }
 
     private void setResidenceInfo(final Map<Integer, byte[]> residence)
     {
         logger.error(Utils.map2UTF8String(residence));
         
-        // tags: 1568 .. 1578
-        state            = Utils.bytes2UTF8String(residence.get(1568));
-        community        = Utils.bytes2UTF8String(residence.get(1569));
-        place            = Utils.bytes2UTF8String(residence.get(1570));
-        street           = Utils.bytes2UTF8String(residence.get(1571));
-        houseNumber      = Utils.bytes2UTF8String(residence.get(1572));
+                       // tags: 1568 .. 1578
+              setState(Utils.bytes2UTF8String(residence.get(1568)));
+          setCommunity(Utils.bytes2UTF8String(residence.get(1569)));
+              setPlace(Utils.bytes2UTF8String(residence.get(1570)));
+             setStreet(Utils.bytes2UTF8String(residence.get(1571)));
+        setHouseNumber(Utils.bytes2UTF8String(residence.get(1572)));
         
         // FIXME: Get tags
         // 1573 .. 1577 ???
-        // houseLetter      = Utils.bytes2UTF8String(residence.get(1573)); // ??
-        // entrance         = Utils.bytes2UTF8String(residence.get(1576)); // ??
-        // floor            = Utils.bytes2UTF8String(residence.get(1577)); // ??
+        // setHouseLetter(Utils.bytes2UTF8String(residence.get(1573))); // ??
+        // setEntrance(Utils.bytes2UTF8String(residence.get(1576))); // ??
+        // setFloor(Utils.bytes2UTF8String(residence.get(1577))); // ??
         houseLetter = ""; entrance = ""; floor = "";
 
-        appartmentNumber = Utils.bytes2UTF8String(residence.get(1578));
+        setAppartmentNumber(Utils.bytes2UTF8String(residence.get(1578)));
     }
 
     public String getNameFull()
@@ -221,8 +223,14 @@ public class EidInfo {
     public String getPersonalNumber() {
         return personalNumber;
     }
-    public void setPersonalNumber(String personalNumber) {
-        this.personalNumber = personalNumber;
+    public void setPersonalNumber(String personalNumber) throws Exception
+    {
+    	Pattern pattern = Pattern.compile("^[0-9]{13}$", Pattern.CASE_INSENSITIVE);  
+        Matcher matcher = pattern.matcher(personalNumber);  
+        if(matcher.matches()) {  
+        	this.personalNumber = personalNumber;
+        }  
+        else throw new Exception("Invalid personal number.");
     }
     public String getSurname() {
         return surname;

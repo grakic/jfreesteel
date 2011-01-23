@@ -86,7 +86,15 @@ public class JFreesteel {
 
             // read eid data
             EidCard eidcard = new EidCard(card);
-            EidInfo info    = eidcard.readEidInfo();
+            EidInfo info = null;
+
+            try {
+				info = eidcard.readEidInfo();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.exit(0);
+			}
 
             System.out.format("ATR            : %s\n", Utils.bytes2HexString(card.getATR().getBytes()));
             System.out.format("eID number     : %s\n", info.getDocRegNo());

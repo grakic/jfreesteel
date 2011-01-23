@@ -195,7 +195,7 @@ public class EidCard {
         }
     }
     
-    public EidInfo readEidInfo() throws CardException
+    public EidInfo readEidInfo() throws CardException, Exception
     {
         try {
             logger.info("exclusive");
