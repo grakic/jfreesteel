@@ -25,6 +25,9 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -36,12 +39,15 @@ import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.TerminalFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.devbase.jfreesteel.EidCard;
 import net.devbase.jfreesteel.EidInfo;
@@ -51,6 +57,8 @@ import net.devbase.jfreesteel.gui.GUIPanel;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+
+import com.itextpdf.text.DocumentException;
 
 /**
  * SerbianEidViewer is a singleton class behind SerbianEidViewer application
@@ -69,12 +77,14 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
     EidInfo info = null;
     Image photo  = null;
     
+    JFrame frame;
     GUIPanel details;
+    JButton button;
 
     private static SerbianEidViewer instance = null;
     
     public SerbianEidViewer()
-    {
+    {    	
         setSize(new Dimension(720, 350));
         setLayout(new CardLayout(0, 0));
 
@@ -90,11 +100,6 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
         add(splash, "splash");
         
 
-        /*
-        FIXME: card.debugEidInfo() is blocking on exclusive..
-
-        MyGUIPanel is extending toolbar with new button... but this is not working
-
         class MyGUIPanel extends GUIPanel {
 
             private static final long serialVersionUID = 1L;
@@ -102,31 +107,61 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
             public MyGUIPanel()
             {
                 super();
-                JButton button = new JButton("Debug");
+                button = new JButton(bundle.getString("SavePDF"));
+                button.setEnabled(false);
                 button.setPreferredSize(new Dimension(130, 36));
                 button.setSize(new Dimension(200, 0));
                 button.addActionListener(new ActionListener() {
                     
                     @Override
-                    public void actionPerformed(ActionEvent e) {
-                        
-                        try {
-                            JOptionPane.showMessageDialog(MyGUIPanel.this, card.debugEidInfo());
-                        } catch (HeadlessException e1) {
-                            e1.printStackTrace();
-                        } catch (CardException e1) {
-                            e1.printStackTrace();
+                    public void actionPerformed(ActionEvent ev) {
+
+                    	final JFileChooser fc = new JFileChooser();
+                    	fc.setSelectedFile(new File("report_" + info.getPersonalNumber() + ".pdf"));
+                    	FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                    		        "PDF", "pdf");
+                    	fc.setFileFilter(filter);
+                    	int returnVal = fc.showSaveDialog(frame);
+                    	
+                    	if(returnVal == JFileChooser.APPROVE_OPTION) {
+                            
+                    		// Append correct extension if missing
+                    		String filename = fc.getSelectedFile().toString();
+                    		if(!filename.toLowerCase().endsWith(".pdf")) {
+                    			filename += ".pdf";
+                    		}
+
+                    		try {
+                            	logger.info("Saving " + filename);
+                        		PdfReport report = new PdfReport(info, photo);
+                        		report.write(filename);
+                    		} catch (IOException e) {
+                    			
+                                JOptionPane.showMessageDialog(frame,
+                                        bundle.getString("SavePDFError") + ": " + e.getMessage(),
+                                        bundle.getString("SavePDFErrorTitle"),
+                                        JOptionPane.ERROR_MESSAGE);
+                                logger.error("Error saving PDF file", e);
+
+                    		} catch (DocumentException e) {
+
+                                JOptionPane.showMessageDialog(frame,
+                                        bundle.getString("CreatePDFError") + ": " + e.getMessage(),
+                                        bundle.getString("CreatePDFErrorTitle"),
+                                        JOptionPane.ERROR_MESSAGE);
+                                logger.error("Error creating PDF file", e);
+                    		}    	
                         }
-                        
+
                     }
                 });
                 toolbar.add(button, BorderLayout.WEST);
             }            
-        }         */
+        }
 
 
         /* Add card details screen */
-        details = new GUIPanel();
+        details = new MyGUIPanel();
         add(details, "details");
     }
 
@@ -136,6 +171,11 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
             instance = new SerbianEidViewer();
         }
         return instance;
+    }
+    
+    public void setFrame(JFrame frame)
+    {
+    	this.frame = frame;
     }
     
     public static void main(String[] args)
@@ -220,6 +260,7 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
 
         // Create and set up the content pane
         SerbianEidViewer app = SerbianEidViewer.getInstance();
+        app.setFrame(frame);
         frame.getContentPane().add(app, BorderLayout.CENTER);
         frame.pack();
 
@@ -257,22 +298,25 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
                 JOptionPane.ERROR_MESSAGE);
         logger.error("Card error", e);
     }
+
+    public static final String RESULT = "/home/goran/Desktop/report.pdf";
     
     public void inserted(final EidCard card)
     {
         logger.info("Card inserted");
         CardLayout cl = (CardLayout) this.getLayout();
         cl.show(this, "details");        
-        
+
         try {
             this.card = card;
-            
-            info = card.readEidInfo();
-            details.setDetails(info);
 
-            photo = card.readEidPhoto();            
+            info = card.readEidInfo();            
+			details.setDetails(info);
+
+			photo = card.readEidPhoto();            
             details.setPhoto(photo);
-            
+        
+            button.setEnabled(true);
 /*
              // TODO: Debug this, locate where does deadlock happen and fix it!
 
@@ -291,6 +335,8 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
             
         } catch (CardException e) {
             showCardError(e);
+        } catch (Exception e) {
+            showCardError(e);        	
         }
     }
 
@@ -301,6 +347,7 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
         CardLayout cl = (CardLayout) this.getLayout();
         cl.show(this, "splash");
         
+        button.setEnabled(false);
         card = null;
         info = null;
         photo = null;
