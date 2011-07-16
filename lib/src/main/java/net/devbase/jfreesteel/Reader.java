@@ -48,7 +48,7 @@ public class Reader {
     /**
      * CardTerminal this Reader is assigned to
      */
-	private CardTerminal terminal;
+    private CardTerminal terminal;
     
     /**
      * EidCard is not null when the card is inserted
@@ -67,69 +67,69 @@ public class Reader {
     private Thread listenerThread;
 
     public interface ReaderListener
-	{
-	    /**
-	     * Card is inserted into the reader terminal. Use EidCard object
-	     * to read data from the eID card.
-	     * 
-	     * @param card EidCard object
-	     */
-	    public void inserted(EidCard card);
-	    
-	    /**
-	     * Card is removed from the reader terminal
-	     */
-	    public void removed();
-	}
+    {
+        /**
+         * Card is inserted into the reader terminal. Use EidCard object
+         * to read data from the eID card.
+         * 
+         * @param card EidCard object
+         */
+        public void inserted(EidCard card);
+        
+        /**
+         * Card is removed from the reader terminal
+         */
+        public void removed();
+    }
 
-	public Reader(final CardTerminal terminal)
-	{        
-	    this.terminal = terminal;
-	    listeners = new CopyOnWriteArrayList<ReaderListener>();
-	    
-	    // start card connection in a new thread
-	    listenerThread = new Thread(new Runnable()
-	    {
-	        public void run()
-	        {
-	            try {
-	
-	                // main thread loop
-	                while(true)
-	                {
-	                    // wait for a status change
-	                    try {
-	                        if(eidcard == null) {
-	                            terminal.waitForCardPresent(0);
-	                            connect();
-	                        }
-	                        else {
-	                            terminal.waitForCardAbsent(0);
-	                            disconnect();
-	                        }
-	
-	                    } catch(CardException e1) {
-	                        // try to re-connect, will step out on new exception
-	                        if(terminal.isCardPresent()) connect();
-	                    }
-	                    notifyListeners();
-	                }
-	            } catch(CardException e2) {
-	                // Break the loop, exit thread
-	            }    
-	        }
+    public Reader(final CardTerminal terminal)
+    {        
+        this.terminal = terminal;
+        listeners = new CopyOnWriteArrayList<ReaderListener>();
+        
+        // start card connection in a new thread
+        listenerThread = new Thread(new Runnable()
+        {
+            public void run()
+            {
+                try {
+    
+                    // main thread loop
+                    while(true)
+                    {
+                        // wait for a status change
+                        try {
+                            if(eidcard == null) {
+                                terminal.waitForCardPresent(0);
+                                connect();
+                            }
+                            else {
+                                terminal.waitForCardAbsent(0);
+                                disconnect();
+                            }
+    
+                        } catch(CardException e1) {
+                            // try to re-connect, will step out on new exception
+                            if(terminal.isCardPresent()) connect();
+                        }
+                        notifyListeners();
+                    }
+                } catch(CardException e2) {
+                    // Break the loop, exit thread
+                }    
+            }
 
-			/** Notify all listeners. */
-			private void notifyListeners() {
-				for (ReaderListener listener : listeners) {
-				    notifyCardListener(listener, false);
-				}
-			}
-	    });
-	    listenerThread.start();
-	}
+            /** Notify all listeners. */
+            private void notifyListeners() {
+                for (ReaderListener listener : listeners) {
+                    notifyCardListener(listener, false);
+                }
+            }
+        });
+        listenerThread.start();
+    }
 
-	/**
+    /**
      * Add new card listener to be notified on card insertion/removal.
      * Listeners should assume that the card is removed in default state.
      * 
@@ -160,7 +160,7 @@ public class Reader {
         else if(!inserted_only) listener.removed();
     }
     
-	public void connect() throws CardException
+    public void connect() throws CardException
     {
         logger.info("Reader CONNECT");
         eidcard = new EidCard(terminal.connect("*"));        
