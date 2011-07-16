@@ -29,6 +29,11 @@ public class UtilsTest extends TestCase {
 			Utils.bytes2HexString(asByte(0x00), asByte(0x01), asByte(0x02), asByte(0x03)));
 	}
 
+        public void testbytes2UTF8String() {
+                // Map.get("key") returns null for unknown key
+                assertEquals("", Utils.bytes2UTF8String(null));
+        }
+
 	public void testMap2UTF8String() {
 		String result = Utils.map2UTF8String(ImmutableMap.of(
 			0x01, "АБВГДЂ".getBytes(Charsets.UTF_8),
