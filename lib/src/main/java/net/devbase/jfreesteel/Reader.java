@@ -43,13 +43,13 @@ import org.slf4j.LoggerFactory;
  */
 @SuppressWarnings("restriction")  // Various javax.smartcardio.*
 public class Reader {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(Reader.class);
     /**
      * CardTerminal this Reader is assigned to
      */
     private CardTerminal terminal;
-    
+
     /**
      * EidCard is not null when the card is inserted
      */
@@ -75,7 +75,7 @@ public class Reader {
          * @param card EidCard object
          */
         public void inserted(EidCard card);
-        
+
         /**
          * Card is removed from the reader terminal
          */
@@ -86,32 +86,44 @@ public class Reader {
     {        
         this.terminal = terminal;
         listeners = new CopyOnWriteArrayList<ReaderListener>();
-        
+
         // start card connection in a new thread
         listenerThread = new Thread(new Runnable()
         {
             public void run()
             {
                 try {
-    
+                    // sometimes reader is not blocking on waitForCard*
+                    int timeout = 0;
+
                     // main thread loop
                     while(true)
                     {
                         // wait for a status change
                         try {
                             if(eidcard == null) {
-                                terminal.waitForCardPresent(0);
+                                logger.info("EidCard is null, wait for insertion");
+                                terminal.waitForCardPresent(timeout);
                                 connect();
                             }
                             else {
-                                terminal.waitForCardAbsent(0);
+                                logger.info("EidCard not null, wait for removal");
+                                terminal.waitForCardAbsent(timeout);
                                 disconnect();
                             }
-    
+
                         } catch(CardException e1) {
                             // try to re-connect, will step out on new exception
-                            if(terminal.isCardPresent()) connect();
+                            if(terminal.isCardPresent()) {
+                                logger.info("RE-CONNECT");
+                                connect();
+                            }
+                            else {
+                                logger.info("FAILURE, probably not blocking, raising timeout to 3s");
+                                timeout = 3000;
+                            }
                         }
+
                         notifyListeners();
                     }
                 } catch(CardException e2) {
@@ -138,11 +150,11 @@ public class Reader {
     public void addCardListener(ReaderListener listener)
     {
         listeners.add(listener);
-        
+
         // if the card is inserted, notify the listener about current state
         notifyCardListener(listener, true);
     }
-    
+
     /**
      * Remove card listener from the list of listeners. Does nothing
      * if the listener is not present in the list.
@@ -153,7 +165,7 @@ public class Reader {
     {
         listeners.remove(listener);
     }
-    
+
     private void notifyCardListener(ReaderListener listener, boolean inserted_only)
     {
         if(eidcard != null) listener.inserted(eidcard);
@@ -162,13 +174,13 @@ public class Reader {
     
     public void connect() throws CardException
     {
-        logger.info("Reader CONNECT");
+        logger.info("CONNECT");
         eidcard = new EidCard(terminal.connect("*"));        
     }
     
     public void disconnect() throws CardException
     {
-        logger.info("Reader DISCONNECT");
+        logger.info("DISCONNECT");
         eidcard.disconnect(false);
         eidcard = null;
     }
