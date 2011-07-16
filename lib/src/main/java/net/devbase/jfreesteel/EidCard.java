@@ -48,8 +48,9 @@ import org.slf4j.LoggerFactory;
  * card insertion/removal events. The listener will receive EidCard
  * object when the card is inserted into the terminal.
  * 
- * @author Goran Rakic <grakic@devbase.net>
+ * @author Goran Rakic (grakic@devbase.net)
  */
+@SuppressWarnings("restriction") // Various javax.smartcardio.*
 public class EidCard {
 
     private final static Logger logger = LoggerFactory.getLogger(EidCard.class);

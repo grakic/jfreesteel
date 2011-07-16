@@ -63,7 +63,7 @@ import com.itextpdf.text.DocumentException;
 /**
  * SerbianEidViewer is a singleton class behind SerbianEidViewer application
  * 
- * @author Goran Rakic <grakic@devbase.net>
+ * @author Goran Rakic (grakic@devbase.net)
  */
 public class SerbianEidViewer extends JPanel implements ReaderListener {
     

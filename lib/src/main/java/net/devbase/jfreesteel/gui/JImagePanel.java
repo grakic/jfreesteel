@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 /**
  * Simple JPanel with BufferedImage
  * 
- * @author Goran Rakic <grakic@devbase.net>
+ * @author Goran Rakic (grakic@devbase.net)
  */
 public class JImagePanel extends JPanel
 {

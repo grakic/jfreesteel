@@ -47,7 +47,7 @@ import net.devbase.jfreesteel.EidInfo;
  * while this class and the rest of jfreesteel library is released
  * under the more permissive  GNU Lesser GPL license version 3.
  * 
- * @author Goran Rakic <grakic@devbase.net>
+ * @author Goran Rakic (grakic@devbase.net)
  */
 public class GUIPanel extends JPanel
 {

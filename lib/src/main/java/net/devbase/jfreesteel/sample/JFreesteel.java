@@ -41,6 +41,7 @@ import net.devbase.jfreesteel.Utils;
  * 
  * @author Goran Rakic <grakic@devbase.net>
  */
+@SuppressWarnings("restriction") // Various javax.smartcardio.*
 public class JFreesteel {
 
     public static CardTerminal pickTerminal(List<CardTerminal> terminals)

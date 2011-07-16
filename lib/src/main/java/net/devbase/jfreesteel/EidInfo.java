@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Simple class to hold and reformat data read from eID
  * 
- * @author Nikolic Aleksandar <nikolic.alek@gmail.com>
+ * @author Nikolic Aleksandar (nikolic.alek@gmail.com)
  */
 public class EidInfo {
 
