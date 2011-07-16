@@ -18,6 +18,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>2.3.1</version>
                 <configuration>
                     <excludes>
                         <exclude>**/sample/</exclude>
@@ -27,13 +28,27 @@
       </plugins>
     </build>
     <dependencies>
+        <!-- Do we need slf4j-nop? (As of SLF4J version 1.6, it will default to a NOP implementation) -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.5.8</version>
+            <version>1.6.1</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
-        <!-- Do we need slf4j-nop? (As of SLF4J version 1.6, it will default to a NOP implementation) -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>r09</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+            <type>jar</type>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
