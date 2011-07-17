@@ -18,7 +18,6 @@
 
 package net.devbase.jfreesteel;
 
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,90 +33,33 @@ public class EidInfo {
 
     private final static Logger logger = LoggerFactory.getLogger(EidInfo.class);
     
-    private String docRegNo;
-    private String issuingDate;
-    private String expiryDate;
-    private String issuingAuthority;
+    private String docRegNo = "";
+    private String issuingDate = "";
+    private String expiryDate = "";
+    private String issuingAuthority = "";
     
-    private String personalNumber;
-    private String surname;
-    private String givenName;
-    private String parentGivenName;
-    private String sex;
-    private String placeOfBirth;
-    private String communityOfBirth;
-    private String stateOfBirth;
-    private String dateOfBirth;
+    private String personalNumber = "";
+    private String surname = "";
+    private String givenName = "";
+    private String parentGivenName = "";
+    private String sex = "";
+    private String placeOfBirth = "";
+    private String communityOfBirth = "";
+    private String stateOfBirth = "";
+    private String dateOfBirth = "";
     
-    private String state;
-    private String community;
-    private String place;
-    private String street;
-    private String houseNumber;
-    private String houseLetter;
-    private String entrance;
-    private String floor;
-    private String appartmentNumber;
+    private String state = "";
+    private String community = "";
+    private String place = "";
+    private String street = "";
+    private String houseNumber = "";
+    private String houseLetter = "";
+    private String entrance = "";
+    private String floor = "";
+    private String appartmentNumber = "";
     
-    /**
-     * Build new EidInfo instance using parsed document, personal and residence info from the card
-     * 
-     * @param document TLV structure as tag -> bytes map
-     * @param personal TLV structure as tag -> bytes map
-     * @param residence TLV structure as tag -> bytes map
-     */
-    public EidInfo(final Map<Integer, byte[]> document, final Map<Integer, byte[]> personal,
-        final Map<Integer, byte[]> residence) throws Exception {
-        setDocumentInfo(document);
-        setPersonalInfo(personal);
-        setResidenceInfo(residence);        
-    }
+    public EidInfo() {
 
-    private void setDocumentInfo(final Map<Integer, byte[]> document) {
-        // tags: 1545 - 1553
-        // 1545 = SRB
-        setDocRegNo(Utils.bytes2UTF8String((byte[]) document.get(1546)));
-        // 1547 = ID
-        // 1548 = ID<docRegNo>
-        setIssuingDate(Utils.bytes2UTF8String((byte[]) document.get(1549)));
-        setExpiryDate(Utils.bytes2UTF8String((byte[]) document.get(1550)));
-        setIssuingAuthority(Utils.bytes2UTF8String((byte[]) document.get(1551)));
-        // 1552 = SC
-        // 1553 = SC
-    }
-
-    private void setPersonalInfo(final Map<Integer, byte[]> personal) throws Exception {
-        // tags: 1558 - 1567
-        setPersonalNumber(Utils.bytes2UTF8String((byte[]) personal.get(1558)));
-        setSurname(Utils.bytes2UTF8String((byte[]) personal.get(1559)));
-        setGivenName(Utils.bytes2UTF8String((byte[]) personal.get(1560)));
-        setParentGivenName(Utils.bytes2UTF8String((byte[]) personal.get(1561)));
-        setSex(Utils.bytes2UTF8String((byte[]) personal.get(1562)));
-        setPlaceOfBirth(Utils.bytes2UTF8String((byte[]) personal.get(1563)));
-        setCommunityOfBirth(Utils.bytes2UTF8String((byte[]) personal.get(1564)));
-        setStateOfBirth(Utils.bytes2UTF8String((byte[]) personal.get(1565)));        
-        setDateOfBirth(Utils.bytes2UTF8String((byte[]) personal.get(1566)));
-        // 1567 = SRB (stateOfBirth code?)
-    }
-
-    private void setResidenceInfo(final Map<Integer, byte[]> residence) {
-        logger.error(Utils.map2UTF8String(residence));
-        
-        // tags: 1568 .. 1578
-        setState(Utils.bytes2UTF8String((byte[]) residence.get(1568)));
-        setCommunity(Utils.bytes2UTF8String((byte[]) residence.get(1569)));
-        setPlace(Utils.bytes2UTF8String((byte[]) residence.get(1570)));
-        setStreet(Utils.bytes2UTF8String((byte[]) residence.get(1571)));
-        setHouseNumber(Utils.bytes2UTF8String((byte[]) residence.get(1572)));
-        
-        // FIXME: Get tags
-        // 1573 .. 1577 ???
-        // setHouseLetter(Utils.bytes2UTF8String((byte[]) residence.get(1573))); // ??
-        // setEntrance(Utils.bytes2UTF8String((byte[]) residence.get(1576)));    // ??
-        // setFloor(Utils.bytes2UTF8String((byte[]) residence.get(1577)));       // ??
-        houseLetter = ""; entrance = ""; floor = "";
-
-        setAppartmentNumber(Utils.bytes2UTF8String((byte[]) residence.get(1578)));
     }
 
     /**
@@ -138,21 +80,21 @@ public class EidInfo {
      * 
      * Recommended values for Serbian are "ulaz %s", "%s. sprat" and "br. %s"
      * 
-     * @param entranceLabelFormat String to format entrance label
-     * @param floorLabelFormat String to format floor label
-     * @param appartmentLabelFormat String to format appartment label
+     * @param entranceLabelFormat String to format entrance label or null
+     * @param floorLabelFormat String to format floor label or null
+     * @param appartmentLabelFormat String to format appartment label or null
      * @return Nicely formatted place of residence as multiline string
      */
     public String getPlaceFull(String entranceLabelFormat, String floorLabelFormat, String appartmentLabelFormat) {
         StringBuilder out = new StringBuilder();
 
-        if (entranceLabelFormat.isEmpty()) {
+        if (entranceLabelFormat == null || entranceLabelFormat.isEmpty()) {
             entranceLabelFormat = "%s";
         }
-        if (floorLabelFormat.isEmpty()) {
+        if (floorLabelFormat == null || floorLabelFormat.isEmpty()) {
             floorLabelFormat = "%s";
         }
-        if (appartmentLabelFormat.isEmpty()) {
+        if (appartmentLabelFormat == null || appartmentLabelFormat.isEmpty()) {
             appartmentLabelFormat = "%s";
         }
         

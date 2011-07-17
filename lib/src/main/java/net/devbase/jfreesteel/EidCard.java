@@ -218,7 +218,48 @@ public class EidCard {
             final Map<Integer, byte[]> personal  = parseTLV(readElementaryFile(PERSONAL_FILE, false));
             final Map<Integer, byte[]> residence = parseTLV(readElementaryFile(RESIDENCE_FILE, false));
 
-            return new EidInfo(document, personal, residence);
+            EidInfo info = new EidInfo();
+
+
+            // tags: 1545 - 1553
+            // 1545 = SRB
+            info.setDocRegNo(Utils.bytes2UTF8String((byte[]) document.get(1546)));
+            // 1547 = ID
+            // 1548 = ID<docRegNo>
+            info.setIssuingDate(Utils.bytes2UTF8String((byte[]) document.get(1549)));
+            info.setExpiryDate(Utils.bytes2UTF8String((byte[]) document.get(1550)));
+            info.setIssuingAuthority(Utils.bytes2UTF8String((byte[]) document.get(1551)));
+            // 1552 = SC
+            // 1553 = SC
+
+            // tags: 1558 - 1567
+            info.setPersonalNumber(Utils.bytes2UTF8String((byte[]) personal.get(1558)));
+            info.setSurname(Utils.bytes2UTF8String((byte[]) personal.get(1559)));
+            info.setGivenName(Utils.bytes2UTF8String((byte[]) personal.get(1560)));
+            info.setParentGivenName(Utils.bytes2UTF8String((byte[]) personal.get(1561)));
+            info.setSex(Utils.bytes2UTF8String((byte[]) personal.get(1562)));
+            info.setPlaceOfBirth(Utils.bytes2UTF8String((byte[]) personal.get(1563)));
+            info.setCommunityOfBirth(Utils.bytes2UTF8String((byte[]) personal.get(1564)));
+            info.setStateOfBirth(Utils.bytes2UTF8String((byte[]) personal.get(1565)));        
+            info.setDateOfBirth(Utils.bytes2UTF8String((byte[]) personal.get(1566)));
+            // 1567 = SRB (stateOfBirth code?)
+        
+            // tags: 1568 .. 1578
+            info.setState(Utils.bytes2UTF8String((byte[]) residence.get(1568)));
+            info.setCommunity(Utils.bytes2UTF8String((byte[]) residence.get(1569)));
+            info.setPlace(Utils.bytes2UTF8String((byte[]) residence.get(1570)));
+            info.setStreet(Utils.bytes2UTF8String((byte[]) residence.get(1571)));
+            info.setHouseNumber(Utils.bytes2UTF8String((byte[]) residence.get(1572)));        
+            // TODO: What about tags 1573 .. 1577_
+            // info.setHouseLetter(Utils.bytes2UTF8String((byte[]) residence.get(1573))); // ??
+            // info.setEntrance(Utils.bytes2UTF8String((byte[]) residence.get(1576)));    // ??
+            // info.setFloor(Utils.bytes2UTF8String((byte[]) residence.get(1577)));       // ??
+            info.setAppartmentNumber(Utils.bytes2UTF8String((byte[]) residence.get(1578)));
+
+            // FIXME: log residence info so all users can check and copy-paste missing tags
+            logger.error(Utils.map2UTF8String(residence));
+
+            return info;
 
         } finally {
             card.endExclusive();
