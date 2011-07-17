@@ -85,32 +85,49 @@ public class Reader {
 
                     // main thread loop
                     while (true) {
-                        // wait for a status change
+
+                        boolean statusChanged = true;
+
                         try {
+                            // wait for a status change
                             if (eidcard == null) {
                                 logger.info("EidCard is null, wait for insertion");
                                 terminal.waitForCardPresent(timeoutMs);
-                                connect();
                             } else {
                                 logger.info("EidCard not null, wait for removal");
                                 terminal.waitForCardAbsent(timeoutMs);
-                                disconnect();
                             }
+
+                            // change the status
+                            if (eidcard == null && terminal.isCardPresent()) {
+                                connect();
+                            } else if (eidcard != null && !terminal.isCardPresent()) {
+                                disconnect();
+                            } else {
+                                // this looks like a bug in PC/SC with waitForCard*(0) not blocking!
+                                timeoutMs = 3000;
+                                statusChanged = false;
+                            }
+
                         } catch (CardException e1) {
-                            // try to re-connect, will step out on new exception
+                            // force "disconnect"
+                            eidcard = null;
+
+                            // try to reconnect if card is present and continue the loop
                             if (terminal.isCardPresent()) {
                                 logger.info("RE-CONNECT");
+                                // will step out on repeated exception
                                 connect();
-                            } else {
-                                logger.info("FAILURE, probably not blocking, raising timeout to 3s");
-                                timeoutMs = 3000;
                             }
                         }
 
-                        notifyListeners();
+                        if (statusChanged) {
+                            notifyListeners();
+                        }
                     }
                 } catch (CardException e2) {
                     // Break the loop, exit thread
+                    // TODO: Should we notify our listeners that there is no Reader thread?
                 }
             }
 
@@ -133,7 +150,7 @@ public class Reader {
     public void addCardListener(ReaderListener listener) {
         listeners.add(listener);
 
-        // if the card is inserted, notify the listener about current state
+        // if the card is inserted, notify the listener about the current state
         notifyCardListener(listener, true);
     }
 
