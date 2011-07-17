@@ -76,27 +76,27 @@ public class EidInfo {
     private void setDocumentInfo(final Map<Integer, byte[]> document) {
         // tags: 1545 - 1553
         // 1545 = SRB
-        setDocRegNo(Utils.bytes2UTF8String(document.get(1546)));
+        setDocRegNo(Utils.bytes2UTF8String((byte[]) document.get(1546)));
         // 1547 = ID
         // 1548 = ID<docRegNo>
-        setIssuingDate(Utils.bytes2UTF8String(document.get(1549)));
-        setExpiryDate(Utils.bytes2UTF8String(document.get(1550)));
-        setIssuingAuthority(Utils.bytes2UTF8String(document.get(1551)));
+        setIssuingDate(Utils.bytes2UTF8String((byte[]) document.get(1549)));
+        setExpiryDate(Utils.bytes2UTF8String((byte[]) document.get(1550)));
+        setIssuingAuthority(Utils.bytes2UTF8String((byte[]) document.get(1551)));
         // 1552 = SC
         // 1553 = SC
     }
 
     private void setPersonalInfo(final Map<Integer, byte[]> personal) throws Exception {
         // tags: 1558 - 1567
-        setPersonalNumber(Utils.bytes2UTF8String(personal.get(1558)));
-        setSurname(Utils.bytes2UTF8String(personal.get(1559)));
-        setGivenName(Utils.bytes2UTF8String(personal.get(1560)));
-        setParentGivenName(Utils.bytes2UTF8String(personal.get(1561)));
-        setSex(Utils.bytes2UTF8String(personal.get(1562)));
-        setPlaceOfBirth(Utils.bytes2UTF8String(personal.get(1563)));
-        setCommunityOfBirth(Utils.bytes2UTF8String(personal.get(1564)));
-        setStateOfBirth(Utils.bytes2UTF8String(personal.get(1565)));        
-        setDateOfBirth(Utils.bytes2UTF8String(personal.get(1566)));
+        setPersonalNumber(Utils.bytes2UTF8String((byte[]) personal.get(1558)));
+        setSurname(Utils.bytes2UTF8String((byte[]) personal.get(1559)));
+        setGivenName(Utils.bytes2UTF8String((byte[]) personal.get(1560)));
+        setParentGivenName(Utils.bytes2UTF8String((byte[]) personal.get(1561)));
+        setSex(Utils.bytes2UTF8String((byte[]) personal.get(1562)));
+        setPlaceOfBirth(Utils.bytes2UTF8String((byte[]) personal.get(1563)));
+        setCommunityOfBirth(Utils.bytes2UTF8String((byte[]) personal.get(1564)));
+        setStateOfBirth(Utils.bytes2UTF8String((byte[]) personal.get(1565)));        
+        setDateOfBirth(Utils.bytes2UTF8String((byte[]) personal.get(1566)));
         // 1567 = SRB (stateOfBirth code?)
     }
 
@@ -104,20 +104,20 @@ public class EidInfo {
         logger.error(Utils.map2UTF8String(residence));
         
         // tags: 1568 .. 1578
-        setState(Utils.bytes2UTF8String(residence.get(1568)));
-        setCommunity(Utils.bytes2UTF8String(residence.get(1569)));
-        setPlace(Utils.bytes2UTF8String(residence.get(1570)));
-        setStreet(Utils.bytes2UTF8String(residence.get(1571)));
-        setHouseNumber(Utils.bytes2UTF8String(residence.get(1572)));
+        setState(Utils.bytes2UTF8String((byte[]) residence.get(1568)));
+        setCommunity(Utils.bytes2UTF8String((byte[]) residence.get(1569)));
+        setPlace(Utils.bytes2UTF8String((byte[]) residence.get(1570)));
+        setStreet(Utils.bytes2UTF8String((byte[]) residence.get(1571)));
+        setHouseNumber(Utils.bytes2UTF8String((byte[]) residence.get(1572)));
         
         // FIXME: Get tags
         // 1573 .. 1577 ???
-        // setHouseLetter(Utils.bytes2UTF8String(residence.get(1573))); // ??
-        // setEntrance(Utils.bytes2UTF8String(residence.get(1576))); // ??
-        // setFloor(Utils.bytes2UTF8String(residence.get(1577))); // ??
+        // setHouseLetter(Utils.bytes2UTF8String((byte[]) residence.get(1573))); // ??
+        // setEntrance(Utils.bytes2UTF8String((byte[]) residence.get(1576)));    // ??
+        // setFloor(Utils.bytes2UTF8String((byte[]) residence.get(1577)));       // ??
         houseLetter = ""; entrance = ""; floor = "";
 
-        setAppartmentNumber(Utils.bytes2UTF8String(residence.get(1578)));
+        setAppartmentNumber(Utils.bytes2UTF8String((byte[]) residence.get(1578)));
     }
 
     /**
