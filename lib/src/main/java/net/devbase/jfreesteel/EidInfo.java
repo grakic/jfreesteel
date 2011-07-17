@@ -59,51 +59,55 @@ public class EidInfo {
     private String floor;
     private String appartmentNumber;
     
-    public EidInfo(final Map<Integer, byte[]> document, final Map<Integer, byte[]> personal, final Map<Integer, byte[]> residence) throws Exception
-    {
+    /**
+     * Build new EidInfo instance using parsed document, personal and residence info from the card
+     * 
+     * @param document TLV structure as tag -> bytes map
+     * @param personal TLV structure as tag -> bytes map
+     * @param residence TLV structure as tag -> bytes map
+     */
+    public EidInfo(final Map<Integer, byte[]> document, final Map<Integer, byte[]> personal,
+        final Map<Integer, byte[]> residence) throws Exception {
         setDocumentInfo(document);
         setPersonalInfo(personal);
         setResidenceInfo(residence);        
     }
 
-    private void setDocumentInfo(final Map<Integer, byte[]> document)
-    {
-                            // tags: 1545 - 1553
-                            // 1545 = SRB
-                setDocRegNo(Utils.bytes2UTF8String(document.get(1546)));
-                            // 1547 = ID
-                            // 1548 = ID<docRegNo>
-             setIssuingDate(Utils.bytes2UTF8String(document.get(1549)));
-              setExpiryDate(Utils.bytes2UTF8String(document.get(1550)));
+    private void setDocumentInfo(final Map<Integer, byte[]> document) {
+        // tags: 1545 - 1553
+        // 1545 = SRB
+        setDocRegNo(Utils.bytes2UTF8String(document.get(1546)));
+        // 1547 = ID
+        // 1548 = ID<docRegNo>
+        setIssuingDate(Utils.bytes2UTF8String(document.get(1549)));
+        setExpiryDate(Utils.bytes2UTF8String(document.get(1550)));
         setIssuingAuthority(Utils.bytes2UTF8String(document.get(1551)));
-                            // 1552 = SC
-                            // 1553 = SC
+        // 1552 = SC
+        // 1553 = SC
     }
 
-    private void setPersonalInfo(final Map<Integer, byte[]> personal) throws Exception
-    {
-                            // tags: 1558 - 1567
-    	  setPersonalNumber(Utils.bytes2UTF8String(personal.get(1558)));
-                 setSurname(Utils.bytes2UTF8String(personal.get(1559)));
-               setGivenName(Utils.bytes2UTF8String(personal.get(1560)));
-         setParentGivenName(Utils.bytes2UTF8String(personal.get(1561)));
-                     setSex(Utils.bytes2UTF8String(personal.get(1562)));
-            setPlaceOfBirth(Utils.bytes2UTF8String(personal.get(1563)));
+    private void setPersonalInfo(final Map<Integer, byte[]> personal) throws Exception {
+        // tags: 1558 - 1567
+        setPersonalNumber(Utils.bytes2UTF8String(personal.get(1558)));
+        setSurname(Utils.bytes2UTF8String(personal.get(1559)));
+        setGivenName(Utils.bytes2UTF8String(personal.get(1560)));
+        setParentGivenName(Utils.bytes2UTF8String(personal.get(1561)));
+        setSex(Utils.bytes2UTF8String(personal.get(1562)));
+        setPlaceOfBirth(Utils.bytes2UTF8String(personal.get(1563)));
         setCommunityOfBirth(Utils.bytes2UTF8String(personal.get(1564)));
-            setStateOfBirth(Utils.bytes2UTF8String(personal.get(1565)));        
-             setDateOfBirth(Utils.bytes2UTF8String(personal.get(1566)));
-                            // 1567 = SRB (stateOfBirth code?)
+        setStateOfBirth(Utils.bytes2UTF8String(personal.get(1565)));        
+        setDateOfBirth(Utils.bytes2UTF8String(personal.get(1566)));
+        // 1567 = SRB (stateOfBirth code?)
     }
 
-    private void setResidenceInfo(final Map<Integer, byte[]> residence)
-    {
+    private void setResidenceInfo(final Map<Integer, byte[]> residence) {
         logger.error(Utils.map2UTF8String(residence));
         
-                       // tags: 1568 .. 1578
-              setState(Utils.bytes2UTF8String(residence.get(1568)));
-          setCommunity(Utils.bytes2UTF8String(residence.get(1569)));
-              setPlace(Utils.bytes2UTF8String(residence.get(1570)));
-             setStreet(Utils.bytes2UTF8String(residence.get(1571)));
+        // tags: 1568 .. 1578
+        setState(Utils.bytes2UTF8String(residence.get(1568)));
+        setCommunity(Utils.bytes2UTF8String(residence.get(1569)));
+        setPlace(Utils.bytes2UTF8String(residence.get(1570)));
+        setStreet(Utils.bytes2UTF8String(residence.get(1571)));
         setHouseNumber(Utils.bytes2UTF8String(residence.get(1572)));
         
         // FIXME: Get tags
@@ -116,82 +120,111 @@ public class EidInfo {
         setAppartmentNumber(Utils.bytes2UTF8String(residence.get(1578)));
     }
 
-    public String getNameFull()
-    {
+    /**
+     * Get given name, parent given name and a surname as a single string.
+     *
+     * @return Nicely formatted full name
+     */
+    public String getNameFull() {
         return givenName + " " + parentGivenName + " " + surname;
     }
 
     /**
-     * Get place of residence as multiline string. Format paramters
-     * can be used to provide better output or null/empty strings can
-     * be passed for no special formating.
+     * Get place of residence as multiline string. Format paramters can be used to provide better
+     * output or null/empty strings can be passed for no special formating.
      * 
-     * For example if floorLabelFormat is "%s. sprat" returned string
-     * will contain "5. sprat" for floor number 5.
+     * For example if floorLabelFormat is "%s. sprat" returned string will contain "5. sprat" for
+     * floor number 5.
      * 
      * Recommended values for Serbian are "ulaz %s", "%s. sprat" and "br. %s"
      * 
-     * @param entranceLabelFormat
-     * @param floorLabelFormat
-     * @param appartmentLabelFormat
-     * @return
+     * @param entranceLabelFormat String to format entrance label
+     * @param floorLabelFormat String to format floor label
+     * @param appartmentLabelFormat String to format appartment label
+     * @return Nicely formatted place of residence as multiline string
      */
-    public String getPlaceFull(String entranceLabelFormat, String floorLabelFormat, String appartmentLabelFormat)
-    {
+    public String getPlaceFull(String entranceLabelFormat, String floorLabelFormat, String appartmentLabelFormat) {
         StringBuilder out = new StringBuilder();
 
-        if(entranceLabelFormat.isEmpty())   entranceLabelFormat = "%s";
-        if(floorLabelFormat.isEmpty())      floorLabelFormat = "%s";
-        if(appartmentLabelFormat.isEmpty()) appartmentLabelFormat = "%s";
+        if (entranceLabelFormat.isEmpty()) {
+            entranceLabelFormat = "%s";
+        }
+        if (floorLabelFormat.isEmpty()) {
+            floorLabelFormat = "%s";
+        }
+        if (appartmentLabelFormat.isEmpty()) {
+            appartmentLabelFormat = "%s";
+        }
         
-        if(!street.isEmpty()) out.append(street);                   // Neka ulica
-        if(!houseNumber.isEmpty()) {                                // Neka ulica 11
+        if (!street.isEmpty()) {
+            // Neka ulica
+            out.append(street);                   
+        }
+        if (!houseNumber.isEmpty()) {
+            // Neka ulica 11
             out.append(" ");
             out.append(houseNumber);
         }
-        if(!houseLetter.isEmpty()) out.append(houseLetter);        // Neka ulica 11A
+        if (!houseLetter.isEmpty()) {
+            // Neka ulica 11A
+            out.append(houseLetter);
+        }
         
         // For entranceLabel = "ulaz %s" gives "Neka ulica 11A ulaz 2"
-        if(!entrance.isEmpty()) {
+        if (!entrance.isEmpty()) {
             out.append(" ");
             out.append(String.format(entranceLabelFormat, entrance));
         }
 
         // For floorLabel = "%s. sprat" gives "Neka ulica 11 ulaz 2, 5. sprat"
-        if(!floor.isEmpty()) {
+        if (!floor.isEmpty()) {
             out.append(", ");
             out.append(String.format(floorLabelFormat, floor));
         }
 
-        if(!appartmentNumber.isEmpty()) {
+        if (!appartmentNumber.isEmpty()) {
             // For appartmentLabel "br. %s" gives "Neka ulica 11 ulaz 2, 5. sprat, br. 4"
-            if(!entrance.isEmpty() || !floor.isEmpty()) out.append(", " + String.format(appartmentLabelFormat, appartmentNumber));
-            else out.append("/" + appartmentNumber); // short form: Neka ulica 11A/4
+            if (!entrance.isEmpty() || !floor.isEmpty()) {
+                out.append(", " + String.format(appartmentLabelFormat, appartmentNumber));
+            } else {
+                // short form: Neka ulica 11A/4
+                out.append("/" + appartmentNumber);
+            }
         }
 
         out.append("\n");
         out.append(place);
-        if(!community.isEmpty()) {
+        if (!community.isEmpty()) {
             out.append(", ");
             out.append(community);
         }
 
         out.append("\n");
-        if(state.contentEquals("SRB")) {
+        if (state.contentEquals("SRB")) {
             // small cheat for better output
             out.append("REPUBLIKA SRBIJA");
+        } else {
+            out.append(state);
         }
-        else out.append(state);
         
         return out.toString();
     }
 
+    /**
+     * Get full place of birth as a multiline string, including community and state if present.
+     *
+     * @return Nicely formatted place of birth as a multiline string.
+     */
     public String getPlaceOfBirthFull()
     {
         String out = new String(placeOfBirth);
 
-        if(!communityOfBirth.isEmpty()) out += ", " + communityOfBirth;
-        if(!stateOfBirth.isEmpty()) out += "\n" + stateOfBirth;
+        if (!communityOfBirth.isEmpty()) {
+            out += ", " + communityOfBirth;
+        }
+        if (!stateOfBirth.isEmpty()) {
+            out += "\n" + stateOfBirth;
+        }
         
         return out;
     }
@@ -225,12 +258,14 @@ public class EidInfo {
     }
     public void setPersonalNumber(String personalNumber) throws Exception
     {
-    	Pattern pattern = Pattern.compile("^[0-9]{13}$", Pattern.CASE_INSENSITIVE);  
+        // there are valid personal numbers with invalid checksum, check for format only
+        Pattern pattern = Pattern.compile("^[0-9]{13}$", Pattern.CASE_INSENSITIVE);  
         Matcher matcher = pattern.matcher(personalNumber);  
-        if(matcher.matches()) {  
-        	this.personalNumber = personalNumber;
-        }  
-        else throw new Exception("Invalid personal number.");
+        if (matcher.matches()) {  
+            this.personalNumber = personalNumber;
+        } else {
+            throw new Exception("Invalid personal number.");
+        }
     }
     public String getSurname() {
         return surname;
@@ -335,13 +370,14 @@ public class EidInfo {
         this.appartmentNumber = appartmentNumber;
     }
     
-    // For testing
+    // For debug
     @Override
-    public String toString()
-    {
-        return  givenName + " " + parentGivenName + " " + surname + "(" + personalNumber + "/" + sex + ")\n" +
-                docRegNo  + " " + issuingDate + "-" + expiryDate + ", " + issuingAuthority + "\n" +
-                state + ", " + place + ", " + community + ", " + street + " " + houseNumber + houseLetter + " " + entrance + " " + floor + " " + appartmentNumber + "\n" +
-                dateOfBirth + ", " + placeOfBirth + ", " + communityOfBirth + " " + stateOfBirth + "\n";
+    public String toString() {
+        return  givenName + " " + parentGivenName + " " + surname + "(" + personalNumber + "/" +
+                sex + ")\n" + docRegNo  + " " + issuingDate + "-" + expiryDate + ", " + 
+                issuingAuthority + "\n" + state + ", " + place + ", " + community + ", " + street +
+                " " + houseNumber + houseLetter + " " + entrance + " " + floor + " " +
+                appartmentNumber + "\n" + dateOfBirth + ", " + placeOfBirth + ", " + 
+                communityOfBirth + " " + stateOfBirth + "\n";
     }
 }

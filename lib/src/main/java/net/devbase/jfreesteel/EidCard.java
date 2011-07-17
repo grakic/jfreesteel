@@ -58,53 +58,60 @@ public class EidCard {
     private Card card = null;
     private CardChannel channel;
     
-    public EidCard(final Card card) throws IllegalArgumentException, SecurityException, IllegalStateException
-    {
+    public EidCard(final Card card)
+        throws IllegalArgumentException, SecurityException, IllegalStateException {
         // Check if the card ATR is recognized
         if(!knownATR(card.getATR().getBytes())) {
-            throw new IllegalArgumentException("EidCard: Card is not recognized as Serbian eID. Card ATR: " + Utils.bytes2HexString(card.getATR().getBytes()));
+            throw new IllegalArgumentException(
+                "EidCard: Card is not recognized as Serbian eID. Card ATR: " + 
+                Utils.bytes2HexString(card.getATR().getBytes()));
         }
 
         this.card = card;
         channel = card.getBasicChannel();
     }
     
-    private boolean knownATR(byte[] card_atr)
-    {
-        for(byte[] eid_atr:known_eid_atrs)
-        {
-            if(Arrays.equals(card_atr, eid_atr)) return true;
+    private boolean knownATR(byte[] card_atr) {
+        for(byte[] eid_atr:known_eid_atrs) {
+            if(Arrays.equals(card_atr, eid_atr)) {
+                return true;
+            }
         }
         return false;
     }
     
     private static final byte[][] known_eid_atrs = {
-            {(byte) 0x3B, (byte) 0xB9, (byte) 0x18, (byte) 0x00, (byte) 0x81, (byte) 0x31, (byte) 0xFE, (byte) 0x9E, (byte) 0x80, (byte) 0x73, (byte) 0xFF, (byte) 0x61, (byte) 0x40, (byte) 0x83, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0xDF},
+        {(byte) 0x3B, (byte) 0xB9, (byte) 0x18, (byte) 0x00, (byte) 0x81, (byte) 0x31, (byte) 0xFE,
+         (byte) 0x9E, (byte) 0x80, (byte) 0x73, (byte) 0xFF, (byte) 0x61, (byte) 0x40, (byte) 0x83,
+         (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0xDF},
     };
     
     private static final byte[] DOCUMENT_FILE  = {0x0F, 0x02}; // Document data
     private static final byte[] PERSONAL_FILE  = {0x0F, 0x03}; // Personal data
-    private static final byte[] RESIDENCE_FILE = {0x0F, 0x04}; // Place of residence, variable length
+    private static final byte[] RESIDENCE_FILE = {0x0F, 0x04}; // Place of residence, var length
     private static final byte[] PHOTO_FILE     = {0x0F, 0x06}; // Personal photo in JPEG format
 
+    // Intermediate CA gradjani public X.509 certificate
     @SuppressWarnings("unused")
-    private static final byte[] INTERM_CERT_FILE  = {0x0F, 0x11}; // Intermediate CA gradjani public X.509 certificate
+    private static final byte[] INTERM_CERT_FILE  = {0x0F, 0x11};
+
+    // Public X.509 certificate for qualified (Non Repudiation) signing
     @SuppressWarnings("unused")
-    private static final byte[] SIGNING_CERT_FILE = {0x0F, 0x10}; // Public X.509 certificate for qualified (Non Repudiation) signing
+    private static final byte[] SIGNING_CERT_FILE = {0x0F, 0x10};
+
+    // Public X.509 certificate for authentication
     @SuppressWarnings("unused")
-    private static final byte[] AUTH_CERT_FILE    = {0x0F, 0x08}; // Public X.509 certificate for authentication
+    private static final byte[] AUTH_CERT_FILE    = {0x0F, 0x08};
 
     private static final int BLOCK_SIZE = 0xFF;
 
-    private Map<Integer, byte[]> parseTLV(byte[] bytes)
-    {
+    private Map<Integer, byte[]> parseTLV(byte[] bytes) {
         HashMap<Integer, byte[]> out = new HashMap<Integer, byte[]>();
         
         // [fld 16bit LE] [len 16bit LE] [len bytes of data] | [fld] [06] ...
         
         int i = 0;
-        while(i+3 < bytes.length)
-        {
+        while(i+3 < bytes.length) {
             int len = ((0xFF&bytes[i+3])<<8) + (0xFF&bytes[i+2]);
             int tag = ((0xFF&bytes[i+1])<<8) + (0xFF&bytes[i+0]);
             
@@ -119,8 +126,16 @@ public class EidCard {
         return out;
     }
 
-    private byte[] readElementaryFile(byte[] name, boolean strip_heading_tlv) throws CardException
-    {
+    /**
+     * Read EF content, selecting by file path.
+     * 
+     * The file length is read at 4B offset from the file. The method is not thread safe. Exclusive
+     * card access should be enabled before calling the method.
+     * 
+     * TODO: Refactor to be in line with ISO7816-4 and BER-TLV, removing "magic" headers
+     */
+    private byte[] readElementaryFile(byte[] name, boolean strip_heading_tlv) throws CardException {
+
         selectFile(name);
     
         // Read first 6 bytes from the EF
@@ -128,8 +143,10 @@ public class EidCard {
 
         // Missing files have header filled with 0xFF
         int i = 0;
-        while(i < header.length && header[i] == 0xFF) i++;
-        if(i == header.length) {
+        while (i < header.length && header[i] == 0xFF) {
+            i++;
+        }
+        i f(i == header.length) {
             throw new CardException("Read EF file failed: File header is missing");
         }
         
@@ -141,14 +158,12 @@ public class EidCard {
         return readBinary(offset, length);
     }
     
-    private byte[] readBinary(int offset, int length) throws CardException
-    {
+    private byte[] readBinary(int offset, int length) throws CardException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        while(length > 0)
-        {
+        while (length > 0) {
             int block = Math.min(length, BLOCK_SIZE);
             ResponseAPDU r = channel.transmit(new CommandAPDU(0x00, 0xB0, offset >> 8, offset & 0xFF, block));
-            if(r.getSW() != 0x9000) {
+            if (r.getSW() != 0x9000) {
                 throw new CardException("Read binary failed: " + Utils.int2HexString(r.getSW()));
             }
 
@@ -167,16 +182,14 @@ public class EidCard {
         return out.toByteArray();
     }
     
-    private void selectFile(byte[] name) throws CardException
-    {
+    private void selectFile(byte[] name) throws CardException {
         ResponseAPDU r = channel.transmit(new CommandAPDU(0x00, 0xA4, 0x08, 0x00, name));
         if(r.getSW() != 0x9000) {
             throw new CardException("Select failed: " + Utils.int2HexString(r.getSW()));
         }
     }
     
-    public Image readEidPhoto() throws CardException
-    {
+    public Image readEidPhoto() throws CardException {
         try {
             logger.info("photo exclusive");
             card.beginExclusive();
@@ -189,15 +202,13 @@ public class EidCard {
             } catch (IOException e) {
                 throw new CardException("Photo reading error: " + e.getMessage(), e);
             }
-        }
-        finally {
+        } finally {
             card.endExclusive();
             logger.info("photo exclusive free");            
         }
     }
     
-    public EidInfo readEidInfo() throws CardException, Exception
-    {
+    public EidInfo readEidInfo() throws CardException, Exception {
         try {
             logger.info("exclusive");
             card.beginExclusive();
@@ -215,8 +226,7 @@ public class EidCard {
         }
     }
 
-    public String debugEidInfo() throws CardException
-    {
+    public String debugEidInfo() throws CardException {
         try {
             logger.debug("debug exclusive ask");
             card.beginExclusive();
@@ -242,15 +252,14 @@ public class EidCard {
     }
     
 /*
-    private X509Certificate readCertificate(byte[] name, CertificateFactory factory) throws CardException, CertificateException
-    {
+    private X509Certificate readCertificate(byte[] name, CertificateFactory factory)
+        throws CardException, CertificateException {
         byte[] bytes = readElementaryFile(AUTH_CERT_FILE, true);
         
         return factory.generateCertificate(new ByteArrayInputStream(bytes));
     }
     
-    public List<X509Certificate> readAuthCertChain() throws CertificateException
-    {
+    public List<X509Certificate> readAuthCertChain() throws CertificateException {
         List<X509Certificate> chain = new LinkedList<X509Certificate>();
         CertificateFactory factory = CertificateFactory.getInstance("X.509");
 
@@ -272,34 +281,30 @@ public class EidCard {
     }
 */
     
-    public void disconnect(boolean reset) throws CardException
-    {
+    public void disconnect(boolean reset) throws CardException {
         card.disconnect(reset);
         card = null;
     }
     
     @Override
-    protected void finalize() throws Throwable
-    {
-        if(card != null) disconnect(false);
+    protected void finalize() throws Throwable {
+        if (card != null) {
+            disconnect(false);  
+        }
     }
 
 /*    
-    public interface EidPhotoAsyncCallback 
-    {
+    public interface EidPhotoAsyncCallback {
         public void ready(Image image);
         public void error(CardException e);
     }
 
-    public void readEidPhotoAsync(final EidPhotoAsyncCallback callback)
-    {
+    public void readEidPhotoAsync(final EidPhotoAsyncCallback callback) {
         Thread reader = new Thread(new Runnable() {
-            public void run()
-            {
+            public void run() {
                 try {
                     Image photo = readEidPhoto();
                     callback.ready(photo);
-                    
                 } catch (CardException e) {
                     callback.error(e);
                 }

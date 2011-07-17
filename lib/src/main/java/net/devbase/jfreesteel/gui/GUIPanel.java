@@ -38,19 +38,17 @@ import javax.swing.border.EmptyBorder;
 import net.devbase.jfreesteel.EidInfo;
 
 /**
- * Use GUIPanel as JPanel in your Swing applications to display
- * data from the eID card.
+ * Use GUIPanel as JPanel in your Swing applications to display data from the eID card.
  * 
- * See JFreesteelGUI application for the example how to use GUIPanel,
- * Reader and EidCard to create the complete eID card viewer. Please
- * note that the JFreesteelGUI is released under GNU Affero GPLv3 license,
- * while this class and the rest of jfreesteel library is released
- * under the more permissive  GNU Lesser GPL license version 3.
+ * See SerbianEidViewer application for the example how to use GUIPanel, Reader and EidCard to
+ * create the complete eID card viewer. Please note that the SerbianEidViewer is released under GNU
+ * Affero GPLv3 license, while this class and the rest of JFreesteel library is released under the
+ * more permissive  GNU Lesser GPL license version 3.
  * 
  * @author Goran Rakic (grakic@devbase.net)
  */
-public class GUIPanel extends JPanel
-{
+public class GUIPanel extends JPanel {
+
     private static final long serialVersionUID = 5830429844217109957L;
 
     private static final ResourceBundle bundle = ResourceBundle.getBundle("net.devbase.jfreesteel.gui.jfreesteel-lib-gui"); //$NON-NLS-1$
@@ -70,52 +68,55 @@ public class GUIPanel extends JPanel
     private JLabel expiryDate;
     private JLabel issuingAuthority;
     
-    public void clearDetailsAndPhoto()
-    {
+    public void clearDetailsAndPhoto() {
         setDetails("", "", "", "", "", "", "", "", "");
         setPhoto(null);
     }
     
-    public void setPhoto(Image image)
-    {
+    public void setPhoto(Image image) {
         if(image == null) {
             photo.setImage(throbber);
+        } else {
+            photo.setImage(image);
         }
-        else photo.setImage(image);        
     }
 
-    public void setDetails(EidInfo info)
-    {
+    public void setDetails(EidInfo info) {
         nameFull.setText(info.getNameFull());
         personalNumber.setText(info.getPersonalNumber());
-        placeFull.setText("<html>"+info.getPlaceFull(bundle.getString("EntranceLabelFormat"), 
-                                                     bundle.getString("FloorLabelFormat"),
-                                                     bundle.getString("AppartmentLabelFormat")).replace("\n", "<br/>"));
         dateOfBirth.setText(info.getDateOfBirth());
         placeOfBirthFull.setText("<html>"+info.getPlaceOfBirthFull().replace("\n", "<br/>"));
+
+        placeFull.setText("<html>"+info.getPlaceFull(bundle.getString("EntranceLabelFormat"), 
+            bundle.getString("FloorLabelFormat"),
+            bundle.getString("AppartmentLabelFormat")).replace("\n", "<br/>"));
+
         docRegNo.setText(info.getDocRegNo());
         issuingDate.setText(info.getIssuingDate());
         expiryDate.setText(info.getExpiryDate());
         issuingAuthority.setText(info.getIssuingAuthority());
     }
     
-    public void setDetails(String nameFull, String personalNumber, String placeFull, String dateOfBirth, String placeOfBirthFull, String docRegNo, String issuingDate, String expiryDate, String issuingAuthority)
-    {
+    public void setDetails(String nameFull, String personalNumber, String placeFull,
+        String dateOfBirth, String placeOfBirthFull, String docRegNo, String issuingDate,
+        String expiryDate, String issuingAuthority) {
+
         this.nameFull.setText(nameFull);
         this.personalNumber.setText(personalNumber);
-        this.placeFull.setText("<html>"+placeFull.replace("\n", "<br/>"));
         this.dateOfBirth.setText(dateOfBirth);
         this.placeOfBirthFull.setText("<html>"+placeOfBirthFull.replace("\n", "<br/>"));
+
+        this.placeFull.setText("<html>"+placeFull.replace("\n", "<br/>"));
+
         this.docRegNo.setText(docRegNo);
         this.issuingDate.setText(issuingDate);
         this.expiryDate.setText(expiryDate);
         this.issuingAuthority.setText(issuingAuthority);
     }
         
-    public GUIPanel()
-    {
-        setSize(new Dimension(700, 320));             // without layout manager
-        setPreferredSize(new Dimension(700, 320));    // with layout manager
+    public GUIPanel() {
+        setSize(new Dimension(700, 320));  // without layout manager
+        setPreferredSize(new Dimension(700, 320));  // with layout manager
         setBorder(new EmptyBorder(12, 12, 12, 12));
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 

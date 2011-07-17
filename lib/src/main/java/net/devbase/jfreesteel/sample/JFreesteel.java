@@ -39,36 +39,35 @@ import net.devbase.jfreesteel.Utils;
  * license, while this class and the rest of the jfreesteel library is
  * released under the more permissive GNU Lesser GPL license version 3.
  * 
- * @author Goran Rakic <grakic@devbase.net>
+ * @author Goran Rakic (grakic@devbase.net)
  */
 @SuppressWarnings("restriction") // Various javax.smartcardio.*
 public class JFreesteel {
 
-    public static CardTerminal pickTerminal(List<CardTerminal> terminals)
-    {
-        if(terminals.size() > 1) {
+    public static CardTerminal pickTerminal(List<CardTerminal> terminals) {
+        if (terminals.size() > 1) {
             System.out.println("Available readers:\n");
             int c = 1;
-            for(Object t:terminals.toArray())
-            {
+            for (Object t:terminals.toArray()) {
                 System.out.format("%d) %s\n", c++, t);
             }
 
             Scanner in = new Scanner(System.in);
-            while(true)
-            {
+            while (true) {
                 System.out.print("Select number: ");
                 System.out.flush();
 
                 c = in.nextInt();
-                if(c > 0 && c < terminals.size()) return terminals.get(c);
+                if (c > 0 && c < terminals.size()) {
+                    return terminals.get(c);
+                }
             }
+        } else {
+            return terminals.get(0);
         }
-        else return terminals.get(0);
     }
         
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         CardTerminal terminal = null;
         
         // get the terminal
@@ -77,7 +76,7 @@ public class JFreesteel {
             terminal = pickTerminal(factory.terminals().list());
 
             System.out.println("Using reader   : " + terminal);
-        } catch(CardException e) {
+        } catch (CardException e) {
             System.err.println("Missing card reader.");
         }
         
@@ -90,12 +89,12 @@ public class JFreesteel {
             EidInfo info = null;
 
             try {
-				info = eidcard.readEidInfo();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.exit(0);
-			}
+                info = eidcard.readEidInfo();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                System.exit(0);
+            }
 
             System.out.format("ATR            : %s\n", Utils.bytes2HexString(card.getATR().getBytes()));
             System.out.format("eID number     : %s\n", info.getDocRegNo());
