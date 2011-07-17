@@ -26,109 +26,92 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Reader class maintains the connection with the terminal and provides
- * an interface for your code to receive card insertion/removal events.
- * 
+ * Reader class maintains the connection with the terminal and provides an
+ * interface for your code to receive card insertion/removal events.
+ *
  * To assign the listeners for the event, pass the object implementing
  * ReaderListener interface to the Reader.addCardListener() method.
- * 
- * On card insertion insert() method of the listener will be called
- * passing new EidCard object that can be used to read data from the
- * Serbian eID card. Listener should assume that card is removed in the
- * default state.
- * 
+ *
+ * On card insertion insert() method of the listener will be called passing new
+ * EidCard object that can be used to read data from the Serbian eID card.
+ * Listener should assume that card is removed in the default state.
+ *
  * Reader will ignore cards with an unknown ATR.
- * 
+ *
  * @author Goran Rakic (grakic@devbase.net)
  */
 @SuppressWarnings("restriction")  // Various javax.smartcardio.*
 public class Reader {
 
     private static final Logger logger = LoggerFactory.getLogger(Reader.class);
-    /**
-     * CardTerminal this Reader is assigned to
-     */
+    /** CardTerminal this Reader is assigned to */
     private CardTerminal terminal;
 
-    /**
-     * EidCard is not null when the card is inserted
-     */
-    private EidCard eidcard = null;
+    /** EidCard is not null when the card is inserted */
+    private volatile EidCard eidcard = null;
 
     /** List of card listeners to be notifies on card insertion/removal. */
-    // Must be a copy-on-write array list, as list notification will crash if someone adds
-    // a listener while notification is in progress; due to concurrent modification of the 
-    // iterated collection.
+    // Must be a copy-on-write array list, as list notification will crash if
+    // someone adds a listener while notification is in progress; due to
+    // concurrent modification of the iterated collection.
     private CopyOnWriteArrayList<ReaderListener> listeners;
 
-    /**
-     * Thread waiting for card insert/removal
-     */
+    /** Thread waiting for card insert/removal */
     private Thread listenerThread;
 
-    public interface ReaderListener
-    {
+    public interface ReaderListener {
         /**
-         * Card is inserted into the reader terminal. Use EidCard object
-         * to read data from the eID card.
-         * 
+         * Card is inserted into the reader terminal. Use EidCard object to read
+         * data from the eID card.
+         *
          * @param card EidCard object
          */
         public void inserted(EidCard card);
 
-        /**
-         * Card is removed from the reader terminal
-         */
+        /** Card is removed from the reader terminal */
         public void removed();
     }
 
-    public Reader(final CardTerminal terminal)
-    {        
+    public Reader(final CardTerminal terminal) {
         this.terminal = terminal;
         listeners = new CopyOnWriteArrayList<ReaderListener>();
 
         // start card connection in a new thread
-        listenerThread = new Thread(new Runnable()
-        {
-            public void run()
-            {
+        listenerThread = new Thread(new Runnable() {
+            public void run() {
                 try {
                     // sometimes reader is not blocking on waitForCard*
-                    int timeout = 0;
+                    int timeoutMs = 0;
 
                     // main thread loop
-                    while(true)
-                    {
+                    while (true) {
                         // wait for a status change
                         try {
-                            if(eidcard == null) {
+                            if (eidcard == null) {
                                 logger.info("EidCard is null, wait for insertion");
-                                terminal.waitForCardPresent(timeout);
+                                terminal.waitForCardPresent(timeoutMs);
                                 connect();
-                            }
-                            else {
+                            } else {
                                 logger.info("EidCard not null, wait for removal");
-                                terminal.waitForCardAbsent(timeout);
+                                terminal.waitForCardAbsent(timeoutMs);
                                 disconnect();
                             }
-
-                        } catch(CardException e1) {
+                        } catch (CardException e1) {
                             // try to re-connect, will step out on new exception
-                            if(terminal.isCardPresent()) {
+                            if (terminal.isCardPresent()) {
                                 logger.info("RE-CONNECT");
                                 connect();
-                            }
-                            else {
+                            } else {
                                 logger.info("FAILURE, probably not blocking, raising timeout to 3s");
-                                timeout = 3000;
+                                timeoutMs = 3000;
                             }
                         }
 
                         notifyListeners();
                     }
-                } catch(CardException e2) {
+                } catch (CardException e2) {
                     // Break the loop, exit thread
-                }    
+                }
             }
 
             /** Notify all listeners. */
@@ -142,13 +125,12 @@ public class Reader {
     }
 
     /**
-     * Add new card listener to be notified on card insertion/removal.
-     * Listeners should assume that the card is removed in default state.
-     * 
+     * Add new card listener to be notified on card insertion/removal. Listeners
+     * should assume that the card is removed in default state.
+     *
      * @param listener Card listener object to be added
      */
-    public void addCardListener(ReaderListener listener)
-    {
+    public void addCardListener(ReaderListener listener) {
         listeners.add(listener);
 
         // if the card is inserted, notify the listener about current state
@@ -156,30 +138,30 @@ public class Reader {
     }
 
     /**
-     * Remove card listener from the list of listeners. Does nothing
-     * if the listener is not present in the list.
-     * 
+     * Remove card listener from the list of listeners. Does nothing if the
+     * listener is not present in the list.
+     *
      * @param listener Previously added card listener object to be removed
+     * @return true if the removal succeeded; false otherwise
      */
-    public void removeCardListener(ReaderListener listener)
-    {
-        listeners.remove(listener);
+    public boolean removeCardListener(ReaderListener listener) {
+        return listeners.remove(listener);
     }
 
-    private void notifyCardListener(ReaderListener listener, boolean inserted_only)
-    {
-        if(eidcard != null) listener.inserted(eidcard);
-        else if(!inserted_only) listener.removed();
+    private void notifyCardListener(ReaderListener listener, boolean inserted_only) {
+        if (eidcard != null) {
+            listener.inserted(eidcard);
+        } else if (!inserted_only) {
+            listener.removed();
+        }
     }
-    
-    public void connect() throws CardException
-    {
+
+    public void connect() throws CardException {
         logger.info("CONNECT");
-        eidcard = new EidCard(terminal.connect("*"));        
+        eidcard = new EidCard(terminal.connect("*"));
     }
-    
-    public void disconnect() throws CardException
-    {
+
+    public void disconnect() throws CardException {
         logger.info("DISCONNECT");
         eidcard.disconnect(false);
         eidcard = null;
