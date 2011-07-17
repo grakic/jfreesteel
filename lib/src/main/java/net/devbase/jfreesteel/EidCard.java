@@ -146,7 +146,7 @@ public class EidCard {
         while (i < header.length && header[i] == 0xFF) {
             i++;
         }
-        i f(i == header.length) {
+        if (i == header.length) {
             throw new CardException("Read EF file failed: File header is missing");
         }
         
