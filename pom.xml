@@ -27,5 +27,6 @@
     <modules>
         <module>lib</module>
         <module>viewer</module>
+        <module>applet</module>
     </modules>
 </project>

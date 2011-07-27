@@ -1,0 +1,80 @@
+<html>
+<head>
+<style type="text/css">
+body {
+   font-family: sans-serif;
+   padding: 30px;
+}
+#eid {
+   width: 640px;
+   height: 320px;
+   margin: 0 auto;
+   border: 1px solid #ccc;
+   border-radius: 15px;
+   box-shadow: 3px 3px 3px #ccc;
+   overflow: hidden;
+}
+#eid h1 {
+   padding-top: 20px;
+   padding-left: 260px;
+   background-color: #666666;
+   -webkit-background-clip: text;
+   -moz-background-clip: text;
+   background-clip: text;
+   color: transparent;
+   text-shadow: rgba(255,255,255,0.5) 0px 3px 3px;
+   color: #333;
+}
+#eid img {
+   float: left;
+}
+</style>
+<script type="text/javascript" src="https://www.java.com/js/deployJava.js"></script>
+<script type="text/javascript">
+var nameNode;
+var photoNode;
+
+function inserted(name, photo) {
+  nameNode.innerHTML = name;
+  photoNode.src = "data:image/png;base64,"+photo;
+}
+function removed() {
+  nameNode.innerHTML = "";
+  photoNode.src = "jfreesteel-applet.gif";
+}
+
+window.onload = function() {
+    nameNode = document.getElementById("name");
+    photoNode = document.getElementById("photo");
+
+//    Mozilla Bug 606737 workaround
+//    var applet = document.getElementById("jfreesteel");
+//    applet.setupJSObject();
+}
+</script>
+</head>
+<body>
+
+<script type="text/javascript">
+    var attributes = {
+        code: "net.devbase.jfreesteel.applet.JFreesteelApplet.class",
+        archive: "../target/applet-1.0-SNAPSHOT.jar",
+        width: 1,
+        height: 1,
+        mayscript: 'true',
+        id: 'jfreesteel'
+    };
+    var parameters = {
+        RemovedCallback: 'removed',
+        InsertedCallback: 'inserted'
+    };
+    deployJava.runApplet(attributes, parameters, '1.6');
+</script>
+
+<div id="eid">
+  <img id="photo" src="jfreesteel-applet.gif" />
+  <h1 id="name"></h1>
+</div>
+
+</body>
+</html>
