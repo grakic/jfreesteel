@@ -1,0 +1,12 @@
+Applet using smartcardio API has to be signed. You can use a self-signed certificate.
+
+  keytool -genkey -alias signFiles -keystore signing-jar.keystore \
+          -keypass <keypass> -dname "cn=<Your Name>" -storepass <storepass>
+
+  keytool -selfcert -alias signFiles -keystore signing-jar.keystore \
+          -keypass <keypass> -storepass <storepass>
+
+
+Now create a signed applet JAR:
+
+  mvn -Djarsigner.storepass="<storepass>" install
