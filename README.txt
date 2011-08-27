@@ -17,6 +17,17 @@ available on GNU/Linux)
 In the app module there is a complete GUI viewer, Java Swing application using
 the JFreesteel library.
 
-Get the source code from the Git repository at http://gitorious.org/freesteel
-Send your patches and comments to Goran Rakic <grakic@devbase.net>
+Resources
+---------
+
+  * Get the source code from the Git repository at
+    http://gitorious.org/freesteel
+
+  * Check out the library web page at http://devbase.net/jfreesteel
+    (in Serbian)
+
+  * Project's wiki page on gitorious:
+    http://gitorious.org/freesteel/pages/Home
+
+  * Send your patches and comments to Goran Rakic <grakic@devbase.net>
 

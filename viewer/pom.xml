@@ -6,14 +6,10 @@
         <artifactId>jfreesteel-project</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>net.devbase.jfreesteel</groupId>
     <artifactId>serbianeidviewer</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <name>Serbian eID Viewer Application</name>
     <description>GUI application using the JFreesteel library</description>
     <build>
-        <directory>../target/${artifactId}</directory>
-        <finalName>../${artifactId}-${version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -23,7 +19,7 @@
                     <archive>
                         <manifest>
                             <mainClass>net.devbase.jfreesteel.viewer.SerbianEidViewer</mainClass>
-                            <classpathPrefix>${project.artifactId}-lib/</classpathPrefix>
+                            <classpathPrefix>dependency/</classpathPrefix>
                             <addClasspath>true</addClasspath>
                         </manifest>
                     </archive>
@@ -37,18 +33,39 @@
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
-                        <configuration>
-                            <!--
-                            If the jfreesteel.jar is excluded, it will not be available
-                            in the serbianediviewer-lib/ classpath
-                            <excludeArtifactIds>jfreesteel</excludeArtifactIds>
-                            -->
-                            <outputDirectory>../target/${project.artifactId}-lib</outputDirectory>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <!-- Ignores the dependency plugin in Eclipse m2e -->
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                      <lifecycleMappingMetadata>
+                        <pluginExecutions>
+                          <pluginExecution>
+                            <pluginExecutionFilter>
+                              <groupId>org.apache.maven.plugins</groupId>
+                              <artifactId>maven-dependency-plugin</artifactId>
+                              <versionRange>[2.0,)</versionRange>
+                              <goals>
+                                <goal>copy-dependencies</goal>
+                              </goals>
+                            </pluginExecutionFilter>
+                            <action>
+                              <ignore />
+                            </action>
+                          </pluginExecution>
+                        </pluginExecutions>
+                      </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
     <repositories>
         <repository>

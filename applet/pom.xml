@@ -6,19 +6,14 @@
         <artifactId>jfreesteel-project</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>net.devbase.jfreesteel</groupId>
     <artifactId>applet</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <name>Serbian eID Applet Demo</name>
     <description>Applet demo using the JFreesteel library</description>
     <build>
-        <directory>../target/${artifactId}</directory>
-        <finalName>../${artifactId}-${version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2.1</version>
                 <configuration>
                     <appendAssemblyId>false</appendAssemblyId>
                     <descriptorRefs>
@@ -74,5 +69,11 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
+	<dependency>
+	    <groupId>local-java</groupId>
+	    <artifactId>local-java-plugin</artifactId>
+	    <version>0.0.0</version>
+	    <scope>provided</scope>
+	</dependency>
     </dependencies>
 </project>
