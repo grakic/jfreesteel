@@ -30,6 +30,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -48,6 +49,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.imageio.ImageIO;
 
 import net.devbase.jfreesteel.EidCard;
 import net.devbase.jfreesteel.EidInfo;
@@ -222,6 +224,19 @@ public class EidViewer extends JPanel implements ReaderListener {
         JFrame frame = new JFrame(bundle.getString("FreesteelTitle"));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
+
+        // Set window icon
+        ArrayList<Image> icons = new ArrayList<Image>();
+        final String iconFiles[] = {"eidviewer20.png", "eidviewer26.png", "eidviewer32.png"};
+        for (String iconFile : iconFiles) {
+            try {
+                icons.add(ImageIO.read(frame.getClass().getResource(
+                    "/net/devbase/jfreesteel/viewer/" + iconFile)));
+            } catch (IOException e) {
+                logger.error("Could not find icon file "+iconFile, e);
+            }
+        }
+        frame.setIconImages(icons);
 
         // Set default look and feel
         try {

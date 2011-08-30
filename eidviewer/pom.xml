@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>net.devbase.jfreesteel</groupId>
@@ -36,6 +36,64 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>1.3</version>
+                <executions>
+                    <execution>
+                        <id>EidViewer</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <headerType>gui</headerType>
+                            <outfile>${project.build.directory}/eidviewer.exe</outfile>
+                            <jar>${project.build.directory}/eidviewer-1.0-SNAPSHOT.jar</jar>
+                            <errTitle>JFreesteel</errTitle>
+                            <supportUrl>${project.url}</supportUrl>
+                            <customProcName>true</customProcName>
+                            <icon>eidviewer.ico</icon>
+                            <classPath>
+                                <mainClass>net.devbase.jfreesteel.viewer.EidViewer</mainClass>
+                                <addDependencies>true</addDependencies>
+                            </classPath>
+                            <jre>
+                                <minVersion>1.6.0</minVersion>
+                            </jre>
+                            <versionInfo>
+                                <fileVersion>0.9.0.1</fileVersion>
+                                <txtFileVersion>1.0-SNAPSHOT</txtFileVersion>
+                                <fileDescription>Serbian eID Viewer Application</fileDescription>
+                                <copyright>Goran Rakic</copyright>
+                                <productVersion>0.9.0.1</productVersion>
+                                <txtProductVersion>1.0-SNAPSHOT</txtProductVersion>
+                                <productName>JFreesteel eID Viewer</productName>
+                                <internalName>eidviewer</internalName>
+                                <originalFilename>eidviewer.exe</originalFilename>
+                            </versionInfo>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>nsis-maven-plugin</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>generate-project</goal>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${project.build.directory}/jfreesteel-${project.build.finalName}.exe</outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
@@ -45,23 +103,23 @@
                     <artifactId>lifecycle-mapping</artifactId>
                     <version>1.0.0</version>
                     <configuration>
-                      <lifecycleMappingMetadata>
-                        <pluginExecutions>
-                          <pluginExecution>
-                            <pluginExecutionFilter>
-                              <groupId>org.apache.maven.plugins</groupId>
-                              <artifactId>maven-dependency-plugin</artifactId>
-                              <versionRange>[2.0,)</versionRange>
-                              <goals>
-                                <goal>copy-dependencies</goal>
-                              </goals>
-                            </pluginExecutionFilter>
-                            <action>
-                              <ignore />
-                            </action>
-                          </pluginExecution>
-                        </pluginExecutions>
-                      </lifecycleMappingMetadata>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-dependency-plugin</artifactId>
+                                        <versionRange>[2.0,)</versionRange>
+                                        <goals>
+                                            <goal>copy-dependencies</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore/>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
                     </configuration>
                 </plugin>
             </plugins>
@@ -73,7 +131,40 @@
             <name>Maven Repository for iText</name>
             <url>http://maven.itextpdf.com/</url>
         </repository>
+        <repository>
+            <id>akathist-repository</id>
+            <name>Akathist Repository</name>
+            <url>http://www.9stmaryrd.com/maven</url>
+        </repository>
+        <repository>
+            <id>Codehaus Snapshots</id>
+            <url>http://nexus.codehaus.org/snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
     </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>akathist-repository</id>
+            <name>Akathist Repository</name>
+            <url>http://www.9stmaryrd.com/maven</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>Codehaus Snapshots</id>
+            <url>http://nexus.codehaus.org/snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <!-- Workaround for MNG-2974, see note below -->
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
     <dependencies>
         <dependency>
             <groupId>net.devbase.jfreesteel</groupId>
