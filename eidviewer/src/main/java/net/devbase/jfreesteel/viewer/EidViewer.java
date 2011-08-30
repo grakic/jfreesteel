@@ -61,15 +61,15 @@ import org.apache.log4j.PropertyConfigurator;
 import com.itextpdf.text.DocumentException;
 
 /**
- * SerbianEidViewer is a singleton class behind SerbianEidViewer application
+ * EidViewer is a singleton class behind EidViewer application
  * 
  * @author Goran Rakic (grakic@devbase.net)
  */
-public class SerbianEidViewer extends JPanel implements ReaderListener {
+public class EidViewer extends JPanel implements ReaderListener {
     
     private static final long serialVersionUID = -2497143822816312498L;
 
-    private static final Logger logger = Logger.getLogger(SerbianEidViewer.class);
+    private static final Logger logger = Logger.getLogger(EidViewer.class);
     
     private static final ResourceBundle bundle = ResourceBundle.getBundle("net.devbase.jfreesteel.viewer.viewer");
 
@@ -81,9 +81,9 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
     GUIPanel details;
     JButton button;
 
-    private static SerbianEidViewer instance = null;
+    private static EidViewer instance = null;
     
-    public SerbianEidViewer()
+    public EidViewer()
     {    	
         setSize(new Dimension(720, 350));
         setLayout(new CardLayout(0, 0));
@@ -165,10 +165,10 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
         add(details, "details");
     }
 
-    public static SerbianEidViewer getInstance()
+    public static EidViewer getInstance()
     {
         if(instance == null) {
-            instance = new SerbianEidViewer();
+            instance = new EidViewer();
         }
         return instance;
     }
@@ -191,7 +191,7 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
     private static void configureLog4j()
     {
         Properties properties = new Properties();
-        InputStream propertiesStream = SerbianEidViewer.class.getResourceAsStream("/net/devbase/jfreesteel/viewer/log4j.properties");
+        InputStream propertiesStream = EidViewer.class.getResourceAsStream("/net/devbase/jfreesteel/viewer/log4j.properties");
         if(propertiesStream != null) {
             try {
                 properties.load(propertiesStream);
@@ -259,7 +259,7 @@ public class SerbianEidViewer extends JPanel implements ReaderListener {
         }
 
         // Create and set up the content pane
-        SerbianEidViewer app = SerbianEidViewer.getInstance();
+        EidViewer app = EidViewer.getInstance();
         app.setFrame(frame);
         frame.getContentPane().add(app, BorderLayout.CENTER);
         frame.pack();

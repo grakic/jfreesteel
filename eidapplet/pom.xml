@@ -6,9 +6,9 @@
         <artifactId>jfreesteel-project</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>applet</artifactId>
+    <artifactId>eidapplet</artifactId>
     <name>Serbian eID Applet Demo</name>
-    <description>Applet demo using the JFreesteel library</description>
+    <description>Serbian eID applet demo using the JFreesteel library</description>
     <build>
         <plugins>
             <plugin>

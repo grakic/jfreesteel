@@ -26,9 +26,9 @@ import netscape.javascript.JSObject;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-public class JFreesteelApplet extends Applet implements ReaderListener {
+public class EidApplet extends Applet implements ReaderListener {
 
-    private static final Logger logger = Logger.getLogger(JFreesteelApplet.class);
+    private static final Logger logger = Logger.getLogger(EidApplet.class);
     JSObject window = null;
     EidCard card = null;
 
@@ -70,7 +70,7 @@ public class JFreesteelApplet extends Applet implements ReaderListener {
 	
     private static void configureLog4j() {
         Properties properties = new Properties();
-        InputStream propertiesStream = JFreesteelApplet.class.getResourceAsStream("/net/devbase/jfreesteel/applet/log4j.properties");
+        InputStream propertiesStream = EidApplet.class.getResourceAsStream("/net/devbase/jfreesteel/applet/log4j.properties");
         if(propertiesStream != null) {
             try {
                 properties.load(propertiesStream);

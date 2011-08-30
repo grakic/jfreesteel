@@ -40,7 +40,7 @@ function inserted(name, photo) {
 }
 function removed() {
   nameNode.innerHTML = "";
-  photoNode.src = "jfreesteel-applet.gif";
+  photoNode.src = "eidapplet.gif";
 }
 
 window.onload = function() {
@@ -48,7 +48,7 @@ window.onload = function() {
     photoNode = document.getElementById("photo");
 
 //    Mozilla Bug 606737 workaround
-//    var applet = document.getElementById("jfreesteel");
+//    var applet = document.getElementById("jfreesteel-eidapplet");
 //    applet.setupJSObject();
 }
 </script>
@@ -57,12 +57,12 @@ window.onload = function() {
 
 <script type="text/javascript">
     var attributes = {
-        code: "net.devbase.jfreesteel.applet.JFreesteelApplet.class",
-        archive: "../target/applet-1.0-SNAPSHOT.jar",
+        code: "net.devbase.jfreesteel.applet.EidApplet.class",
+        archive: "../target/eidapplet-1.0-SNAPSHOT.jar",
         width: 1,
         height: 1,
         mayscript: 'true',
-        id: 'jfreesteel'
+        id: 'jfreesteel-eidapplet'
     };
     var parameters = {
         RemovedCallback: 'removed',
@@ -72,7 +72,7 @@ window.onload = function() {
 </script>
 
 <div id="eid">
-  <img id="photo" src="jfreesteel-applet.gif" />
+  <img id="photo" src="eidapplet.gif" />
   <h1 id="name"></h1>
 </div>
 
