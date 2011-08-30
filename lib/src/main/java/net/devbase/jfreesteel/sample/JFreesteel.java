@@ -33,12 +33,12 @@ import net.devbase.jfreesteel.Utils;
  * This is just a simple demonstration how one can use jfreesteel library
  * to include eID viewer support into other applications. Reader interface
  * was not used, instead a direct connection to the Card is made.
- * 
+ *
  * See the jFreesteelGUI for the example how to use the Reader interface. 
  * Please note that the JFreesteelGUI is released under GNU Affero GPLv3
  * license, while this class and the rest of the jfreesteel library is
  * released under the more permissive GNU Lesser GPL license version 3.
- * 
+ *
  * @author Goran Rakic (grakic@devbase.net)
  */
 @SuppressWarnings("restriction") // Various javax.smartcardio.*
@@ -48,8 +48,8 @@ public class JFreesteel {
         if (terminals.size() > 1) {
             System.out.println("Available readers:\n");
             int c = 1;
-            for (Object t:terminals.toArray()) {
-                System.out.format("%d) %s\n", c++, t);
+            for (CardTerminal terminal : terminals) {
+                System.out.format("%d) %s\n", c++, terminal);
             }
 
             Scanner in = new Scanner(System.in);
@@ -66,10 +66,10 @@ public class JFreesteel {
             return terminals.get(0);
         }
     }
-        
+
     public static void main(String[] args) {
         CardTerminal terminal = null;
-        
+
         // get the terminal
         try {
             TerminalFactory factory = TerminalFactory.getDefault();
@@ -79,22 +79,14 @@ public class JFreesteel {
         } catch (CardException e) {
             System.err.println("Missing card reader.");
         }
-        
+
         try {
             // establish a connection with the card
             Card card = terminal.connect("*");
 
             // read eid data
             EidCard eidcard = new EidCard(card);
-            EidInfo info = null;
-
-            try {
-                info = eidcard.readEidInfo();
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                System.exit(0);
-            }
+            EidInfo info = eidcard.readEidInfo();
 
             System.out.format("ATR            : %s\n", Utils.bytes2HexString(card.getATR().getBytes()));
             System.out.format("eID number     : %s\n", info.getDocRegNo());

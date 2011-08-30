@@ -39,12 +39,12 @@ import net.devbase.jfreesteel.EidInfo;
 
 /**
  * Use GUIPanel as JPanel in your Swing applications to display data from the eID card.
- * 
+ *
  * See SerbianEidViewer application for the example how to use GUIPanel, Reader and EidCard to
  * create the complete eID card viewer. Please note that the SerbianEidViewer is released under GNU
  * Affero GPLv3 license, while this class and the rest of JFreesteel library is released under the
  * more permissive  GNU Lesser GPL license version 3.
- * 
+ *
  * @author Goran Rakic (grakic@devbase.net)
  */
 public class GUIPanel extends JPanel {
@@ -57,7 +57,7 @@ public class GUIPanel extends JPanel {
     private Image throbber;
     
     protected JPanel toolbar;
-    
+
     private JLabel nameFull;
     private JLabel personalNumber;
     private JLabel placeFull;
@@ -67,12 +67,12 @@ public class GUIPanel extends JPanel {
     private JLabel issuingDate;
     private JLabel expiryDate;
     private JLabel issuingAuthority;
-    
+
     public void clearDetailsAndPhoto() {
         setDetails("", "", "", "", "", "", "", "", "");
         setPhoto(null);
     }
-    
+
     public void setPhoto(Image image) {
         if(image == null) {
             photo.setImage(throbber);
@@ -87,7 +87,7 @@ public class GUIPanel extends JPanel {
         dateOfBirth.setText(info.getDateOfBirth());
         placeOfBirthFull.setText("<html>"+info.getPlaceOfBirthFull().replace("\n", "<br/>"));
 
-        placeFull.setText("<html>"+info.getPlaceFull(bundle.getString("EntranceLabelFormat"), 
+        placeFull.setText("<html>"+info.getPlaceFull(bundle.getString("EntranceLabelFormat"),
             bundle.getString("FloorLabelFormat"),
             bundle.getString("AppartmentLabelFormat")).replace("\n", "<br/>"));
 
@@ -96,7 +96,7 @@ public class GUIPanel extends JPanel {
         expiryDate.setText(info.getExpiryDate());
         issuingAuthority.setText(info.getIssuingAuthority());
     }
-    
+
     public void setDetails(String nameFull, String personalNumber, String placeFull,
         String dateOfBirth, String placeOfBirthFull, String docRegNo, String issuingDate,
         String expiryDate, String issuingAuthority) {
@@ -113,7 +113,7 @@ public class GUIPanel extends JPanel {
         this.expiryDate.setText(expiryDate);
         this.issuingAuthority.setText(issuingAuthority);
     }
-        
+
     public GUIPanel() {
         setSize(new Dimension(700, 320));  // without layout manager
         setPreferredSize(new Dimension(700, 320));  // with layout manager
@@ -122,7 +122,7 @@ public class GUIPanel extends JPanel {
 
         URL throbberURL = GUIPanel.class.getResource("/net/devbase/jfreesteel/gui/throbber.gif");
         throbber = Toolkit.getDefaultToolkit().createImage(throbberURL);
-        
+
         photo = new JImagePanel(throbber);
         photo.setMaximumSize(new Dimension(240, 320));
         photo.setPreferredSize(new Dimension(240, 320));
@@ -130,18 +130,18 @@ public class GUIPanel extends JPanel {
         photo.setBackground(new Color(128, 128, 128));
         photo.setBorder(new EmptyBorder(12, 12, 12, 12));
         add(photo);
-        
+
         JPanel panel = new JPanel();
         panel.setBorder(new EmptyBorder(0, 24, 0, 0));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         add(panel);
-        
+
         JPanel panel_1 = new JPanel();
         panel_1.setBorder(new EmptyBorder(12, 0, 24, 0));
         panel_1.setAlignmentX(0.0f);
         panel.add(panel_1);
         panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
-        
+
         nameFull = new JLabel("");
         nameFull.setHorizontalTextPosition(SwingConstants.LEADING);
         nameFull.setFont(nameFull.getFont().deriveFont(nameFull.getFont().getStyle() | Font.BOLD, nameFull.getFont().getSize() + 8f));
@@ -156,7 +156,7 @@ public class GUIPanel extends JPanel {
         gbl_panel_2.columnWeights = new double[]{0.0, 1.0};
         gbl_panel_2.rowWeights = new double[]{1.0, 1.0, 1.0, 3.0};
         panel_2.setLayout(gbl_panel_2);
-        
+
         JLabel personalNumberLabel = new JLabel(bundle.getString("PersonalNumber")); //$NON-NLS-1$
         personalNumberLabel.setForeground(Color.GRAY);
         GridBagConstraints gbc_personalNumberLabel = new GridBagConstraints();
@@ -166,7 +166,7 @@ public class GUIPanel extends JPanel {
         gbc_personalNumberLabel.gridx = 0;
         gbc_personalNumberLabel.gridy = 0;
         panel_2.add(personalNumberLabel, gbc_personalNumberLabel);
-        
+
         personalNumber = new JLabel("");
         GridBagConstraints gbc_personalNumber = new GridBagConstraints();
         gbc_personalNumber.anchor = GridBagConstraints.NORTH;
@@ -174,7 +174,7 @@ public class GUIPanel extends JPanel {
         gbc_personalNumber.gridx = 1;
         gbc_personalNumber.gridy = 0;
         panel_2.add(personalNumber, gbc_personalNumber);
-        
+
         JLabel placeFullLabel = new JLabel(bundle.getString("Place")); //$NON-NLS-1$
         placeFullLabel.setForeground(Color.GRAY);
         GridBagConstraints gbc_placeFullLabel = new GridBagConstraints();
@@ -183,7 +183,7 @@ public class GUIPanel extends JPanel {
         gbc_placeFullLabel.gridx = 0;
         gbc_placeFullLabel.gridy = 1;
         panel_2.add(placeFullLabel, gbc_placeFullLabel);
-        
+
         placeFull = new JLabel("");
         GridBagConstraints gbc_placeFull = new GridBagConstraints();
         gbc_placeFull.anchor = GridBagConstraints.NORTH;
@@ -191,7 +191,7 @@ public class GUIPanel extends JPanel {
         gbc_placeFull.gridx = 1;
         gbc_placeFull.gridy = 1;
         panel_2.add(placeFull, gbc_placeFull);
-        
+
         JLabel dateOfBirthLabel = new JLabel(bundle.getString("DateOfBirth")); //$NON-NLS-1$
         dateOfBirthLabel.setForeground(Color.GRAY);
         GridBagConstraints gbc_dateOfBirthLabel = new GridBagConstraints();
@@ -200,7 +200,7 @@ public class GUIPanel extends JPanel {
         gbc_dateOfBirthLabel.gridx = 0;
         gbc_dateOfBirthLabel.gridy = 2;
         panel_2.add(dateOfBirthLabel, gbc_dateOfBirthLabel);
-        
+
         dateOfBirth = new JLabel("");
         GridBagConstraints gbc_dateOfBirth = new GridBagConstraints();
         gbc_dateOfBirth.anchor = GridBagConstraints.NORTH;
@@ -208,7 +208,7 @@ public class GUIPanel extends JPanel {
         gbc_dateOfBirth.gridx = 1;
         gbc_dateOfBirth.gridy = 2;
         panel_2.add(dateOfBirth, gbc_dateOfBirth);
-        
+
         JLabel placeOfBirthFullLabel = new JLabel(bundle.getString("PlaceOfBirth")); //$NON-NLS-1$
         placeOfBirthFullLabel.setForeground(Color.GRAY);
         GridBagConstraints gbc_placeOfBirthFullLabel = new GridBagConstraints();
@@ -217,7 +217,7 @@ public class GUIPanel extends JPanel {
         gbc_placeOfBirthFullLabel.gridx = 0;
         gbc_placeOfBirthFullLabel.gridy = 3;
         panel_2.add(placeOfBirthFullLabel, gbc_placeOfBirthFullLabel);
-        
+
         placeOfBirthFull = new JLabel("");
         GridBagConstraints gbc_placeOfBirthFull = new GridBagConstraints();
         gbc_placeOfBirthFull.anchor = GridBagConstraints.NORTH;
@@ -225,7 +225,7 @@ public class GUIPanel extends JPanel {
         gbc_placeOfBirthFull.gridx = 1;
         gbc_placeOfBirthFull.gridy = 3;
         panel_2.add(placeOfBirthFull, gbc_placeOfBirthFull);
-                
+
         toolbar = new JPanel();
         toolbar.setAlignmentX(0.0f);
         panel.add(toolbar);
@@ -239,7 +239,7 @@ public class GUIPanel extends JPanel {
         gbl_panel_4.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0};
         gbl_panel_4.rowWeights = new double[]{1.0, 0.0, 0.0};
         panel_4.setLayout(gbl_panel_4);
-        
+
         JLabel docRegNoLabel = new JLabel(bundle.getString("DocRegNo")); //$NON-NLS-1$
         docRegNoLabel.setAlignmentX(1.0f);
         docRegNoLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -251,7 +251,7 @@ public class GUIPanel extends JPanel {
         gbc_docRegNoLabel.gridy = 1;
         gbc_docRegNoLabel.insets = new Insets(0, 0, 0, 12);
         panel_4.add(docRegNoLabel, gbc_docRegNoLabel);
-        
+
         JLabel issuingDateLabel = new JLabel(bundle.getString("IssuingDate")); //$NON-NLS-1$
         issuingDateLabel.setAlignmentX(1.0f);
         issuingDateLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -262,7 +262,7 @@ public class GUIPanel extends JPanel {
         gbc_issuingDateLabel.gridx = 1;
         gbc_issuingDateLabel.gridy = 1;
         panel_4.add(issuingDateLabel, gbc_issuingDateLabel);
-        
+
         JLabel expiryDateLabel = new JLabel(bundle.getString("ExpiryDate")); //$NON-NLS-1$
         expiryDateLabel.setAlignmentX(1.0f);
         expiryDateLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -273,7 +273,7 @@ public class GUIPanel extends JPanel {
         gbc_expiryDateLabel.gridx = 2;
         gbc_expiryDateLabel.gridy = 1;
         panel_4.add(expiryDateLabel, gbc_expiryDateLabel);
-        
+
         JLabel issuingAuthorityLabel = new JLabel(bundle.getString("IssuingAuthority")); //$NON-NLS-1$
         issuingAuthorityLabel.setAlignmentX(1.0f);
         issuingAuthorityLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -285,7 +285,7 @@ public class GUIPanel extends JPanel {
         gbc_issuingAuthorityLabelLabel.gridx = 3;
         gbc_issuingAuthorityLabelLabel.gridy = 1;
         panel_4.add(issuingAuthorityLabel, gbc_issuingAuthorityLabelLabel);
-        
+
         docRegNo = new JLabel("");
         docRegNo.setAlignmentX(1.0f);
         docRegNo.setHorizontalAlignment(SwingConstants.LEFT);
@@ -295,7 +295,7 @@ public class GUIPanel extends JPanel {
         gbc_docRegNo.gridx = 0;
         gbc_docRegNo.gridy = 2;
         panel_4.add(docRegNo, gbc_docRegNo);
-        
+
         issuingDate = new JLabel("");
         issuingDate.setAlignmentX(1.0f);
         issuingDate.setHorizontalAlignment(SwingConstants.LEFT);
@@ -307,7 +307,7 @@ public class GUIPanel extends JPanel {
         gbc_issuingDate.gridx = 1;
         gbc_issuingDate.gridy = 2;
         panel_4.add(issuingDate, gbc_issuingDate);
-        
+
         expiryDate = new JLabel("");
         expiryDate.setAlignmentX(1.0f);
         expiryDate.setHorizontalAlignment(SwingConstants.LEFT);
@@ -318,7 +318,7 @@ public class GUIPanel extends JPanel {
         gbc_expiryDate.gridx = 2;
         gbc_expiryDate.gridy = 2;
         panel_4.add(expiryDate, gbc_expiryDate);
-        
+
         issuingAuthority = new JLabel("");
         issuingAuthority.setAlignmentX(1.0f);
         issuingAuthority.setHorizontalAlignment(SwingConstants.LEFT);
