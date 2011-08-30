@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>net.devbase.jfreesteel</groupId>
@@ -45,7 +45,7 @@
                 <configuration>
                     <keystore>signing-jar.keystore</keystore>
                     <alias>signFiles</alias>
-               </configuration>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -55,7 +55,7 @@
             <artifactId>jfreesteel</artifactId>
             <version>${project.version}</version>
         </dependency>
-       <dependency>
+        <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.16</version>
@@ -69,11 +69,11 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
-	<dependency>
-	    <groupId>local-java</groupId>
-	    <artifactId>local-java-plugin</artifactId>
-	    <version>0.0.0</version>
-	    <scope>provided</scope>
-	</dependency>
+        <dependency>
+            <groupId>local-java</groupId>
+            <artifactId>local-java-plugin</artifactId>
+            <version>0.0.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>
