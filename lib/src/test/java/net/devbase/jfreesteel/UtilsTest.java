@@ -1,14 +1,12 @@
 package net.devbase.jfreesteel;
 
-import junit.framework.TestCase;
-
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 
 /**
  * @author Filip Miletic (filmil@gmail.com)
  */
-public class UtilsTest extends TestCase {
+public class UtilsTest extends EidTestCase {
 
     public void testInt2HexString() {
         // TODO(filmil): Is this the expected outcome?
@@ -38,21 +36,14 @@ public class UtilsTest extends TestCase {
         String result = Utils.map2UTF8String(ImmutableMap.of(
             0x01, "АБВГДЂ".getBytes(Charsets.UTF_8),
             0x02, "ЕЖЗИЈК".getBytes(Charsets.UTF_8),
-            0x03, "\uffff\uffff\uffff".getBytes(Charsets.ISO_8859_1)));
-        assertContains("1 = АБВГДЂ\n", result);
-        assertContains("2 = ЕЖЗИЈК\n", result);
+            0x03, "\uffff\uffff\uffff".getBytes(Charsets.ISO_8859_1),
+            0x04, "AB".getBytes(Charsets.UTF_8)));
+
+        assertContains("1 = АБВГДЂ (D0:90:D0:91:D0:92:D0:93:D0:94:D0:82)\n", result);
+        assertContains("2 = ЕЖЗИЈК (D0:95:D0:96:D0:97:D0:98:D0:88:D0:9A)\n", result);
         assertContains(
-            new String("3 = \uffff\uffff\uffff\n".getBytes(Charsets.ISO_8859_1),
+            new String("3 = \uffff\uffff\uffff (3F:3F:3F)\n".getBytes(Charsets.ISO_8859_1),
                 Charsets.ISO_8859_1), result);
-    }
-
-    private void assertContains(String expected, String actual) {
-        assertTrue(
-            String.format("'%s' should contain '%s' but does not", actual, expected),
-            actual.contains(expected));
-    }
-
-    private byte asByte(int value) {
-        return (byte) (value & 0xff);
+        assertContains("4 = AB (41:42)\n", result);
     }
 }

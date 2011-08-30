@@ -19,6 +19,7 @@
 package net.devbase.jfreesteel;
 
 import java.util.Map;
+import java.util.SortedMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 
 /**
  * Functions to print and convert bytes into strings.
@@ -74,23 +76,36 @@ public class Utils {
     }
 
     /**
-     * Formats a map of integer to byte arrays for printing.
+     * Formats a map of objects to byte arrays for printing.
      * <p>
      * Each map entry is written out as a string line, map key first, then an
-     * equals sign, then an UTF-8 string interpreted from the bytes.
+     * equals sign, then an UTF-8 string interpreted from the bytes, then the
+     * recovered bytes written out as strings.
      * <p>
-     * The keys are written out in random order (due to set iteration).
+     * The map keys are sorted by the natural order of the key type.
      * <p>
-     * TODO(filmil): Why are they written out randomly?
+     * Example:
      *
+     * <pre>
+     * 42 = Hello World ()
+     * <pre>
+     *
+     * @param <T> a comparable key type (comparable for sorting)
      * @param map the map to format
      * @return the formatted string, one line each.
      */
-    public static String map2UTF8String(Map<Integer, byte[]> map) {
+    public static <T extends Comparable<T>> String map2UTF8String(Map<T, byte[]> map) {
+        SortedMap<T, byte[]> sorted = Maps.newTreeMap();
+        sorted.putAll(map);
+
         StringBuilder builder = new StringBuilder();
-        for (Map.Entry<Integer, byte[]> entry : map.entrySet()) {
+        for (Map.Entry<?, byte[]> entry : sorted.entrySet()) {
+            byte[] value = entry.getValue();
             builder.append(
-                String.format("%d = %s\n", entry.getKey(), bytes2UTF8String(entry.getValue())));
+                String.format("%d = %s (%s)\n",
+                    entry.getKey(),
+                    bytes2UTF8String(value),
+                    bytes2HexString(value)));
         }
         return builder.toString();
     }
