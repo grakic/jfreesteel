@@ -30,7 +30,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -60,6 +59,8 @@ import net.devbase.jfreesteel.gui.GUIPanel;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.itextpdf.text.DocumentException;
 
 /**
@@ -67,26 +68,32 @@ import com.itextpdf.text.DocumentException;
  * 
  * @author Goran Rakic (grakic@devbase.net)
  */
+@SuppressWarnings("restriction")  // Access to restricted card APIs
 public class EidViewer extends JPanel implements ReaderListener {
     
     private static final long serialVersionUID = -2497143822816312498L;
 
+    private static final ImmutableList<String> ICON_FILES = ImmutableList.of(
+            "eidviewer20.png", "eidviewer26.png", "eidviewer32.png");
+
+    private static final String ICON_RESOURCE = 
+        "/net/devbase/jfreesteel/viewer/smart-card-reader2.jpg";
+
     private static final Logger logger = Logger.getLogger(EidViewer.class);
     
-    private static final ResourceBundle bundle = ResourceBundle.getBundle("net.devbase.jfreesteel.viewer.viewer");
+    private static final ResourceBundle bundle = ResourceBundle.getBundle(
+        "net.devbase.jfreesteel.viewer.viewer");
 
-    EidCard card = null;
-    EidInfo info = null;
-    Image photo  = null;
+    private EidInfo info;
+    private Image photo;
     
-    JFrame frame;
-    GUIPanel details;
-    JButton button;
+    private JFrame frame;
+    private GUIPanel details;
+    private JButton button;
 
-    private static EidViewer instance = null;
+    private static EidViewer instance;
     
-    public EidViewer()
-    {    	
+    public EidViewer() {    	
         setSize(new Dimension(720, 350));
         setLayout(new CardLayout(0, 0));
 
@@ -94,77 +101,25 @@ public class EidViewer extends JPanel implements ReaderListener {
         JPanel splash = new JPanel();
         splash.setBackground(Color.WHITE);
         splash.setLayout(new GridBagLayout());
-        ImageIcon insertCardIcon = new ImageIcon(getClass().getResource("/net/devbase/jfreesteel/viewer/smart-card-reader2.jpg"));
-        JLabel label = new JLabel(bundle.getString("InsertCard"), insertCardIcon, SwingConstants.CENTER);
-        label.setFont(label.getFont().deriveFont(label.getFont().getStyle() | Font.BOLD, label.getFont().getSize() + 4f));
+        ImageIcon insertCardIcon = new ImageIcon(getClass().getResource(ICON_RESOURCE));
+        JLabel label = getLabel(insertCardIcon);
         splash.add(label, new GridBagConstraints());
 
         add(splash, "splash");
-        
-
-        class MyGUIPanel extends GUIPanel {
-
-            private static final long serialVersionUID = 1L;
-
-            public MyGUIPanel()
-            {
-                super();
-                button = new JButton(bundle.getString("SavePDF"));
-                button.setEnabled(false);
-                button.setPreferredSize(new Dimension(130, 36));
-                button.setSize(new Dimension(200, 0));
-                button.addActionListener(new ActionListener() {
-                    
-                    @Override
-                    public void actionPerformed(ActionEvent ev) {
-
-                    	final JFileChooser fc = new JFileChooser();
-                    	fc.setSelectedFile(new File("report_" + info.getPersonalNumber() + ".pdf"));
-                    	FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                    		        "PDF", "pdf");
-                    	fc.setFileFilter(filter);
-                    	int returnVal = fc.showSaveDialog(frame);
-                    	
-                    	if(returnVal == JFileChooser.APPROVE_OPTION) {
-                            
-                    		// Append correct extension if missing
-                    		String filename = fc.getSelectedFile().toString();
-                    		if(!filename.toLowerCase().endsWith(".pdf")) {
-                    			filename += ".pdf";
-                    		}
-
-                    		try {
-                            	logger.info("Saving " + filename);
-                        		PdfReport report = new PdfReport(info, photo);
-                        		report.write(filename);
-                    		} catch (IOException e) {
-                    			
-                                JOptionPane.showMessageDialog(frame,
-                                        bundle.getString("SavePDFError") + ": " + e.getMessage(),
-                                        bundle.getString("SavePDFErrorTitle"),
-                                        JOptionPane.ERROR_MESSAGE);
-                                logger.error("Error saving PDF file", e);
-
-                    		} catch (DocumentException e) {
-
-                                JOptionPane.showMessageDialog(frame,
-                                        bundle.getString("CreatePDFError") + ": " + e.getMessage(),
-                                        bundle.getString("CreatePDFErrorTitle"),
-                                        JOptionPane.ERROR_MESSAGE);
-                                logger.error("Error creating PDF file", e);
-                    		}    	
-                        }
-
-                    }
-                });
-                toolbar.add(button, BorderLayout.WEST);
-            }            
-        }
-
 
         /* Add card details screen */
-        details = new MyGUIPanel();
+        details = new EidViewerPanel();
         add(details, "details");
+    }
+
+    private JLabel getLabel(ImageIcon insertCardIcon) {
+        JLabel label = new JLabel(
+                bundle.getString("InsertCard"), insertCardIcon, SwingConstants.CENTER);
+        Font labelFont = label.getFont();
+        label.setFont(
+            labelFont.deriveFont(labelFont.getStyle() | Font.BOLD,
+            labelFont.getSize() + 4f));
+        return label;
     }
 
     public static EidViewer getInstance()
@@ -175,13 +130,11 @@ public class EidViewer extends JPanel implements ReaderListener {
         return instance;
     }
     
-    public void setFrame(JFrame frame)
-    {
-    	this.frame = frame;
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
     }
     
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         configureLog4j();
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -190,11 +143,11 @@ public class EidViewer extends JPanel implements ReaderListener {
         });
     }
 
-    private static void configureLog4j()
-    {
+    private static void configureLog4j() {
         Properties properties = new Properties();
-        InputStream propertiesStream = EidViewer.class.getResourceAsStream("/net/devbase/jfreesteel/viewer/log4j.properties");
-        if(propertiesStream != null) {
+        InputStream propertiesStream = EidViewer.class.getResourceAsStream(
+            "/net/devbase/jfreesteel/viewer/log4j.properties");
+        if (propertiesStream != null) {
             try {
                 properties.load(propertiesStream);
             } catch (IOException e) {
@@ -210,15 +163,13 @@ public class EidViewer extends JPanel implements ReaderListener {
     /**
      * Create the GUI and show it.
      */
-    private static void createAndShowGUI()
-    {
+    private static void createAndShowGUI() {
         // Enable font anti aliasing
         System.setProperty("awt.useSystemAAFontSettings","on");
         System.setProperty("swing.aatext", "true");
         
         // Set sr_RS locale as default
         Locale.setDefault(new Locale("sr", "RS"));
-//        dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
         
         // Create and set up the window
         JFrame frame = new JFrame(bundle.getString("FreesteelTitle"));
@@ -226,9 +177,8 @@ public class EidViewer extends JPanel implements ReaderListener {
         frame.setLocationRelativeTo(null);
 
         // Set window icon
-        ArrayList<Image> icons = new ArrayList<Image>();
-        final String iconFiles[] = {"eidviewer20.png", "eidviewer26.png", "eidviewer32.png"};
-        for (String iconFile : iconFiles) {
+        List<Image> icons = Lists.newArrayList();
+        for (String iconFile : ICON_FILES) {
             try {
                 icons.add(ImageIO.read(frame.getClass().getResource(
                     "/net/devbase/jfreesteel/viewer/" + iconFile)));
@@ -266,9 +216,9 @@ public class EidViewer extends JPanel implements ReaderListener {
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
-                    bundle.getString("ReaderError") + ": " + e.getMessage(),
-                    bundle.getString("ReaderErrorTitle"),
-                    JOptionPane.ERROR_MESSAGE);
+                bundle.getString("ReaderError") + ": " + e.getMessage(),
+                bundle.getString("ReaderErrorTitle"),
+                JOptionPane.ERROR_MESSAGE);
             logger.error("Reader error", e);
             System.exit(1);
         }
@@ -287,17 +237,19 @@ public class EidViewer extends JPanel implements ReaderListener {
         frame.setVisible(true);
     }
 
-    public static CardTerminal pickTerminalGUI(JFrame frame, List<CardTerminal> terminals)
-    {
-        if(terminals.size() == 1) return terminals.get(0);
+    public static CardTerminal pickTerminalGUI(JFrame frame, List<CardTerminal> terminals) {
+        if (terminals.size() == 1) {
+            return terminals.get(0);
+        }
         
-        CardTerminal terminal = (CardTerminal)JOptionPane.showInputDialog(frame,
-                                        bundle.getString("SelectReader"),
-                                        bundle.getString("SelectReaderTitle"),
-                                        JOptionPane.PLAIN_MESSAGE,
-                                        null,
-                                        terminals.toArray(),
-                                        terminals.get(0));
+        CardTerminal terminal = (CardTerminal) JOptionPane.showInputDialog(
+            frame,
+            bundle.getString("SelectReader"),
+            bundle.getString("SelectReaderTitle"),
+            JOptionPane.PLAIN_MESSAGE,
+            null,
+            terminals.toArray(),
+            terminals.get(0));
 
         // Cancel clicked
         if(terminal == null) System.exit(1);
@@ -305,49 +257,27 @@ public class EidViewer extends JPanel implements ReaderListener {
         return terminal;
     }
 
-    private void showCardError(Exception e)
-    {
+    private void showCardError(Exception e) {
         JOptionPane.showMessageDialog(this,
-                bundle.getString("CardError") + ": " + e.getMessage(),
-                bundle.getString("CardErrorTitle"),
-                JOptionPane.ERROR_MESSAGE);
+            bundle.getString("CardError") + ": " + e.getMessage(),
+            bundle.getString("CardErrorTitle"),
+            JOptionPane.ERROR_MESSAGE);
         logger.error("Card error", e);
     }
 
     public static final String RESULT = "/home/goran/Desktop/report.pdf";
     
-    public void inserted(final EidCard card)
-    {
+    public void inserted(final EidCard card) {
         logger.info("Card inserted");
         CardLayout cl = (CardLayout) this.getLayout();
         cl.show(this, "details");        
 
         try {
-            this.card = card;
-
             info = card.readEidInfo();            
-			details.setDetails(info);
-
-			photo = card.readEidPhoto();            
+            details.setDetails(info);
+            photo = card.readEidPhoto();            
             details.setPhoto(photo);
-        
             button.setEnabled(true);
-/*
-             // TODO: Debug this, locate where does deadlock happen and fix it!
-
-            card.readEidPhotoAsync(new EidPhotoAsyncCallback() {
-                public void ready(Image image)
-                {
-                    details.setPhoto(image);
-                }
-
-                public void error(CardException e)
-                {
-                    showCardError(e);
-                }
-            });
-*/            
-            
         } catch (CardException e) {
             showCardError(e);
         } catch (Exception e) {
@@ -355,18 +285,75 @@ public class EidViewer extends JPanel implements ReaderListener {
         }
     }
 
-    public void removed()
-    {
+    public void removed() {
         logger.info("Card removed");
 
         CardLayout cl = (CardLayout) this.getLayout();
         cl.show(this, "splash");
         
         button.setEnabled(false);
-        card = null;
         info = null;
         photo = null;
         details.clearDetailsAndPhoto();
     }
 
+    /** UI panel for the application */
+    class EidViewerPanel extends GUIPanel {
+
+        private static final long serialVersionUID = 1L;
+
+        public EidViewerPanel() {
+            super();
+            button = newButton();
+            toolbar.add(button, BorderLayout.WEST);
+        }
+
+        private JButton newButton() {
+            JButton button = new JButton(bundle.getString("SavePDF"));
+            button.setEnabled(false);
+            button.setPreferredSize(new Dimension(130, 36));
+            button.setSize(new Dimension(200, 0));
+            button.addActionListener(new ButtonActionListener());
+            return button;
+        }
+    }
+
+    /** The action taken on the UI action button press. */
+    private class ButtonActionListener implements ActionListener {
+        @Override public void actionPerformed(ActionEvent ev) {
+
+            final JFileChooser fc = new JFileChooser();
+            fc.setSelectedFile(new File("report_" + info.getPersonalNumber() + ".pdf"));
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "PDF", "pdf");
+            fc.setFileFilter(filter);
+            int returnVal = fc.showSaveDialog(frame);
+            
+            if(returnVal == JFileChooser.APPROVE_OPTION) {
+                // Append correct extension if missing
+                String filename = fc.getSelectedFile().toString();
+                if(!filename.toLowerCase().endsWith(".pdf")) {
+                    filename += ".pdf";
+                }
+
+                try {
+                    logger.info("Saving " + filename);
+                    PdfReport report = new PdfReport(info, photo);
+                    report.write(filename);
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(frame,
+                        bundle.getString("SavePDFError") + ": " + e.getMessage(),
+                        bundle.getString("SavePDFErrorTitle"),
+                        JOptionPane.ERROR_MESSAGE);
+                    logger.error("Error saving PDF file", e);
+                } catch (DocumentException e) {
+                    JOptionPane.showMessageDialog(frame,
+                        bundle.getString("CreatePDFError") + ": " + e.getMessage(),
+                        bundle.getString("CreatePDFErrorTitle"),
+                        JOptionPane.ERROR_MESSAGE);
+                    logger.error("Error creating PDF file", e);
+                }
+            }
+        }
+    }
 }

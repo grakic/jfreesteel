@@ -51,7 +51,8 @@ public class GUIPanel extends JPanel {
 
     private static final long serialVersionUID = 5830429844217109957L;
 
-    private static final ResourceBundle bundle = ResourceBundle.getBundle("net.devbase.jfreesteel.gui.jfreesteel-lib-gui"); //$NON-NLS-1$
+    private static final ResourceBundle bundle = ResourceBundle.getBundle(
+        "net.devbase.jfreesteel.gui.jfreesteel-lib-gui"); //$NON-NLS-1$
 
     private JImagePanel photo;
     private Image throbber;

@@ -22,13 +22,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 
 /**
  * Simple class to hold and reformat data read from eID
@@ -49,7 +47,7 @@ public class EidInfo {
         ISSUING_DATE(102, "Issuing date"),
         /** The date that the ID expires */
         EXPIRY_DATE(103, "Expiry date"),
-        /** The authoritu, e.g. "Ministry of the Interior". */
+        /** The authority, e.g. "Ministry of the Interior". */
         ISSUING_AUTHORITY(104, "Issuing authority"),
 
         /** The person's unique identifier number.
@@ -113,7 +111,7 @@ public class EidInfo {
          * Initializes a tag with the corresponding raw encoding value, and a
          * validator.
          * <p>
-         * The validator is invoked to check whether the given raw value parsees into
+         * The validator is invoked to check whether the given raw value parses into
          * a sensible value for the field.
          */
         Tag(int code, String name, Predicate<String> validator) {
@@ -230,21 +228,24 @@ public class EidInfo {
     }
 
     /**
-     * Get place of residence as multiline string. Format paramters can be used to provide better
+     * Get place of residence as multiline string. Format parameters can be used to provide better
      * output or null/empty strings can be passed for no special formating.
      *
      * For example if floorLabelFormat is "%s. sprat" returned string will contain "5. sprat" for
      * floor number 5.
      *
-     * Recommended values for Serbian are "ulaz %s", "%s. sprat" and "br. %s"
+     * Recommended values for Serbian are "alas %s", "%s. sprat" and "br. %s"
      *
      * @param entranceLabelFormat String to format entrance label or null
      * @param floorLabelFormat String to format floor label or null
-     * @param appartmentLabelFormat String to format appartment label or null
+     * @param appartmentLabelFormat String to format apartment label or null
      * @return Nicely formatted place of residence as multiline string
      *
-     * FIXME: Use one parametrzed format string to allow both "Main street 11" and "11 Main street"
-     * Think about how to handle short form format with missing ENTRANCE/FLOOR label (line 298).
+     * FIXME: Use one parameterized format string to allow both "Main street 11" and 
+     * "11 Main street"
+     * 
+     * FIXME: Think about how to handle short form format with missing ENTRANCE/FLOOR 
+     * label (line 298).
      */
     public String getPlaceFull(
             String entranceLabelFormat, String floorLabelFormat, String appartmentLabelFormat) {

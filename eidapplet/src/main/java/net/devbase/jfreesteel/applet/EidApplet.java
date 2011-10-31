@@ -2,7 +2,6 @@ package net.devbase.jfreesteel.applet;
 
 import java.applet.Applet;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -28,6 +27,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 public class EidApplet extends Applet implements ReaderListener {
 
+    private static final long serialVersionUID = -8975515949350240407L;
     private static final Logger logger = Logger.getLogger(EidApplet.class);
     JSObject window = null;
     EidCard card = null;

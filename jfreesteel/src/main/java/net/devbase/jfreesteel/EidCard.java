@@ -58,7 +58,7 @@ public class EidCard {
 
     private final static Logger logger = LoggerFactory.getLogger(EidCard.class);
 
-    private Card card = null;
+    private Card card;
     private CardChannel channel;
 
     public EidCard(final Card card)
@@ -248,10 +248,9 @@ public class EidCard {
             .put(1570, Tag.PLACE)
             .put(1571, Tag.STREET)
             .put(1572, Tag.HOUSE_NUMBER)
-            // TODO: What about tags 1573 .. 1577?
-            .put(1573, Tag.HOUSE_LETTER) // ??
-            .put(1576, Tag.ENTRANCE) // ??
-            .put(1577, Tag.FLOOR) // ??
+            .put(1573, Tag.HOUSE_LETTER)
+            .put(1576, Tag.ENTRANCE)
+            .put(1577, Tag.FLOOR)
             .put(1578, Tag.APPARTMENT_NUMBER)
             .build();
 
@@ -260,11 +259,9 @@ public class EidCard {
      *
      * @param builder EidInfo builder
      * @param rawTagMap Parsed map of raw byte strings by TLV code
-     * @param tagMapper Map translating TLV codes into EidInfo tags (Use Tag.NULL if tag should be silently ignored)
+     * @param tagMapper Map translating TLV codes into EidInfo tags; use {@code Tag.NULL} 
+     *     if tag should be silently ignored
      * @return Raw map of unknown tags
-     *
-     * FIXME: http://code.google.com/p/google-collections/issues/detail?id=234 requires us to have
-     * Tag.NULL. Alternatively, tagMapper may be modified to allow null tag values.
      */
     private Map<Integer, byte[]> addAllToBuilder(
             EidInfo.Builder builder,
@@ -277,7 +274,9 @@ public class EidCard {
             if (tagMapper.containsKey(entry.getKey())) {
                 // tag is known, ignore if null or decode and add value to the builder
                 Tag tag = tagMapper.get(entry.getKey());
-                if (tag == Tag.NULL) continue;
+                if (tag == Tag.NULL) {
+                    continue;
+                }
 
                 String value = Utils.bytes2UTF8String(entry.getValue());
                 builder.addValue(tag, value);

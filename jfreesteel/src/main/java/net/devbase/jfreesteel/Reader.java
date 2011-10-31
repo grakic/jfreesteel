@@ -48,7 +48,7 @@ public class Reader {
     private CardTerminal terminal;
 
     /** EidCard is not null when the card is inserted */
-    private volatile EidCard eidcard = null;
+    private volatile EidCard eidcard;
 
     /** List of card listeners to be notifies on card insertion/removal. */
     // Must be a copy-on-write array list, as list notification will crash if

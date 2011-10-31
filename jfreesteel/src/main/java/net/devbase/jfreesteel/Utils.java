@@ -115,7 +115,7 @@ public class Utils {
      * <p>
      * Failing that, interprets as ISO-8859-1.
      *
-     * @param bytes the bytes to convert to string
+     * @param bytes the bytes to convert to string, {@code null} allowed.
      */
     public static String bytes2UTF8String(byte... bytes) {
         if (bytes == null) {
