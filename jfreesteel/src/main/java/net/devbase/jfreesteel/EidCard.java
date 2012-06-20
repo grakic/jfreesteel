@@ -249,8 +249,8 @@ public class EidCard {
             .put(1571, Tag.STREET)
             .put(1572, Tag.HOUSE_NUMBER)
             .put(1573, Tag.HOUSE_LETTER)
-            .put(1576, Tag.ENTRANCE)
-            .put(1577, Tag.FLOOR)
+            .put(1574, Tag.ENTRANCE)
+            .put(1575, Tag.FLOOR)
             .put(1578, Tag.APPARTMENT_NUMBER)
             .build();
 
