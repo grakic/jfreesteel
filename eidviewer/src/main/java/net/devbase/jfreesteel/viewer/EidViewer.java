@@ -159,6 +159,18 @@ public class EidViewer extends JPanel implements ReaderListener {
             System.out.println(bundle.getString("Log4jMissing"));
         }
     }
+
+    /**
+     * Return JVM version
+     */
+    private static double getVersion () {
+        String version = System.getProperty("java.version");
+        int pos = 0, count = 0;
+        for ( ; pos<version.length() && count < 2; pos ++) {
+            if (version.charAt(pos) == '.') count ++;
+        }
+        return Double.parseDouble(version.substring(0, pos-1));
+    }
      
     /**
      * Create the GUI and show it.
@@ -199,8 +211,8 @@ public class EidViewer extends JPanel implements ReaderListener {
             logger.error("Error setting look and feel", e);
         }
         
-        // Test for Java 1.6
-        if(!System.getProperty("java.version").startsWith("1.6")) {
+        // Test for Java 1.6 or newer
+        if(getVersion() < 1.6) {
             JOptionPane.showMessageDialog(frame,
                     bundle.getString("JavaError"),
                     bundle.getString("JavaErrorTitle"),
