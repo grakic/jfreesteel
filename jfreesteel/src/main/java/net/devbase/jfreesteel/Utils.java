@@ -135,7 +135,7 @@ public class Utils {
         return (byte) (value & 0xFF);
     }
 
-    private static byte[] asByteArray(int... values) {
+    public static byte[] asByteArray(int... values) {
         byte[] valueBytes = new byte[values.length];
         for (int i = 0; i < values.length; i++) {
             valueBytes[i] = asByte(values[i]);

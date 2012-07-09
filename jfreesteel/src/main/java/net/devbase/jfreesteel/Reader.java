@@ -180,7 +180,7 @@ public class Reader {
 
     public void disconnect() throws CardException {
         logger.info("DISCONNECT");
-        eidcard.disconnect(false);
+        eidcard.disconnect();
         eidcard = null;
     }
 }
