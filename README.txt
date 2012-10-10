@@ -14,8 +14,21 @@ installation of the middleware software or other libraries. Underlay, Java is
 using system PC/SC interface (bundled with MS Windows and Apple Mac OS X,
 and pcsc-lite available on GNU/Linux)
 
-A simple sample code for using the library is included in sample/JFreesteel.java
-file inside the jfreesteel module.
+To start using the library API, call methods readEidInfo() and readEidPhoto() on
+the EidCard object. There is a low-level API where you create a new EidCard
+object directly from a card currently inserted in a smartcard reader (terminal).
+A sample code is included in the sample/JFreesteel.java file inside the
+jfreesteel module. You will need to handle card insertions and removals yourself
+when using the low-level API.
+
+It is better to use a high-level API where you have to implement a listener
+following the ReaderListener interface with methods inserted() and removed() and
+subscribe this listener to a Reader object wrapping a smartcard reader. Your
+listener will be notified when the eID smart card is inserted or removed from a
+smart card reader, with a new EidCard object given on insert.
+
+For more details on the API, you may find these slides useful:
+    https://speakerdeck.com/u/grakic/p/jfreesteel-citanje-elektronske-licne-karte-u-javi
 
 The eidapplet module contains a Java applet providing JavaScript interface that
 can be used in web applications to read smartcard data from a web browser.
