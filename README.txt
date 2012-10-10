@@ -20,11 +20,11 @@ file inside the jfreesteel module.
 The eidapplet module contains a Java applet providing JavaScript interface that
 can be used in web applications to read smartcard data from a web browser.
 
-For non-developers, in the eidviewer module there is a complete GUI viewer built
-as a Java Swing application using the JFreesteel library in the eidviewer
-module. The viewer is released under the GNU Affero GPLv3 license and has the
-iText library as a dependency. To download the current viewer release for
-Windows, GNU/Linux or Mac OS visit http://devbase.net/jfreesteel/
+For non-developers, in the eidviewer module there is a full-featured GUI viewer
+built as a Java Swing application using the JFreesteel library. The viewer is
+released under the GNU Affero GPLv3 license and has the iText library as a
+dependency. To download the current viewer release for Windows, GNU/Linux or
+Mac OS visit http://devbase.net/jfreesteel/
 
 
 Resources
