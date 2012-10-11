@@ -277,8 +277,6 @@ public class EidViewer extends JPanel implements ReaderListener {
         logger.error("Card error", e);
     }
 
-    public static final String RESULT = "/home/goran/Desktop/report.pdf";
-    
     public void inserted(final EidCard card) {
         logger.info("Card inserted");
         CardLayout cl = (CardLayout) this.getLayout();
