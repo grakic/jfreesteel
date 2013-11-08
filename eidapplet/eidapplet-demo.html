@@ -17,13 +17,13 @@ body {
 #eid h1 {
    padding-top: 20px;
    padding-left: 260px;
-   background-color: #666666;
    -webkit-background-clip: text;
    -moz-background-clip: text;
    background-clip: text;
    color: transparent;
    text-shadow: rgba(255,255,255,0.5) 0px 3px 3px;
    color: #333;
+   font-size: 18pt;
 }
 #eid img {
    float: left;
@@ -57,8 +57,9 @@ window.onload = function() {
 
 <script type="text/javascript">
     var attributes = {
-        code: "net.devbase.jfreesteel.applet.EidApplet.class",
-        archive: "./target/eidapplet-1.0-SNAPSHOT.jar",
+        code: 'net.devbase.jfreesteel.applet.EidApplet.class',
+        codebase: './target/',
+        archive: 'eidapplet-1.0-SNAPSHOT.jar',
         width: 1,
         height: 1,
         mayscript: 'true',
@@ -66,7 +67,8 @@ window.onload = function() {
     };
     var parameters = {
         RemovedCallback: 'removed',
-        InsertedCallback: 'inserted'
+        InsertedCallback: 'inserted',
+        Permissions: 'all-permissions'
     };
     deployJava.runApplet(attributes, parameters, '1.6');
 </script>

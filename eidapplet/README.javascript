@@ -40,3 +40,12 @@ the -Dfile=... command line flag instead of the sample path
 /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/plugin.jar seen above.
 
 After installing the plugin.jar, you can proceed with the compilation.
+
+
+
+MIXED CODE WARNING
+
+You may have to fiddle with manifest attributes to avoid the mixed code
+warning. See http://stackoverflow.com/a/19451594
+
+
