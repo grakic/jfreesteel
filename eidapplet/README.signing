@@ -10,3 +10,17 @@ Applet using smartcardio API has to be signed. You can use a self-signed certifi
 Now create a signed applet JAR:
 
   mvn -Djarsigner.storepass="<storepass>" install
+
+
+The self-signed certificate is not accepted as Signer CA so there will be a warning
+dialog. In the future Java releases self-signed certificates may not be accepted
+depending on the security level settings in the Java Control Panel.
+
+You can export and set your self-signed certificate as Signer CA.
+
+  keytool -export -alias signFiles -file cert.crt -keystore signing-jar.keystore \
+          -storepass <storepass>
+
+Now open Java Control Panel (from the Java JRE path), in the Security tab click
+the Manage Certificates... button. In the drop down select the Signer CA type
+and click the Import button to load cert.crt file you have expored.

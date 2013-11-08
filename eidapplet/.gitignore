@@ -3,3 +3,4 @@
 /.settings
 /target
 /signing-jar.keystore
+/cert.crt
