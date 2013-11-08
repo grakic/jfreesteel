@@ -28,6 +28,8 @@ import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 
+import org.json.simple.JSONObject;
+
 /**
  * Simple class to hold and reformat data read from eID
  *
@@ -39,16 +41,16 @@ public class EidInfo {
     /** eID information codes. */
     public enum Tag {
         /** Dummy tag */
-        NULL(0, "Ignored", Predicates.<String>alwaysFalse()),
+        NULL(0, "ignored", "Ignored", Predicates.<String>alwaysFalse()),
 
         /** Registered document number. */
-        DOC_REG_NO(101, "Document reg. number"),
+        DOC_REG_NO(101, "doc_reg_no", "Document reg. number"),
         /** The issuing date, e.g. 01.01.2011. */
-        ISSUING_DATE(102, "Issuing date"),
+        ISSUING_DATE(102, "issuing_date", "Issuing date"),
         /** The date that the ID expires */
-        EXPIRY_DATE(103, "Expiry date"),
+        EXPIRY_DATE(103, "expiry_date", "Expiry date"),
         /** The authority, e.g. "Ministry of the Interior". */
-        ISSUING_AUTHORITY(104, "Issuing authority"),
+        ISSUING_AUTHORITY(104, "issuing_authority", "Issuing authority"),
 
         /** The person's unique identifier number.
          *
@@ -56,55 +58,56 @@ public class EidInfo {
          * been known to repeat for some rare individuals. The last digit is mod 11 checksum, but
          * due the same reason, there exist numbers with incorrect checksum.
          */
-        PERSONAL_NUMBER(201, "Personal number", new ValidatePersonalNumber()),
+        PERSONAL_NUMBER(201, "personal_number", "Personal number", new ValidatePersonalNumber()),
         /** Person's last name, e.g. "Smith" for some John Smith */
-        SURNAME(202, "Surname"),
+        SURNAME(202, "surname", "Surname"),
         /** The given name, e.g. "John" for some John Smith. */
-        GIVEN_NAME(203, "Given name"),
+        GIVEN_NAME(203, "given_name", "Given name"),
         /**
          * The parent's given name, the usual 'parenthood' middle name used to disambiguate
          * similarly named persons.
          * <p>
          * E.g. "Wiley" for some John Wiley Smith.
          */
-        PARENT_GIVEN_NAME(204, "Parent given name"),
+        PARENT_GIVEN_NAME(204, "parent_given_name", "Parent given name"),
         /** The gender of the person. */
-        SEX(205, "Gender"),
+        SEX(205, "sex", "Gender"),
 
         /** The place the person was born in, e.g. "Belgrade" */
-        PLACE_OF_BIRTH(301, "Place of birth"),
+        PLACE_OF_BIRTH(301, "place_of_birth", "Place of birth"),
         /** The community/municipality the person was born in, e.g. "Savski Venac" */
-        COMMUNITY_OF_BIRTH(302, "Community of birth"),
-        STATE_OF_BIRTH(303, "State of birth"),
-        STATE_OF_BIRTH_CODE(304, "State of birth code"),
-        DATE_OF_BIRTH(305, "Date of birth"),
+        COMMUNITY_OF_BIRTH(302, "community_of_birth", "Community of birth"),
+        STATE_OF_BIRTH(303, "state_of_birth", "State of birth"),
+        STATE_OF_BIRTH_CODE(304, "state_of_birth_code", "State of birth code"),
+        DATE_OF_BIRTH(305, "date_of_birth", "Date of birth"),
 
         /** The state of the person residence */
-        STATE(401, "State"),
+        STATE(401, "state", "State"),
         /** The community/municipality of the person residence */
-        COMMUNITY(402, "Community"),
+        COMMUNITY(402, "community", "Community"),
         /** The place of the person residence */
-        PLACE(403, "Place"),
+        PLACE(403, "place", "Place"),
         /** The street name of the person residence */
-        STREET(404, "Street name"),
+        STREET(404, "street", "Street name"),
         /** The house number of the person residence */
-        HOUSE_NUMBER(405, "House number"),
+        HOUSE_NUMBER(405, "house_number", "House number"),
         /** The house letter of the person residence */
-        HOUSE_LETTER(406, "House letter"),
+        HOUSE_LETTER(406, "house_letter", "House letter"),
         /** The entrance label of the person residence */
-        ENTRANCE(407, "Entrance label"),
+        ENTRANCE(407, "entrance_label", "Entrance label"),
         /** The floor number of the person residence */
-        FLOOR(408, "Floor number"),
+        FLOOR(408, "floor_number", "Floor number"),
         /** The appartment number of the person residence */
-        APPARTMENT_NUMBER(409, "Appartment number");
+        APPARTMENT_NUMBER(409, "appartment_number", "Appartment number");
 
         private final int code;
+        private final String keyName;
         private final String name;
         private final Predicate<String> validator;
 
         /** Initializes a tag with the corresponding raw encoding value */
-        Tag(int code, String name) {
-            this(code, name, Predicates.<String>alwaysTrue());
+        Tag(int code, String keyName, String name) {
+            this(code, keyName, name, Predicates.<String>alwaysTrue());
         }
 
         /**
@@ -114,14 +117,19 @@ public class EidInfo {
          * The validator is invoked to check whether the given raw value parses into
          * a sensible value for the field.
          */
-        Tag(int code, String name, Predicate<String> validator) {
+        Tag(int code, String keyName, String name, Predicate<String> validator) {
             this.code = code;
+            this.keyName = keyName;
             this.name = name;
             this.validator = validator;
         }
         /** Gets the numeric tag code corresponding to this enum. */
         public int getCode() {
             return code;
+        }
+        /** Gets the string tag key corresponding to this enum. */
+        public String getKeyName() {
+            return keyName;
         }
         /** Gets the string tag name corresponding to this enum. */
         public String getName() {
@@ -234,7 +242,7 @@ public class EidInfo {
      * For example if floorLabelFormat is "%s. sprat" returned string will contain "5. sprat" for
      * floor number 5.
      *
-     * Recommended values for Serbian are "alas %s", "%s. sprat" and "br. %s"
+     * Recommended values for Serbian are "ulaz %s", "%s. sprat" and "br. %s"
      *
      * @param entranceLabelFormat String to format entrance label or null
      * @param floorLabelFormat String to format floor label or null
@@ -375,14 +383,25 @@ public class EidInfo {
     public String getAppartmentNumber() {
         return get(Tag.APPARTMENT_NUMBER);
     }
-    
+
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
         for (Map.Entry<Tag, String> field : fields.entrySet()) {
-            out.append(String.format("%s: %s", field.getKey(), field.getValue()));
+            out.append(String.format("%s: %s", field.getKey().getName(), field.getValue()));
         }
         return out.toString();
+    }
+
+    public JSONObject toJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("name_full", getNameFull());
+        obj.put("place_full", getPlaceFull("ulaz %s", "%s. sprat", "br. %s"));
+        obj.put("place_of_birth_full", getPlaceOfBirthFull());
+        for (Map.Entry<Tag, String> field : fields.entrySet()) {
+            obj.put(field.getKey().getKeyName(), field.getValue());
+        }
+        return obj;
     }
 
     /**

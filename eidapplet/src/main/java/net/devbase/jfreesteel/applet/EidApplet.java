@@ -25,12 +25,16 @@ import netscape.javascript.JSObject;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import org.json.simple.JSONObject;
+
 public class EidApplet extends Applet implements ReaderListener {
 
     private static final long serialVersionUID = -8975515949350240407L;
     private static final Logger logger = Logger.getLogger(EidApplet.class);
     JSObject window = null;
     EidCard card = null;
+    String removedCallback = "removed";
+    String insertedCallback = "inserted";
 
     @Override
     public void init() {
@@ -42,7 +46,7 @@ public class EidApplet extends Applet implements ReaderListener {
             TerminalFactory factory = TerminalFactory.getDefault();
             List<CardTerminal> terminals = factory.terminals().list();
             terminal = terminals.get(0);
-        } catch(Exception e) { 
+        } catch(Exception e) {
             logger.error("Terminal error", e);
             stop();
         }
@@ -51,6 +55,10 @@ public class EidApplet extends Applet implements ReaderListener {
         Reader reader = new Reader(terminal);
         reader.addCardListener(this);
         logger.info("Terminal initialized.");
+
+        // get callbacks
+        removedCallback = getParameter("RemovedCallback");
+        insertedCallback = getParameter("InsertedCallback");
     }
 
     /* export public function as the Mozilla Bug 606737 workaround */
@@ -67,7 +75,7 @@ public class EidApplet extends Applet implements ReaderListener {
         setupJSObject();
         logger.info("Applet started");
     }
-	
+
     private static void configureLog4j() {
         Properties properties = new Properties();
         InputStream propertiesStream = EidApplet.class.getResourceAsStream("/net/devbase/jfreesteel/applet/log4j.properties");
@@ -89,7 +97,7 @@ public class EidApplet extends Applet implements ReaderListener {
         showStatus("Card inserted.");
         try {
             EidInfo info = card.readEidInfo();
-            String name = info.getNameFull();
+            String infoJson = info.toJSON().toString();
 
             Image image = card.readEidPhoto();
 
@@ -103,8 +111,8 @@ public class EidApplet extends Applet implements ReaderListener {
             byte[] bytes = output.toByteArray();
             String photo = DatatypeConverter.printBase64Binary(bytes);
 
-            window.call("inserted", new Object[] {name, photo});
-        } catch (Exception e) { 
+            window.call(insertedCallback, new Object[] {infoJson, photo});
+        } catch (Exception e) {
             logger.error("Read info exception", e);
             stop();
         }
@@ -112,6 +120,6 @@ public class EidApplet extends Applet implements ReaderListener {
 
     public void removed() {
         showStatus("Card removed.");
-        window.call("removed", null);
+        window.call(removedCallback, null);
     }
 }

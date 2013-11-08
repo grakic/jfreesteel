@@ -15,8 +15,6 @@ body {
    overflow: hidden;
 }
 #eid h1 {
-   padding-top: 20px;
-   padding-left: 260px;
    -webkit-background-clip: text;
    -moz-background-clip: text;
    background-clip: text;
@@ -25,6 +23,15 @@ body {
    color: #333;
    font-size: 18pt;
 }
+#eid h1, #eid small {
+    padding: 20px;
+    padding-left: 260px;
+}
+#eid small {
+    color: #aaa;
+    font-size: 8pt;
+    display: block;
+}
 #eid img {
    float: left;
 }
@@ -32,10 +39,15 @@ body {
 <script type="text/javascript" src="https://www.java.com/js/deployJava.js"></script>
 <script type="text/javascript">
 var nameNode;
+var infoNode;
 var photoNode;
 
-function inserted(name, photo) {
-  nameNode.innerHTML = name;
+function inserted(info, photo) {
+  infoNode.innerHTML = info;
+
+  eidInfo = JSON.parse(info);
+  nameNode.innerHTML = eidInfo.name_full;
+
   photoNode.src = "data:image/png;base64,"+photo;
 }
 function removed() {
@@ -45,6 +57,7 @@ function removed() {
 
 window.onload = function() {
     nameNode = document.getElementById("name");
+    infoNode = document.getElementById("info");
     photoNode = document.getElementById("photo");
 
 //    Mozilla Bug 606737 workaround
@@ -76,6 +89,7 @@ window.onload = function() {
 <div id="eid">
   <img id="photo" src="eidapplet.gif" />
   <h1 id="name"></h1>
+  <small id="info"></small>
 </div>
 
 </body>
