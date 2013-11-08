@@ -101,13 +101,13 @@ public class EidInfo {
         APPARTMENT_NUMBER(409, "appartment_number", "Appartment number");
 
         private final int code;
-        private final String keyName;
+        private final String key;
         private final String name;
         private final Predicate<String> validator;
 
         /** Initializes a tag with the corresponding raw encoding value */
-        Tag(int code, String keyName, String name) {
-            this(code, keyName, name, Predicates.<String>alwaysTrue());
+        Tag(int code, String key, String name) {
+            this(code, key, name, Predicates.<String>alwaysTrue());
         }
 
         /**
@@ -117,9 +117,9 @@ public class EidInfo {
          * The validator is invoked to check whether the given raw value parses into
          * a sensible value for the field.
          */
-        Tag(int code, String keyName, String name, Predicate<String> validator) {
+        Tag(int code, String key, String name, Predicate<String> validator) {
             this.code = code;
-            this.keyName = keyName;
+            this.key = key;
             this.name = name;
             this.validator = validator;
         }
@@ -128,8 +128,8 @@ public class EidInfo {
             return code;
         }
         /** Gets the string tag key corresponding to this enum. */
-        public String getKeyName() {
-            return keyName;
+        public String getKey() {
+            return key;
         }
         /** Gets the string tag name corresponding to this enum. */
         public String getName() {
@@ -291,13 +291,14 @@ public class EidInfo {
         String rawState = get(Tag.STATE);
 
         out.append("\n");
+
         if (rawState.contentEquals("SRB")) {
             // small cheat for a better output
             out.append("REPUBLIKA SRBIJA");
         } else {
             out.append(rawState);
         }
-        
+
         return out.toString();
     }
 
@@ -313,7 +314,7 @@ public class EidInfo {
         appendTo(out, Tag.PLACE_OF_BIRTH);
         appendTo(out, ", ", Tag.COMMUNITY_OF_BIRTH);
         appendTo(out, "\n", Tag.STATE_OF_BIRTH);
-        
+
         return out.toString();
     }
 
@@ -388,7 +389,7 @@ public class EidInfo {
     public String toString() {
         StringBuilder out = new StringBuilder();
         for (Map.Entry<Tag, String> field : fields.entrySet()) {
-            out.append(String.format("%s: %s", field.getKey().getName(), field.getValue()));
+            out.append(String.format("%s: %s", field.getKey(), field.getValue()));
         }
         return out.toString();
     }
@@ -399,7 +400,8 @@ public class EidInfo {
         obj.put("place_full", getPlaceFull("ulaz %s", "%s. sprat", "br. %s"));
         obj.put("place_of_birth_full", getPlaceOfBirthFull());
         for (Map.Entry<Tag, String> field : fields.entrySet()) {
-            obj.put(field.getKey().getKeyName(), field.getValue());
+            Tag tag = field.getKey();
+            obj.put(tag.getKey(), field.getValue());
         }
         return obj;
     }

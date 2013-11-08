@@ -21,6 +21,8 @@ package net.devbase.jfreesteel;
 import net.devbase.jfreesteel.EidInfo.Builder;
 import net.devbase.jfreesteel.EidInfo.Tag;
 
+import org.json.simple.JSONObject;
+
 /**
  * @author filmil@gmail.com (Filip Miletic)
  */
@@ -31,6 +33,7 @@ public class EidInfoTest extends EidTestCase {
             .addValue(EidInfo.Tag.DOC_REG_NO, "1000")
             .build();
         assertEquals("1000", info.get(Tag.DOC_REG_NO));
+
         assertContains("Document reg. number: 1000", info.toString());
     }
 
@@ -181,6 +184,12 @@ public class EidInfoTest extends EidTestCase {
         return builder.build();
     }
 
+    public void testJSON() {
+        EidInfo info = buildEidInfoForSimpleGetters();
+        JSONObject infoJson = info.toJSON();
+        assertEquals(infoJson.get("doc_reg_no"), "1000");    
+    }
+
     public void testGetDocRegNo() {
         EidInfo info = buildEidInfoForSimpleGetters();
         assertEquals("1000", info.get(Tag.DOC_REG_NO));
@@ -269,5 +278,4 @@ public class EidInfoTest extends EidTestCase {
         EidInfo info = buildEidInfoForSimpleGetters();
         assertEquals("1212", info.get(Tag.APPARTMENT_NUMBER));
     }
-
 }
