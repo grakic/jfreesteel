@@ -19,9 +19,13 @@
 package net.devbase.jfreesteel;
 
 import java.awt.Image;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
@@ -65,7 +69,8 @@ public class EidCard {
 
     private Card card;
     private CardChannel channel;
-
+    private static int cardVersion = 0; // 1 - Apollo, 2 - Gemalto 
+    
     public EidCard(final Card card)
         throws IllegalArgumentException, SecurityException, IllegalStateException {
         // Check if the card ATR is recognized
@@ -81,8 +86,9 @@ public class EidCard {
     }
 
     private boolean isKnownATR(byte[] card_atr) {
-        for(byte[] eid_atr : KNOWN_EID_ATRS) {
-            if(Arrays.equals(card_atr, eid_atr)) {
+        for(int i=0; i< KNOWN_EID_ATRS.length; i++) {
+            if(Arrays.equals(card_atr, KNOWN_EID_ATRS[i])) {
+            	cardVersion = i+1;
                 return true;
             }
         }
@@ -95,6 +101,10 @@ public class EidCard {
         {(byte) 0x3B, (byte) 0xB9, (byte) 0x18, (byte) 0x00, (byte) 0x81, (byte) 0x31, (byte) 0xFE,
          (byte) 0x9E, (byte) 0x80, (byte) 0x73, (byte) 0xFF, (byte) 0x61, (byte) 0x40, (byte) 0x83,
          (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0xDF},
+        {(byte) 0x3B, (byte) 0xFF, (byte) 0x94, (byte) 0x00, (byte) 0x00, (byte) 0x81, (byte) 0x31,
+         (byte) 0x80, (byte) 0x43, (byte) 0x80, (byte) 0x31, (byte) 0x80, (byte) 0x65, (byte) 0xB0,
+         (byte) 0x85, (byte) 0x02, (byte) 0x01, (byte) 0xF3, (byte) 0x12, (byte) 0x0F, (byte) 0xFF,
+		 (byte) 0x82, (byte) 0x90, (byte) 0x00, (byte) 0x79 },		 
     };
 
     /** Document data */
@@ -121,7 +131,7 @@ public class EidCard {
     @SuppressWarnings("unused")
     private static final byte[] AUTH_CERT_FILE    = {0x0F, 0x08};
 
-    private static final int BLOCK_SIZE = 0xFF;
+    private static int BLOCK_SIZE = 0xFF;
 
     
     /**
@@ -145,11 +155,19 @@ public class EidCard {
 
         ByteBuffer buffer = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN);
     
+        if ( cardVersion==2) {
+        	byte[] header = new byte[4];
+        	buffer.get(header);
+        }
         // repeat as long as we have next tag and len...
         while (buffer.remaining() > 4) {
-            char tag = buffer.getChar();
-            char length = buffer.getChar();
-            byte[] range = new byte[(int) length];
+            int tag = buffer.getChar();
+            int length = buffer.getChar();
+            if (length > buffer.remaining()) {
+            	break;
+            }            
+            byte[] range = new byte[length];
+            
             buffer.get(range);
             out.put((int) tag, range);
         }
@@ -170,7 +188,13 @@ public class EidCard {
         selectFile(name);
 
         // Read first 6 bytes from the EF
-        byte[] header = readBinary(0, 6);
+        byte[] header;
+        if ( cardVersion==2) {
+        	header = readBinary(0, 4);
+        	BLOCK_SIZE = 0x80;
+        } else {
+        	header = readBinary(0, 6);
+        }
 
         // Missing files have header filled with 0xFF
         int i = 0;
@@ -182,9 +206,16 @@ public class EidCard {
         }
 
         // Total EF length: data as 16bit LE at 4B offset
-        final int length = ((0xFF&header[5])<<8) + (0xFF&header[4]);
-        final int offset = stripHeader ? 10 : 6;
+        final int length;
+        final int offset;
 
+        if ( cardVersion==2 ) { 
+            length = ((0xFF&header[3])<<8) + (0xFF&header[2])+4;
+            offset = 0;        	
+        } else {
+            length = ((0xFF&header[5])<<8) + (0xFF&header[4]);
+            offset = stripHeader ? 10 : 6;        	
+        }
         // Read binary into buffer
         return readBinary(offset, length);
     }
@@ -217,7 +248,48 @@ public class EidCard {
 
     /** Selects the elementary file to read, based on the name passed in. */
     private void selectFile(byte[] name) throws CardException {
-        ResponseAPDU response = channel.transmit(new CommandAPDU(0x00, 0xA4, 0x08, 0x00, name));
+    	ResponseAPDU response;
+    	if ( cardVersion==2 ) {
+            // ide mantra
+        	byte[] mb = new byte[] {0x00, (byte) 0xA4, 0x04, 0x00, 0x0B, (byte) 0xF3, (byte) 0x81,0x00,0x00,0x02,0x53,0x45,0x52,0x49,0x44,0x01, 0x00};    	
+        	ResponseAPDU m1 = channel.transmit(new CommandAPDU(mb));
+        	//System.out.println("MANTRA 1 -> "+Utils.byte2hex(m1.getBytes()));
+        	
+        	mb = new byte[] {0x00, (byte) 0xA4, 0x04, 0x00, 0x08, (byte) 0xA0, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00};
+        	m1 = channel.transmit(new CommandAPDU(mb));
+        	//System.out.println("MANTRA 2 -> "+Utils.byte2hex(m1.getBytes()));
+
+        	mb = new byte[] {0x00, (byte) 0xA4, 0x04, 0x00, 0x08, (byte) 0xA0, 0x00, 0x00, 0x00, 0x18, 0x43, 0x4D, 0x00, 0x00};
+        	m1 = channel.transmit(new CommandAPDU(mb));
+        	//System.out.println("MANTRA 3 -> "+Utils.byte2hex(m1.getBytes()));
+        	
+
+        	mb = new byte[] {(byte)0x80, (byte)0xCA, (byte)0x9F, 0x7F, 0x00};
+        	m1 = channel.transmit(new CommandAPDU(mb));
+        	//System.out.println("MANTRA 4 -> "+Utils.byte2hex(m1.getBytes()));
+
+        	mb = new byte[] {0x00, (byte) 0xA4, 0x04, 0x00, 0x0B, (byte) 0xF3, (byte) 0x81, 0x00, 0x00, 0x02, 0x53, 0x45, 0x52, 0x49, 0x44, 0x01, 0x00};
+        	m1 = channel.transmit(new CommandAPDU(mb));
+        	//System.out.println("MANTRA 5 -> "+Utils.byte2hex(m1.getBytes()));
+
+            // ode pravi poziv
+        	byte[] ba = new byte[20];
+        	int i = 0;
+        	ba[i++] = 0x00;
+        	ba[i++] = (byte) 0xA4;
+        	ba[i++] = 0x00;
+        	ba[i++] = 0x00;
+        	ba[i++] = (byte) name.length;
+        	System.arraycopy(name, 0, ba, i, name.length);
+        	i += name.length;
+        	ba[i++] = 0x00;
+        	
+            //ResponseAPDU response = channel.transmit(new CommandAPDU(0x00, 0xA4, 0x00, 0x00, name, 0x00));
+        	response = channel.transmit(new CommandAPDU(ba,0,i));
+        	//System.out.println("SELECT FILE RESPONSE -> "+Utils.byte2hex(response.getBytes()));
+    	} else {
+	        response = channel.transmit(new CommandAPDU(0x00, 0xA4, 0x08, 0x00, name));	        
+    	}
         if(response.getSW() != 0x9000) {
             throw new CardException(
                 String.format("Select failed: name=%s, status=%s", 
@@ -233,12 +305,52 @@ public class EidCard {
 
             // Read binary into buffer
             byte[] bytes = readElementaryFile(PHOTO_FILE, true);
-
+            int offset = 0;
+            if (cardVersion==2) {
+            	offset=8;
+            }
             try {
-                return ImageIO.read(new ByteArrayInputStream(bytes));
+                return ImageIO.read(new ByteArrayInputStream(bytes,offset, bytes.length-offset));
             } catch (IOException e) {
                 throw new CardException("Photo reading error", e);
             }
+        } finally {
+            card.endExclusive();
+            logger.info("photo exclusive free");
+        }
+    }
+
+    void writeFile(byte[] aInput, int offset, String aOutputFileName){
+        try {
+          OutputStream output = null;
+          try {
+            output = new BufferedOutputStream(new FileOutputStream(aOutputFileName));
+            output.write(aInput,offset, aInput.length-offset);
+          }
+          finally {
+            output.close();
+          }
+        }
+        catch(FileNotFoundException ex){
+          ex.printStackTrace();
+        }
+        catch(IOException ex){
+          ex.printStackTrace();
+        }
+      }
+    
+    public void copyEidPhotoToFile(String name) throws CardException {
+        try {
+            logger.info("photo exclusive");
+            card.beginExclusive();
+
+            // Read binary into buffer
+            byte[] bytes = readElementaryFile(PHOTO_FILE, true);
+            int offset = 0;
+            if (cardVersion==2) {
+            	offset=8;
+            }
+            writeFile(bytes, offset, name);
         } finally {
             card.endExclusive();
             logger.info("photo exclusive free");
@@ -393,5 +505,9 @@ public class EidCard {
             // write log output and hope for the best.
             LoggerFactory.getLogger(EidCard.class).warn(error.getMessage());
         }
+    }
+    
+    public int getVersion() {
+    	return cardVersion;
     }
 }
