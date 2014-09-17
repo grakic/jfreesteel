@@ -56,8 +56,8 @@ import net.devbase.jfreesteel.Reader;
 import net.devbase.jfreesteel.Reader.ReaderListener;
 import net.devbase.jfreesteel.gui.GUIPanel;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -79,7 +79,7 @@ public class EidViewer extends JPanel implements ReaderListener {
     private static final String ICON_RESOURCE = 
         "/net/devbase/jfreesteel/viewer/smart-card-reader2.jpg";
 
-    private static final Logger logger = Logger.getLogger(EidViewer.class);
+    private static final Logger logger = LoggerFactory.getLogger(EidViewer.class);
     
     private static final ResourceBundle bundle = ResourceBundle.getBundle(
         "net.devbase.jfreesteel.viewer.viewer");
@@ -135,29 +135,11 @@ public class EidViewer extends JPanel implements ReaderListener {
     }
     
     public static void main(String[] args) {
-        configureLog4j();
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();
             }
         });
-    }
-
-    private static void configureLog4j() {
-        Properties properties = new Properties();
-        InputStream propertiesStream = EidViewer.class.getResourceAsStream(
-            "/net/devbase/jfreesteel/viewer/log4j.properties");
-        if (propertiesStream != null) {
-            try {
-                properties.load(propertiesStream);
-            } catch (IOException e) {
-                System.out.println(bundle.getString("Log4jReadError"));
-            }
-            PropertyConfigurator.configure(properties);
-        }
-        else {
-            System.out.println(bundle.getString("Log4jMissing"));
-        }
     }
 
     /**

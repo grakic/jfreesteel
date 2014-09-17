@@ -39,7 +39,7 @@
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
-                <version>1.3</version>
+                <version>1.5.2</version>
                 <executions>
                     <execution>
                         <id>EidViewer</id>
@@ -132,11 +132,6 @@
             <url>http://maven.itextpdf.com/</url>
         </repository>
         <repository>
-            <id>akathist-repository</id>
-            <name>Akathist Repository</name>
-            <url>http://www.9stmaryrd.com/maven</url>
-        </repository>
-        <repository>
             <id>Codehaus Snapshots</id>
             <url>http://nexus.codehaus.org/snapshots/</url>
             <snapshots>
@@ -148,11 +143,6 @@
         </repository>
     </repositories>
     <pluginRepositories>
-        <pluginRepository>
-            <id>akathist-repository</id>
-            <name>Akathist Repository</name>
-            <url>http://www.9stmaryrd.com/maven</url>
-        </pluginRepository>
         <pluginRepository>
             <id>Codehaus Snapshots</id>
             <url>http://nexus.codehaus.org/snapshots/</url>
@@ -171,26 +161,15 @@
             <artifactId>jfreesteel</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.6.1</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-simple</artifactId>
+		<version>1.7.7</version>
+	</dependency>
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
-            <version>5.0.4</version>
-            <type>jar</type>
-            <scope>compile</scope>
+            <version>5.5.2</version>
         </dependency>
     </dependencies>
 </project>

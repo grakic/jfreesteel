@@ -14,7 +14,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.1</version>
+                <version>2.5</version>
                 <configuration>
                     <excludes>
                         <exclude>**/sample/</exclude>
@@ -28,35 +28,30 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.6.1</version>
+            <version>1.7.7</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>r09</version>
-            <type>jar</type>
-            <scope>compile</scope>
+            <version>18.0</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
-            <type>jar</type>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.2</version>
-            <type>jar</type>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.easymock</groupId>
           <artifactId>easymockclassextension</artifactId>
-          <version>2.4</version>
+          <version>3.2</version>
           <scope>test</scope>
         </dependency>
     </dependencies>
