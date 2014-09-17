@@ -10,8 +10,8 @@ import javax.smartcardio.CardException;
 
 import junit.framework.TestCase;
 
-import org.easymock.classextension.EasyMock;
-import org.easymock.classextension.IMocksControl;
+import org.easymock.EasyMock;
+import org.easymock.IMocksControl;
 
 @SuppressWarnings("restriction") // Various javax.smartcardio.*
 public class EidCardTest extends TestCase {

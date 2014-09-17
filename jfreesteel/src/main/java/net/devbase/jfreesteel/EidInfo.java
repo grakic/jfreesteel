@@ -18,17 +18,10 @@
 
 package net.devbase.jfreesteel;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.json.simple.JSONObject;
-
-import com.google.common.base.Preconditions;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableMap;
 
 /**
  * Simple class to hold and reformat data read from eID
@@ -41,7 +34,7 @@ public class EidInfo {
     /** eID information codes. */
     public enum Tag {
         /** Dummy tag */
-        NULL(0, "ignored", "Ignored", Predicates.<String>alwaysFalse()),
+        NULL(0, "ignored", "Ignored"),
 
         /** Registered document number. */
         DOC_REG_NO(101, "doc_reg_no", "Document reg. number"),
@@ -58,7 +51,7 @@ public class EidInfo {
          * been known to repeat for some rare individuals. The last digit is mod 11 checksum, but
          * due the same reason, there exist numbers with incorrect checksum.
          */
-        PERSONAL_NUMBER(201, "personal_number", "Personal number", new ValidatePersonalNumber()),
+        PERSONAL_NUMBER(201, "personal_number", "Personal number"),
         /** Person's last name, e.g. "Smith" for some John Smith */
         SURNAME(202, "surname", "Surname"),
         /** The given name, e.g. "John" for some John Smith. */
@@ -103,25 +96,14 @@ public class EidInfo {
         private final int code;
         private final String key;
         private final String name;
-        private final Predicate<String> validator;
-
-        /** Initializes a tag with the corresponding raw encoding value */
-        Tag(int code, String key, String name) {
-            this(code, key, name, Predicates.<String>alwaysTrue());
-        }
 
         /**
-         * Initializes a tag with the corresponding raw encoding value, and a
-         * validator.
-         * <p>
-         * The validator is invoked to check whether the given raw value parses into
-         * a sensible value for the field.
+         * Initializes a tag with the corresponding raw encoding value.
          */
-        Tag(int code, String key, String name, Predicate<String> validator) {
+        Tag(int code, String key, String name) {
             this.code = code;
             this.key = key;
             this.name = name;
-            this.validator = validator;
         }
         /** Gets the numeric tag code corresponding to this enum. */
         public int getCode() {
@@ -135,14 +117,6 @@ public class EidInfo {
         public String getName() {
             return name;
         }
-        /** Runs a validator for this tag on the supplied value.
-         *
-         * @return true if the value is valid; false otherwise.
-         */
-        public boolean validate(String value) {
-            return validator.apply(value);
-        }
-
         @Override
         public String toString() {
             return name;
@@ -152,28 +126,24 @@ public class EidInfo {
     /** Builds an instance of EID info. */
     public static class Builder {
 
-        ImmutableMap.Builder<Tag, String> builder;
+        Map<Tag, String> builder;
 
         public Builder() {
-            builder = ImmutableMap.builder();
+            builder = new HashMap<Tag, String>();
         }
 
         /**
         * Adds the value to the information builder.
         *
-        * @throws IllegalArgumentException if the value supplied fails validation, or if
-        * the same tag is added twice.
+        * @throws IllegalArgumentException if the same tag is added twice.
         */
         public Builder addValue(Tag tag, String value) {
-            Preconditions.checkArgument(
-                tag.validate(value),
-                String.format("Value '%s' not valid for tag '%s'", value, tag));
             builder.put(tag, value);
             return this;
         }
 
         public EidInfo build() {
-            return new EidInfo(builder.build());
+            return new EidInfo(builder);
         }
     }
 
@@ -190,7 +160,8 @@ public class EidInfo {
 
     /** Returns if there is a value associated with the supplied tag. */
     public boolean has(Tag tag) {
-        return !Strings.isNullOrEmpty(get(tag));
+    	String value = get(tag);
+    	return (value != null && value.length() > 0);
     }
 
     /** Append tag value using given separator as a prefix. */
@@ -410,19 +381,5 @@ public class EidInfo {
             obj.put(tag.getKey(), field.getValue());
         }
         return obj;
-    }
-
-    /**
-     * Checks whether the personal ID number is a valid number.
-     * <p>
-     * Currently only the format is checked, but not the checksum.
-     */
-    private static class ValidatePersonalNumber implements Predicate<String> {
-        public boolean apply(String personalNumber) {
-            // there are valid personal numbers with invalid checksum, check for format only
-            Pattern pattern = Pattern.compile("^[0-9]{13}$", Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(personalNumber);
-            return matcher.matches();
-        }
     }
 }

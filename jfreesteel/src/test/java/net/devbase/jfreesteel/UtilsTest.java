@@ -1,7 +1,7 @@
 package net.devbase.jfreesteel;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.ImmutableMap;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 /**
  * @author Filip Miletic (filmil@gmail.com)
@@ -33,17 +33,21 @@ public class UtilsTest extends EidTestCase {
     }
 
     public void testMap2UTF8String() {
-        String result = Utils.map2UTF8String(ImmutableMap.of(
-            0x01, "АБВГДЂ".getBytes(Charsets.UTF_8),
-            0x02, "ЕЖЗИЈК".getBytes(Charsets.UTF_8),
-            0x03, "\uffff\uffff\uffff".getBytes(Charsets.ISO_8859_1),
-            0x04, "AB".getBytes(Charsets.UTF_8)));
+    	
+    	HashMap testmap = new HashMap() {{
+            put(0x01, "АБВГДЂ".getBytes(StandardCharsets.UTF_8));
+            put(0x02, "ЕЖЗИЈК".getBytes(StandardCharsets.UTF_8));
+            put(0x03, "\uffff\uffff\uffff".getBytes(StandardCharsets.ISO_8859_1));
+            put(0x04, "AB".getBytes(StandardCharsets.UTF_8));
+        }};
+    	
+        String result = Utils.map2UTF8String(testmap);
 
         assertContains("1 = АБВГДЂ (D0:90:D0:91:D0:92:D0:93:D0:94:D0:82)\n", result);
         assertContains("2 = ЕЖЗИЈК (D0:95:D0:96:D0:97:D0:98:D0:88:D0:9A)\n", result);
         assertContains(
-            new String("3 = \uffff\uffff\uffff (3F:3F:3F)\n".getBytes(Charsets.ISO_8859_1),
-                Charsets.ISO_8859_1), result);
+            new String("3 = \uffff\uffff\uffff (3F:3F:3F)\n".getBytes(StandardCharsets.ISO_8859_1),
+            StandardCharsets.ISO_8859_1), result);
         assertContains("4 = AB (41:42)\n", result);
     }
 }

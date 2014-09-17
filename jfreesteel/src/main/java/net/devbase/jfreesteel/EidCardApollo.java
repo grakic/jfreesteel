@@ -6,8 +6,6 @@ import java.util.Arrays;
 import javax.smartcardio.Card;
 import javax.smartcardio.CardException;
 
-import com.google.common.annotations.VisibleForTesting;
-
 /**
  * Smart card wrapper for Apollo v2.43 smart card
  * 
@@ -26,7 +24,7 @@ import com.google.common.annotations.VisibleForTesting;
 public class EidCardApollo extends EidCard {
 
     /** The list of known card ATRs, used to identify this smartcard. */
-    @VisibleForTesting static final byte[] CARD_ATR = {
+    public static final byte[] CARD_ATR = {
         (byte) 0x3B, (byte) 0xB9, (byte) 0x18, (byte) 0x00, (byte) 0x81, (byte) 0x31, (byte) 0xFE,
         (byte) 0x9E, (byte) 0x80, (byte) 0x73, (byte) 0xFF, (byte) 0x61, (byte) 0x40, (byte) 0x83,
         (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0xDF

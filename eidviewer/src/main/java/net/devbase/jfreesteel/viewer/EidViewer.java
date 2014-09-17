@@ -30,6 +30,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -59,8 +60,6 @@ import net.devbase.jfreesteel.gui.GUIPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.itextpdf.text.DocumentException;
 
 /**
@@ -73,13 +72,13 @@ public class EidViewer extends JPanel implements ReaderListener {
     
     private static final long serialVersionUID = -2497143822816312498L;
 
-    private static final ImmutableList<String> ICON_FILES = ImmutableList.of(
-            "eidviewer20.png", "eidviewer26.png", "eidviewer32.png");
+    private static final String[] ICON_FILES = {
+            "eidviewer20.png", "eidviewer26.png", "eidviewer32.png"};
 
     private static final String ICON_RESOURCE = 
         "/net/devbase/jfreesteel/viewer/smart-card-reader2.jpg";
 
-    private static final Logger logger = LoggerFactory.getLogger(EidViewer.class);
+    private final static Logger logger = LoggerFactory.getLogger(EidCard.class);
     
     private static final ResourceBundle bundle = ResourceBundle.getBundle(
         "net.devbase.jfreesteel.viewer.viewer");
@@ -171,7 +170,7 @@ public class EidViewer extends JPanel implements ReaderListener {
         frame.setLocationRelativeTo(null);
 
         // Set window icon
-        List<Image> icons = Lists.newArrayList();
+        List<Image> icons = new ArrayList<Image>();
         for (String iconFile : ICON_FILES) {
             try {
                 icons.add(ImageIO.read(frame.getClass().getResource(
