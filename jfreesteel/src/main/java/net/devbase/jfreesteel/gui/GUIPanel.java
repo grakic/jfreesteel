@@ -116,8 +116,8 @@ public class GUIPanel extends JPanel {
     }
 
     public GUIPanel() {
-        setSize(new Dimension(700, 320));  // without layout manager
-        setPreferredSize(new Dimension(700, 320));  // with layout manager
+        setSize(new Dimension(730, 320));  // without layout manager
+        setPreferredSize(new Dimension(730, 320));  // with layout manager
         setBorder(new EmptyBorder(12, 12, 12, 12));
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
