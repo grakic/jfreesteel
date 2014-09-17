@@ -226,9 +226,9 @@ public class EidInfo {
     }
     
     private String formatDate(String date) {
-    	return date.length() == 8 ? 
-    			String.format("%s.%s.%s", date.substring(0, 2), date.substring(2, 4), date.substring(4, 8)) 
-    			: date;
+        return date.length() == 8 ? 
+                String.format("%s.%s.%s", date.substring(0, 2), date.substring(2, 4), date.substring(4, 8)) 
+                : date;
     }
 
     /**
@@ -324,8 +324,6 @@ public class EidInfo {
         return out.toString();
     }
 
-    
-    
     public String getDocRegNo() {
         return get(Tag.DOC_REG_NO);
     }

@@ -66,18 +66,18 @@ public abstract class EidCard {
 
     protected Card card;
     protected CardChannel channel;
-    
+
     // Constructor
     protected EidCard(final Card card) {
         this.card = card;
-        channel = card.getBasicChannel();    	
+        channel = card.getBasicChannel();        
     }
-    
+
     /**
      * Factory method
      * 
      * Return instance of EidCard implementation supporting the given card
-	 *
+     *
      * @param card
      * @throws SecurityException
      * @throws IllegalStateException
@@ -86,24 +86,24 @@ public abstract class EidCard {
      * @throws CardException 
      */
     public static EidCard fromCard(final Card card)
-        throws IllegalArgumentException, SecurityException, IllegalStateException, CardException {
+            throws IllegalArgumentException, SecurityException, IllegalStateException, CardException {
         final byte[] atrBytes = card.getATR().getBytes();
 
-    	if(EidCardApollo.isKnownAtr(atrBytes))
-    		return new EidCardApollo(card);
+        if(EidCardApollo.isKnownAtr(atrBytes))
+            return new EidCardApollo(card);
 
-    	if(EidCardGemalto.isKnownAtr(atrBytes))
-    		return new EidCardGemalto(card);
-    	
-    	throw new IllegalArgumentException(
-            String.format("EidCard: Card is not recognized as Serbian eID. Card ATR: %s",
-                Utils.bytes2HexString(atrBytes)));
+        if(EidCardGemalto.isKnownAtr(atrBytes))
+            return new EidCardGemalto(card);
+
+        throw new IllegalArgumentException(
+                String.format("EidCard: Card is not recognized as Serbian eID. Card ATR: %s",
+                        Utils.bytes2HexString(atrBytes)));
     }
 
     /** Factory "selection" method */
     protected static boolean isKnownAtr(final byte[] atrBytes) {
-		return false;
-	}
+        return false;
+    }
 
     /** Document data */
     protected static final byte[] DOCUMENT_FILE  = {0x0F, 0x02};
@@ -116,8 +116,8 @@ public abstract class EidCard {
 
     /** Personal photo in JPEG format */
     protected static final byte[] PHOTO_FILE     = {0x0F, 0x06};
-    
-    
+
+
     /**
      * Subdivides the byte array into byte sub-arrays, keyed by their tags
      * 
@@ -138,7 +138,7 @@ public abstract class EidCard {
         // [fld 16bit LE] [len 16bit LE] [len bytes of data] | [fld] [06] ...
 
         ByteBuffer buffer = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN);
-    
+
         // repeat as long as we have next tag and len...
         while (buffer.remaining() > 4) {
             char tag = buffer.getChar();
@@ -150,9 +150,9 @@ public abstract class EidCard {
 
         return out;
     }
-    
+
     protected static final int BLOCK_SIZE = 0xFF;
-    
+
     /**
      * Read EF contents, selecting by file path.
      * 
@@ -165,26 +165,26 @@ public abstract class EidCard {
     protected byte[] readBinary(int offset, int length) throws CardException {
         int readSize = Math.min(length, BLOCK_SIZE);
         ResponseAPDU response = channel.transmit(
-            new CommandAPDU(0x00, 0xB0, offset >> 8, offset & 0xFF, readSize));
+                new CommandAPDU(0x00, 0xB0, offset >> 8, offset & 0xFF, readSize));
         if (response.getSW() != 0x9000) {
             throw new CardException(
-                String.format("Read binary failed: offset=%d, length=%d, status=%s", 
-                    offset, length, Utils.int2HexString(response.getSW())));
+                    String.format("Read binary failed: offset=%d, length=%d, status=%s", 
+                            offset, length, Utils.int2HexString(response.getSW())));
         }
         return response.getData();
     }
 
     /** Selects the elementary file to read, based on the name passed in. */
     protected byte[] selectFile(final byte[] name) throws CardException {
-    	return selectFile(name, 0);
+        return selectFile(name, 0);
     }
 
     protected byte[] selectFile(final byte[] name, int ne) throws CardException {
-    	ResponseAPDU response = channel.transmit(new CommandAPDU(0x00, 0xA4, 0x08, 0x00, name, ne));
+        ResponseAPDU response = channel.transmit(new CommandAPDU(0x00, 0xA4, 0x08, 0x00, name, ne));
         if(response.getSW() != 0x9000) {
             throw new CardException(
-                String.format("Select failed: name=%s, status=%s", 
-                    Utils.bytes2HexString(name), Utils.int2HexString(response.getSW())));
+                    String.format("Select failed: name=%s, status=%s", 
+                            Utils.bytes2HexString(name), Utils.int2HexString(response.getSW())));
         }
         return response.getData();
     }
@@ -196,7 +196,7 @@ public abstract class EidCard {
             card.beginExclusive();
 
             // Read binary into buffer
-            byte[] bytes = readElementaryFile(PHOTO_FILE, true);	
+            byte[] bytes = readElementaryFile(PHOTO_FILE, true);    
 
             try {
                 return ImageIO.read(new ByteArrayInputStream(bytes));
@@ -211,7 +211,7 @@ public abstract class EidCard {
 
     // tags: 1545 - 1553
     protected static final ImmutableMap<Integer, Tag> DOCUMENT_TAGMAPPER =
-        new ImmutableMap.Builder<Integer, Tag>()
+            new ImmutableMap.Builder<Integer, Tag>()
             .put(1545, Tag.NULL) // = SRB (issuing authority country code?)
             .put(1546, Tag.DOC_REG_NO)
             .put(1547, Tag.NULL) // = ID
@@ -225,7 +225,7 @@ public abstract class EidCard {
 
     // tags: 1558 - 1567
     protected static final ImmutableMap<Integer, Tag> PERSONAL_TAGMAPPER =
-        new ImmutableMap.Builder<Integer, Tag>()
+            new ImmutableMap.Builder<Integer, Tag>()
             .put(1558, Tag.PERSONAL_NUMBER)
             .put(1559, Tag.SURNAME)
             .put(1560, Tag.GIVEN_NAME)
@@ -240,7 +240,7 @@ public abstract class EidCard {
 
     // tags: 1568 .. 1578
     protected static final ImmutableMap<Integer, Tag> RESIDENCE_TAGMAPPER =
-        new ImmutableMap.Builder<Integer, Tag>()
+            new ImmutableMap.Builder<Integer, Tag>()
             .put(1568, Tag.STATE)
             .put(1569, Tag.COMMUNITY)
             .put(1570, Tag.PLACE)
@@ -317,9 +317,9 @@ public abstract class EidCard {
             }
             if (unknownString.length() > 0) {
                 logger.error(
-                    "Some unknown tags found on a card. Please send this info to " +
-                    "<grakic@devbase.net> and contribute to the development.\n" +
-                    unknownString.toString());
+                        "Some unknown tags found on a card. Please send this info to " +
+                                "<grakic@devbase.net> and contribute to the development.\n" +
+                                unknownString.toString());
             }
 
             return builder.build();

@@ -62,16 +62,16 @@ public class Utils {
      *         gets printed as: "01:02:03"
      */
     public static String bytes2HexString(byte... bytes) {
-    	return bytes2HexStringWithSeparator(":", bytes);
+        return bytes2HexStringWithSeparator(":", bytes);
     }
-    
+
     /**
      * Same as bytes2HexString(), but without bytes seprator
      * @param bytes
      * @return
      */
     public static String bytes2HexStringCompact(byte... bytes) {
-    	return bytes2HexStringWithSeparator("", bytes);    	
+        return bytes2HexStringWithSeparator("", bytes);        
     }
 
     private static String bytes2HexStringWithSeparator(String separator, byte... bytes) {
@@ -114,7 +114,7 @@ public class Utils {
         for (Map.Entry<?, byte[]> entry : sorted.entrySet()) {
             byte[] value = entry.getValue();
             builder.append(
-                String.format("%d = %s (%s)\n",
+                    String.format("%d = %s (%s)\n",
                     entry.getKey(),
                     bytes2UTF8String(value),
                     bytes2HexString(value)));
@@ -129,18 +129,18 @@ public class Utils {
      * @param bytes the bytes to convert to string, {@code null} allowed.
      */
     public static String bytes2String(String charsetName, byte... bytes) {
-    	try {
-    		return new String(bytes, charsetName);
-    	} catch (UnsupportedEncodingException ex) {
+        try {
+            return new String(bytes, charsetName);
+        } catch (UnsupportedEncodingException ex) {
             log.warn(String.format("Could not convert bytes to unknown encoding %s", 
-            		charsetName, ex));
-    	} catch (RuntimeException ex) {
+                    charsetName, ex));
+        } catch (RuntimeException ex) {
             log.warn(String.format("Could not convert bytes to %s: %s, %s", 
-            		charsetName, bytes2HexString(bytes), ex));
+                    charsetName, bytes2HexString(bytes), ex));
         } 
-    	return null;
+        return null;
     }
-		
+
     /**
      * Interprets an array of bytes as an UTF-8 string.
      * <p>
@@ -154,13 +154,13 @@ public class Utils {
         }
         String ret;
         if ((ret = bytes2String("UTF-8", bytes)) != null) {
-        	return ret;
+            return ret;
         }
         else if ((ret = bytes2String("ISO-8859-1", bytes)) != null) {
-        	return ret;
+            return ret;
         }
         else {
-			return bytes2HexString(bytes);
+            return bytes2HexString(bytes);
         }
     }
 
@@ -175,10 +175,10 @@ public class Utils {
         }
         return valueBytes;
     }
-    
+
     public static boolean allEquals(int needle, byte... bytes) {
-    	int i = 0;
-    	while(i < bytes.length && bytes[i] == needle) i++;
-    	return i == bytes.length;
+        int i = 0;
+        while(i < bytes.length && bytes[i] == needle) i++;
+        return i == bytes.length;
     }    
 }
