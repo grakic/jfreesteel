@@ -22,13 +22,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.json.simple.JSONObject;
+
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
-
-import org.json.simple.JSONObject;
 
 /**
  * Simple class to hold and reformat data read from eID
@@ -224,6 +224,12 @@ public class EidInfo {
             ? format
             : "%s";
     }
+    
+    private String formatDate(String date) {
+    	return date.length() == 8 ? 
+    			String.format("%s.%s.%s", date.substring(0, 2), date.substring(2, 4), date.substring(4, 8)) 
+    			: date;
+    }
 
     /**
      * Get given name, parent given name and a surname as a single string.
@@ -318,14 +324,16 @@ public class EidInfo {
         return out.toString();
     }
 
+    
+    
     public String getDocRegNo() {
         return get(Tag.DOC_REG_NO);
     }
     public String getIssuingDate() {
-        return get(Tag.ISSUING_DATE);
+        return formatDate(get(Tag.ISSUING_DATE));
     }
     public String getExpiryDate() {
-        return get(Tag.EXPIRY_DATE);
+        return formatDate(get(Tag.EXPIRY_DATE));
     }
     public String getIssuingAuthority() {
         return get(Tag.ISSUING_AUTHORITY);
@@ -355,7 +363,7 @@ public class EidInfo {
         return get(Tag.STATE_OF_BIRTH);
     }
     public String getDateOfBirth() {
-        return get(Tag.DATE_OF_BIRTH);
+        return formatDate(get(Tag.DATE_OF_BIRTH));
     }
     public String getState() {
         return get(Tag.STATE);
