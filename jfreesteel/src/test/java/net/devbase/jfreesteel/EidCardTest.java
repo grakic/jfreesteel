@@ -13,8 +13,6 @@ import junit.framework.TestCase;
 import org.easymock.classextension.EasyMock;
 import org.easymock.classextension.IMocksControl;
 
-import com.google.common.collect.Iterables;
-
 @SuppressWarnings("restriction") // Various javax.smartcardio.*
 public class EidCardTest extends TestCase {
     
@@ -60,21 +58,21 @@ public class EidCardTest extends TestCase {
             result.get(0xbabe)));
     }
     
-    public void testCardInitialization_knownEid() {
+    public void testCardInitialization_knownEid() throws Exception {
         expectSerbianAtr();
 
         control.replay();
-        new EidCard(mockCard);
-        control.verify();
+    	EidCard.fromCard(mockCard);
+    	control.verify();
     }
 
-    public void testCardInitialization_unknownEid() {
+    public void testCardInitialization_unknownEid() throws Exception {
         expectAtr(Utils.asByteArray(0xca, 0xfe));
         control.replay();
         
         try {
-            new EidCard(mockCard);
-            fail("exception expected");
+        	EidCard.fromCard(mockCard);
+        	fail("exception expected");
         } catch (IllegalArgumentException expected) {
             control.verify();
         }
@@ -85,7 +83,7 @@ public class EidCardTest extends TestCase {
         mockCard.disconnect(false);
 
         control.replay();
-        EidCard card = new EidCard(mockCard);
+        EidCard card = EidCard.fromCard(mockCard);
         card.disconnect();
         try {
             card.disconnect();
@@ -101,7 +99,7 @@ public class EidCardTest extends TestCase {
         EasyMock.expectLastCall().andThrow(new CardException("boo!"));
 
         control.replay();
-        EidCard card = new EidCard(mockCard);
+        EidCard card = EidCard.fromCard(mockCard);
         try {
             card.disconnect();
             fail("exception expected");
@@ -136,7 +134,7 @@ public class EidCardTest extends TestCase {
 */    
 
     private void expectSerbianAtr() {
-        expectAtr(EidCard.KNOWN_EID_ATRS[0]);
+        expectAtr(EidCardApollo.CARD_ATR);
     }
 
     private void expectAtr(byte[] atrSequence) {

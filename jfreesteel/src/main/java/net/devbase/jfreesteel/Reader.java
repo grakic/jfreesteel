@@ -175,7 +175,7 @@ public class Reader {
 
     public void connect() throws CardException {
         logger.info("CONNECT");
-        eidcard = new EidCard(terminal.connect("*"));
+        eidcard = EidCard.fromCard(terminal.connect("*"));
     }
 
     public void disconnect() throws CardException {
