@@ -17,9 +17,14 @@
  */
 package net.devbase.jfreesteel.sample;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
 import javax.smartcardio.Card;
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
@@ -44,7 +49,7 @@ import net.devbase.jfreesteel.Utils;
 @SuppressWarnings("restriction") // Various javax.smartcardio.*
 public class JFreesteel {
 
-    public static CardTerminal pickTerminal(List<CardTerminal> terminals) {
+	private static CardTerminal pickTerminal(List<CardTerminal> terminals) {
         if (terminals.size() > 1) {
             System.out.println("Available readers:\n");
             int c = 1;
@@ -58,14 +63,25 @@ public class JFreesteel {
                 System.out.flush();
 
                 c = in.nextInt();
-                if (c > 0 && c < terminals.size()) {
-                    return terminals.get(c);
+                if (c > 0 && c <= terminals.size()) {
+                    return terminals.get(c-1);
                 }
             }
         } else {
             return terminals.get(0);
         }
     }
+
+	private static BufferedImage toBufferedImage(Image src) {
+	    int w = src.getWidth(null);
+	    int h = src.getHeight(null);
+	    int type = BufferedImage.TYPE_INT_RGB; // other options
+	    BufferedImage dest = new BufferedImage(w, h, type);
+	    Graphics2D g2 = dest.createGraphics();
+	    g2.drawImage(src, 0, 0, null);
+	    g2.dispose();
+	    return dest;
+	}
 
     public static void main(String[] args) {
         CardTerminal terminal = null;
@@ -103,7 +119,12 @@ public class JFreesteel {
             System.out.format("Street address : %s, %s\n", info.getStreet(), info.getHouseNumber());
             System.out.format("City           : %s, %s, %s\n", info.getCommunity(), info.getPlace(), info.getState());
 
-        } catch (CardException e) {
+            Image photo = eidcard.readEidPhoto();
+            File filename = File.createTempFile("eidphoto",".jpg");
+            ImageIO.write(toBufferedImage(photo), "jpg", filename);
+            System.out.format("\neID Photo      : %s", filename);
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
