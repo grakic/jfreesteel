@@ -85,9 +85,9 @@ public class JFreesteel {
             Card card = terminal.connect("*");
 
             // read eid data
-            EidCard eidcard = new EidCard(card);
-            EidInfo info = eidcard.readEidInfo();
+            EidCard eidcard = EidCard.fromCard(card);
 
+            EidInfo info = eidcard.readEidInfo();
             System.out.format("ATR            : %s\n", Utils.bytes2HexString(card.getATR().getBytes()));
             System.out.format("eID number     : %s\n", info.getDocRegNo());
             System.out.format("Issued         : %s\n", info.getIssuingDate());
