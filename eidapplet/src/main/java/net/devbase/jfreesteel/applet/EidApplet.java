@@ -20,17 +20,16 @@ import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
 import javax.xml.bind.DatatypeConverter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import netscape.javascript.JSObject;
-
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-
 import org.json.simple.JSONObject;
 
 public class EidApplet extends Applet implements ReaderListener {
 
     private static final long serialVersionUID = -8975515949350240407L;
-    private static final Logger logger = Logger.getLogger(EidApplet.class);
+    private final static Logger logger = LoggerFactory.getLogger(EidApplet.class);
     JSObject window = null;
     EidCard card = null;
     String removedCallback = "removed";
@@ -38,8 +37,6 @@ public class EidApplet extends Applet implements ReaderListener {
 
     @Override
     public void init() {
-        configureLog4j();
-
         // pick the first terminal
         CardTerminal terminal = null;
         try {
@@ -74,21 +71,6 @@ public class EidApplet extends Applet implements ReaderListener {
     public void start() {
         setupJSObject();
         logger.info("Applet started");
-    }
-
-    private static void configureLog4j() {
-        Properties properties = new Properties();
-        InputStream propertiesStream = EidApplet.class.getResourceAsStream("/net/devbase/jfreesteel/applet/log4j.properties");
-        if(propertiesStream != null) {
-            try {
-                properties.load(propertiesStream);
-            } catch (IOException e) {
-                System.err.println("Logger configuration error");
-            }
-            PropertyConfigurator.configure(properties);
-        } else {
-            System.err.println("Logger configuration missing");
-        }
     }
 
     public void inserted(EidCard card) {
