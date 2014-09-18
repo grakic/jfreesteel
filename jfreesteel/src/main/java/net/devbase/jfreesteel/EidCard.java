@@ -243,7 +243,8 @@ public abstract class EidCard {
         put(1574, Tag.ENTRANCE);
         put(1575, Tag.FLOOR);
         put(1578, Tag.APPARTMENT_NUMBER);
-        put(1580, Tag.NULL); // = 01010001
+        put(1580, Tag.ADDRESS_DATE); // = default 01010001
+        // AddressLabel ?
     }};
 
     /**

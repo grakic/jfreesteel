@@ -119,6 +119,9 @@ public class JFreesteel {
             System.out.format("Street address : %s, %s\n", info.getStreet(), info.getHouseNumber());
             System.out.format("City           : %s, %s, %s\n", info.getCommunity(), info.getPlace(), info.getState());
 
+            String addressDate = info.getAddressDate();
+            System.out.format("Address date   : %s\n", addressDate == null ? "n/a" : addressDate);
+
             Image photo = eidcard.readEidPhoto();
             File filename = File.createTempFile("eidphoto",".jpg");
             ImageIO.write(toBufferedImage(photo), "jpg", filename);

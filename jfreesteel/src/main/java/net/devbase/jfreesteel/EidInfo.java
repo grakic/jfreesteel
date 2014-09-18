@@ -91,7 +91,9 @@ public class EidInfo {
         /** The floor number of the person residence */
         FLOOR(408, "floor_number", "Floor number"),
         /** The appartment number of the person residence */
-        APPARTMENT_NUMBER(409, "appartment_number", "Appartment number");
+        APPARTMENT_NUMBER(409, "appartment_number", "Appartment number"),
+        /** Address update date */
+        ADDRESS_DATE(410, "address_date", "Address date");
 
         private final int code;
         private final String key;
@@ -360,6 +362,12 @@ public class EidInfo {
     }
     public String getAppartmentNumber() {
         return get(Tag.APPARTMENT_NUMBER);
+    }
+    public String getAddressDate() {
+        String value = get(Tag.ADDRESS_DATE);
+        if (value == null || value.equals("01010001"))
+            return null;
+        return formatDate(get(Tag.APPARTMENT_NUMBER));
     }
 
     @Override

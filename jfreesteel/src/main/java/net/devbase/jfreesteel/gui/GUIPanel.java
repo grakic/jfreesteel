@@ -56,12 +56,14 @@ public class GUIPanel extends JPanel {
 
     private JImagePanel photo;
     private Image throbber;
-    
+
     protected JPanel toolbar;
 
     private JLabel nameFull;
     private JLabel personalNumber;
     private JLabel placeFull;
+    private JLabel addressDate;
+    private JLabel addressDateLabel;
     private JLabel dateOfBirth;
     private JLabel placeOfBirthFull;
     private JLabel docRegNo;
@@ -70,7 +72,7 @@ public class GUIPanel extends JPanel {
     private JLabel issuingAuthority;
 
     public void clearDetailsAndPhoto() {
-        setDetails("", "", "", "", "", "", "", "", "");
+        setDetails("", "", "", "", "", "", "", "", "", "");
         setPhoto(null);
     }
 
@@ -92,13 +94,15 @@ public class GUIPanel extends JPanel {
             bundle.getString("FloorLabelFormat"),
             bundle.getString("AppartmentLabelFormat")).replace("\n", "<br/>"));
 
+        setAddressDate(info.getAddressDate());
+
         docRegNo.setText(info.getDocRegNo());
         issuingDate.setText(info.getIssuingDate());
         expiryDate.setText(info.getExpiryDate());
         issuingAuthority.setText(info.getIssuingAuthority());
     }
 
-    public void setDetails(String nameFull, String personalNumber, String placeFull,
+    public void setDetails(String nameFull, String personalNumber, String placeFull, String addressDate,
         String dateOfBirth, String placeOfBirthFull, String docRegNo, String issuingDate,
         String expiryDate, String issuingAuthority) {
 
@@ -108,11 +112,24 @@ public class GUIPanel extends JPanel {
         this.placeOfBirthFull.setText("<html>"+placeOfBirthFull.replace("\n", "<br/>"));
 
         this.placeFull.setText("<html>"+placeFull.replace("\n", "<br/>"));
+        setAddressDate(addressDate);
 
         this.docRegNo.setText(docRegNo);
         this.issuingDate.setText(issuingDate);
         this.expiryDate.setText(expiryDate);
         this.issuingAuthority.setText(issuingAuthority);
+    }
+
+    private void setAddressDate(String addressDate) {
+        if (addressDate != null && addressDate.length() > 0) {
+            this.addressDate.setText(addressDate);
+            this.addressDate.setVisible(true);
+            this.addressDateLabel.setVisible(true);
+        } else {
+            this.addressDate.setText("");
+            this.addressDate.setVisible(false);
+            this.addressDateLabel.setVisible(false);
+        }
     }
 
     public GUIPanel() {
@@ -153,9 +170,9 @@ public class GUIPanel extends JPanel {
         panel.add(panel_2);
         GridBagLayout gbl_panel_2 = new GridBagLayout();
         gbl_panel_2.columnWidths = new int[]{110, 0};
-        gbl_panel_2.rowHeights = new int[]{0, 0, 0, 0};
+        gbl_panel_2.rowHeights = new int[]{0, 0, 0, 0, 0};
         gbl_panel_2.columnWeights = new double[]{0.0, 1.0};
-        gbl_panel_2.rowWeights = new double[]{1.0, 1.0, 1.0, 3.0};
+        gbl_panel_2.rowWeights = new double[]{1.0, 1.0, 1.0, 1.0, 3.0};
         panel_2.setLayout(gbl_panel_2);
 
         JLabel personalNumberLabel = new JLabel(bundle.getString("PersonalNumber")); //$NON-NLS-1$
@@ -193,13 +210,30 @@ public class GUIPanel extends JPanel {
         gbc_placeFull.gridy = 1;
         panel_2.add(placeFull, gbc_placeFull);
 
+        addressDateLabel = new JLabel(bundle.getString("AddressDate")); //$NON-NLS-1$
+        addressDateLabel.setForeground(Color.GRAY);
+        GridBagConstraints gbc_addressDateLabel = new GridBagConstraints();
+        gbc_addressDateLabel.anchor = GridBagConstraints.NORTHWEST;
+        gbc_addressDateLabel.insets = new Insets(0, 0, 6, 12);
+        gbc_addressDateLabel.gridx = 0;
+        gbc_addressDateLabel.gridy = 2;
+        panel_2.add(addressDateLabel, gbc_addressDateLabel);
+
+        addressDate = new JLabel("");
+        GridBagConstraints gbc_addressDate = new GridBagConstraints();
+        gbc_addressDate.anchor = GridBagConstraints.NORTH;
+        gbc_addressDate.fill = GridBagConstraints.HORIZONTAL;
+        gbc_addressDate.gridx = 1;
+        gbc_addressDate.gridy = 3;
+        panel_2.add(addressDate, gbc_addressDate);
+
         JLabel dateOfBirthLabel = new JLabel(bundle.getString("DateOfBirth")); //$NON-NLS-1$
         dateOfBirthLabel.setForeground(Color.GRAY);
         GridBagConstraints gbc_dateOfBirthLabel = new GridBagConstraints();
         gbc_dateOfBirthLabel.anchor = GridBagConstraints.NORTHWEST;
         gbc_dateOfBirthLabel.insets = new Insets(0, 0, 6, 12);
         gbc_dateOfBirthLabel.gridx = 0;
-        gbc_dateOfBirthLabel.gridy = 2;
+        gbc_dateOfBirthLabel.gridy = 3;
         panel_2.add(dateOfBirthLabel, gbc_dateOfBirthLabel);
 
         dateOfBirth = new JLabel("");
@@ -207,7 +241,7 @@ public class GUIPanel extends JPanel {
         gbc_dateOfBirth.anchor = GridBagConstraints.NORTH;
         gbc_dateOfBirth.fill = GridBagConstraints.HORIZONTAL;
         gbc_dateOfBirth.gridx = 1;
-        gbc_dateOfBirth.gridy = 2;
+        gbc_dateOfBirth.gridy = 3;
         panel_2.add(dateOfBirth, gbc_dateOfBirth);
 
         JLabel placeOfBirthFullLabel = new JLabel(bundle.getString("PlaceOfBirth")); //$NON-NLS-1$
@@ -216,7 +250,7 @@ public class GUIPanel extends JPanel {
         gbc_placeOfBirthFullLabel.anchor = GridBagConstraints.NORTHWEST;
         gbc_placeOfBirthFullLabel.insets = new Insets(0, 0, 6, 12);
         gbc_placeOfBirthFullLabel.gridx = 0;
-        gbc_placeOfBirthFullLabel.gridy = 3;
+        gbc_placeOfBirthFullLabel.gridy = 4;
         panel_2.add(placeOfBirthFullLabel, gbc_placeOfBirthFullLabel);
 
         placeOfBirthFull = new JLabel("");
@@ -224,7 +258,7 @@ public class GUIPanel extends JPanel {
         gbc_placeOfBirthFull.anchor = GridBagConstraints.NORTH;
         gbc_placeOfBirthFull.fill = GridBagConstraints.HORIZONTAL;
         gbc_placeOfBirthFull.gridx = 1;
-        gbc_placeOfBirthFull.gridy = 3;
+        gbc_placeOfBirthFull.gridy = 4;
         panel_2.add(placeOfBirthFull, gbc_placeOfBirthFull);
 
         toolbar = new JPanel();
