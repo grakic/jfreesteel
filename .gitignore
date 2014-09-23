@@ -1,8 +1,7 @@
-*/.classpath
-*/.project
-*/.settings
-target
-.settings
+.classpath
 .project
-applet/signing-jar.keystore
-
+.settings/
+*/target/
+*.jks
+keys/
+sign.sh

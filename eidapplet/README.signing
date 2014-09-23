@@ -1,13 +1,19 @@
-Applet using smartcardio API has to be signed. You can use a self-signed certificate.
+### Using a self-signed certificate
 
-  keytool -genkey -alias signFiles -keystore signing-jar.keystore \
-          -keypass <keypass> -dname "cn=<Your Name>" -storepass <storepass>
+Applet using smartcardio API has to be signed. You can buy a code-signing
+certificate from a trusted CA or create a self-signed certificate for signing:
 
-  keytool -selfcert -alias signFiles -keystore signing-jar.keystore \
-          -keypass <keypass> -storepass <storepass>
+  keytool -genkey -alias signFiles -keystore signing.jks \
+          -keypass changeme -dname "cn=<Your Name>" -storepass changeme
 
+  keytool -selfcert -alias signFiles -keystore signing.jks \
+          -storepass changeme
 
 Now create a signed applet JAR:
+
+  mvn install
+
+... or if using a different keystore password:
 
   mvn -Djarsigner.storepass="<storepass>" install
 
@@ -18,9 +24,27 @@ depending on the security level settings in the Java Control Panel.
 
 You can export and set your self-signed certificate as Signer CA.
 
-  keytool -export -alias signFiles -file cert.crt -keystore signing-jar.keystore \
-          -storepass <storepass>
+  keytool -export -alias signFiles -file cert.crt -keystore signing.jks \
+          -storepass changeme
 
-Now open Java Control Panel (from the Java JRE path), in the Security tab click
-the Manage Certificates... button. In the drop down select the Signer CA type
-and click the Import button to load cert.crt file you have expored.
+Now open the Java Control Panel (from the Java JRE path), in the Security tab
+click the Manage Certificates... button. In the drop down select the Signer CA
+type and click the Import button to load your cert.crt file.
+
+
+### Release profile
+
+Release profile uses a trusted OpenSource code signing certificate from Certum.
+
+Timestamping is enabled so the code signature can be valid even after the
+signing certificate is expired. Codebase properties are restricted to domains
+jfreesteal.devbase.net and localhost.
+
+Create a signed applet JAR:
+
+  mvn -Prelease -Dcodesign.keypath=<keystore> -Dcodesign.pass=<keypass> \
+      -Dcodesign.alias=<common name> install
+
+To purchase a Standard Certum code signing certificate go to:
+  http://www.certum.eu/certum/cert,offer_en_standard_code_signing.xml
+
