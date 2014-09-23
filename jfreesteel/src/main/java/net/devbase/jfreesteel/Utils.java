@@ -20,14 +20,9 @@ package net.devbase.jfreesteel;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
-import java.util.SortedMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
 
 /**
  * Functions to print and convert bytes into strings.
@@ -71,20 +66,23 @@ public class Utils {
      * @return
      */
     public static String bytes2HexStringCompact(byte... bytes) {
-        return bytes2HexStringWithSeparator("", bytes);        
+    	return bytes2HexStringWithSeparator("", bytes);    	
     }
 
     private static String bytes2HexStringWithSeparator(String separator, byte... bytes) {
-        ImmutableList.Builder<String> builder = ImmutableList.builder();
+    	StringBuffer sb = new StringBuffer();
         boolean first = true;
         for (byte b : bytes) {
             if (first && b == 0x00) {
                 continue;
             }
-            builder.add(String.format("%02X", b));
+            if (!first) {
+            	sb.append(separator);
+            }
+            sb.append(String.format("%02X", b));
             first = false;
         }
-        return Joiner.on(separator).join(builder.build());
+        return sb.toString();
     }
 
     /**
@@ -107,11 +105,8 @@ public class Utils {
      * @return the formatted string, one line each.
      */
     public static <T extends Comparable<T>> String map2UTF8String(Map<T, byte[]> map) {
-        SortedMap<T, byte[]> sorted = Maps.newTreeMap();
-        sorted.putAll(map);
-
         StringBuilder builder = new StringBuilder();
-        for (Map.Entry<?, byte[]> entry : sorted.entrySet()) {
+        for (Map.Entry<?, byte[]> entry : map.entrySet()) {
             byte[] value = entry.getValue();
             builder.append(
                     String.format("%d = %s (%s)\n",

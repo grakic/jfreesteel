@@ -38,9 +38,6 @@ import net.devbase.jfreesteel.EidInfo.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableMap;
-
 /**
  * Smart card wrapper, abstract interface.
  * 
@@ -131,8 +128,7 @@ public abstract class EidCard {
      * 
      * @return a map of integer tags to corresponding byte chunks.
      */
-    @VisibleForTesting
-    static Map<Integer, byte[]> parseTlv(final byte[] bytes) {
+    public static Map<Integer, byte[]> parseTlv(final byte[] bytes) {
         HashMap<Integer, byte[]> out = new HashMap<Integer, byte[]>();
 
         // [fld 16bit LE] [len 16bit LE] [len bytes of data] | [fld] [06] ...
@@ -210,48 +206,45 @@ public abstract class EidCard {
     }
 
     // tags: 1545 - 1553
-    protected static final ImmutableMap<Integer, Tag> DOCUMENT_TAGMAPPER =
-            new ImmutableMap.Builder<Integer, Tag>()
-            .put(1545, Tag.NULL) // = SRB (issuing authority country code?)
-            .put(1546, Tag.DOC_REG_NO)
-            .put(1547, Tag.NULL) // = ID
-            .put(1548, Tag.NULL) // = ID<docRegNo>
-            .put(1549, Tag.ISSUING_DATE)
-            .put(1550, Tag.EXPIRY_DATE)
-            .put(1551, Tag.ISSUING_AUTHORITY)
-            .put(1552, Tag.NULL) // = SC
-            .put(1553, Tag.NULL) // = SC
-            .build();
+    static final Map<Integer, Tag> DOCUMENT_TAGMAPPER = new HashMap<Integer, Tag>() {{
+        put(1545, Tag.NULL); // = SRB (issuing authority country code?)
+        put(1546, Tag.DOC_REG_NO);
+        put(1547, Tag.NULL); // = ID
+        put(1548, Tag.NULL); // = ID<docRegNo>
+        put(1549, Tag.ISSUING_DATE);
+        put(1550, Tag.EXPIRY_DATE);
+        put(1551, Tag.ISSUING_AUTHORITY);
+        put(1552, Tag.NULL); // = SC
+        put(1553, Tag.NULL); // = SC    	
+    }};
 
     // tags: 1558 - 1567
-    protected static final ImmutableMap<Integer, Tag> PERSONAL_TAGMAPPER =
-            new ImmutableMap.Builder<Integer, Tag>()
-            .put(1558, Tag.PERSONAL_NUMBER)
-            .put(1559, Tag.SURNAME)
-            .put(1560, Tag.GIVEN_NAME)
-            .put(1561, Tag.PARENT_GIVEN_NAME)
-            .put(1562, Tag.SEX)
-            .put(1563, Tag.PLACE_OF_BIRTH)
-            .put(1564, Tag.COMMUNITY_OF_BIRTH)
-            .put(1565, Tag.STATE_OF_BIRTH)
-            .put(1566, Tag.DATE_OF_BIRTH)
-            .put(1567, Tag.NULL) // = SRB (state of birth country code?)
-            .build();
+    static final Map<Integer, Tag> PERSONAL_TAGMAPPER = new HashMap<Integer, Tag>() {{
+        put(1558, Tag.PERSONAL_NUMBER);
+        put(1559, Tag.SURNAME);
+        put(1560, Tag.GIVEN_NAME);
+        put(1561, Tag.PARENT_GIVEN_NAME);
+        put(1562, Tag.SEX);
+        put(1563, Tag.PLACE_OF_BIRTH);
+        put(1564, Tag.COMMUNITY_OF_BIRTH);
+        put(1565, Tag.STATE_OF_BIRTH);
+        put(1566, Tag.DATE_OF_BIRTH);
+        put(1567, Tag.NULL); // = SRB (state of birth country code?)
+    }};
 
     // tags: 1568 .. 1578
-    protected static final ImmutableMap<Integer, Tag> RESIDENCE_TAGMAPPER =
-            new ImmutableMap.Builder<Integer, Tag>()
-            .put(1568, Tag.STATE)
-            .put(1569, Tag.COMMUNITY)
-            .put(1570, Tag.PLACE)
-            .put(1571, Tag.STREET)
-            .put(1572, Tag.HOUSE_NUMBER)
-            .put(1573, Tag.HOUSE_LETTER)
-            .put(1574, Tag.ENTRANCE)
-            .put(1575, Tag.FLOOR)
-            .put(1578, Tag.APPARTMENT_NUMBER)
-            .put(1580, Tag.NULL) // = 01010001
-            .build();
+    static final Map<Integer, Tag> RESIDENCE_TAGMAPPER = new HashMap<Integer, Tag>() {{
+        put(1568, Tag.STATE);
+        put(1569, Tag.COMMUNITY);
+        put(1570, Tag.PLACE);
+        put(1571, Tag.STREET);
+        put(1572, Tag.HOUSE_NUMBER);
+        put(1573, Tag.HOUSE_LETTER);
+        put(1574, Tag.ENTRANCE);
+        put(1575, Tag.FLOOR);
+        put(1578, Tag.APPARTMENT_NUMBER);
+        put(1580, Tag.NULL); // = 01010001
+    }};
 
     /**
      * Add all raw tags to EidInfo builder.

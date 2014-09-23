@@ -8,8 +8,6 @@ import javax.smartcardio.CardException;
 import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 
-import com.google.common.annotations.VisibleForTesting;
-
 /**
  * Smart card wrapper for Gemalto MultiApp ID smart card
  * 
@@ -29,7 +27,7 @@ import com.google.common.annotations.VisibleForTesting;
 public class EidCardGemalto extends EidCard {
 
     /** The list of known card ATRs, used to identify this smartcard. */
-    @VisibleForTesting static final byte[] CARD_ATR = {
+    public static final byte[] CARD_ATR = {
         (byte) 0x3B, (byte) 0xFF, (byte) 0x94, (byte) 0x00, (byte) 0x00, (byte) 0x81, (byte) 0x31,
         (byte) 0x80, (byte) 0x43, (byte) 0x80, (byte) 0x31, (byte) 0x80, (byte) 0x65, (byte) 0xB0,
         (byte) 0x85, (byte) 0x02, (byte) 0x01, (byte) 0xF3, (byte) 0x12, (byte) 0x0F, (byte) 0xFF,

@@ -37,30 +37,11 @@ public class EidInfoTest extends EidTestCase {
         assertContains("Document reg. number: 1000", info.toString());
     }
 
-    public void testAddTwice() {
-        try {
-            new EidInfo.Builder()
-                .addValue(EidInfo.Tag.DOC_REG_NO, "1000")
-                .addValue(EidInfo.Tag.DOC_REG_NO, "2000")
-                .build();
-            fail("exception expectd");
-        } catch (IllegalArgumentException expected) {}
-    }
-
     public void testValidation() {
         EidInfo info = new EidInfo.Builder()
             .addValue(Tag.PERSONAL_NUMBER, "0000000000000")
             .build();
         assertEquals("0000000000000", info.get(Tag.PERSONAL_NUMBER));
-    }
-
-    public void testValidation_fails() {
-        try {
-            new EidInfo.Builder()
-                .addValue(Tag.PERSONAL_NUMBER, "00")
-                .build();
-            fail("exception expected");
-        } catch (IllegalArgumentException expected) {}
     }
 
     public void testPlaceOfBirth() {
