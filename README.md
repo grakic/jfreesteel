@@ -5,6 +5,8 @@ JFreesteel is a reusable open-source Java library for reading public data from
 the Serbian eID card. It is built on top of javax.smartcardio and released under
 the GNU LGPLv3 license.
 
+[![Build Status](https://travis-ci.org/grakic/jfreesteel.svg?branch=master)](https://travis-ci.org/grakic/jfreesteel)
+
 Using this library your Java desktop applications and general web applications
 running in a browser (via "invisible" Java applet) can access the smartcard
 reader to get data such as personal number, full name, place of residence or
