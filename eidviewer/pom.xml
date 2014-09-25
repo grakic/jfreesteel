@@ -7,11 +7,11 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>eidviewer</artifactId>
-    <name>Serbian eID Viewer Application</name>
-    <description>GUI application using the JFreesteel library</description>
+    <name>JFreesteel eID Viewer</name>
+    <description>Serbian eID viewer application using the JFreesteel library</description>
     <version>1.0</version>
     <properties>
-        <windowsProductVersion>1.0.0.1</windowsProductVersion>
+        <windowsProductVersion>1.0.0.2</windowsProductVersion>
         <windowsProductName>JFreesteel eID Viewer</windowsProductName>
     </properties>
     <build>
@@ -59,7 +59,7 @@
                             <errTitle>JFreesteel</errTitle>
                             <supportUrl>${project.url}</supportUrl>
                             <customProcName>true</customProcName>
-                            <icon>eidviewer.ico</icon>
+                            <icon>packages/win/eidviewer.ico</icon>
                             <classPath>
                                 <mainClass>net.devbase.jfreesteel.viewer.EidViewer</mainClass>
                                 <addDependencies>true</addDependencies>
