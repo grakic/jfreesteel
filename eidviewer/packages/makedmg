@@ -1,0 +1,23 @@
+#!/bin/bash
+
+cd dmg
+APP="../../target/JFreesteel eID Viewer.app"
+
+# FIXME: sign with Apple Developer ID
+ALIAS="Open Source Developer, Goran Rakic"
+
+# build app
+ant appbundle
+cp -r ../../target/dependency "$APP/Contents/Java/"
+
+# sign app: content and launcher
+find "$APP" -type f \( -name '*.dylib' -or -name '*.jar' \) -exec codesign -d -vv --timestamp -f -s "$ALIAS" {} \;
+codesign -d -vv --timestamp -f -s "$ALIAS" "$APP"
+
+# FIXME: automate?
+echo "use iDMG and create read-write dmg file from dmg_template, with 'JFreesteel eID Viewer' label"
+echo "mount it to add background, hide toolbar, resize window and adjust icon locations"
+
+# build dmg
+hdiutil convert -format UDZO -o ../../target/jfreesteel-eidviewer-1.0.dmg dmg_template.dmg
+
