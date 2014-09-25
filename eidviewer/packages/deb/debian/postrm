@@ -1,0 +1,7 @@
+#!/bin/sh
+set -e
+if which update-icon-caches >/dev/null 2>&1 ; then
+	update-icon-caches /opt/eidviewer/icon.png
+fi
+
+

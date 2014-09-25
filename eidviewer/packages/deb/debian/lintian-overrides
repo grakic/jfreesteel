@@ -1,0 +1,3 @@
+jfreesteel-eidviewer binary: jar-not-in-usr-share *
+jfreesteel-eidviewer binary: dir-or-file-in-opt *
+jfreesteel-eidviewer binary: executable-not-elf-or-script opt/eidviewer/eidviewer.desktop

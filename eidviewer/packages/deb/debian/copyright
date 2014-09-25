@@ -1,0 +1,41 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: jfreesteel-eidviewer
+Upstream-Contact: Goran Rakic <grakic@devbase.net>
+Source: http://devbase.net/jfreesteel
+License: AGPL-3
+
+Files: *
+Copyright: 2010 Goran Rakic
+License: AGPL-3
+ See http://www.gnu.org/licenses/agpl-3.0.html
+
+Files: /opt/eidviewer/dependency/jfreesteel-1.0-SNAPSHOT.jar
+Copyright: 2010 Goran Rakic
+License: LGPL-3
+ See /usr/share/common-licenses/LGPL-3
+
+Files: /opt/eidviewer/dependency/hamcrest-core-1.1.jar
+Copyright: http://hamcrest.org
+License: BSD-3-clause
+ See http://opensource.org/licenses/BSD-3-Clause
+
+Files: /opt/eidviewer/dependency/itextpdf-5.5.2.jar
+Copyright: http://itextpdf.com
+License: AGPL-3
+ See http://www.gnu.org/licenses/agpl-3.0.html
+
+Files: /opt/eidviewer/dependency/json-simple-1.1.1.jar
+Copyright: https://code.google.com/p/json-simple/
+License: Apache
+ See /usr/share/common-licenses/Apache-2
+
+Files: /opt/eidviewer/dependency/junit-4.10.jar
+Copyright: http://junit.org
+License: CPL
+ See http://opensource.org/licenses/CPL-1.0
+
+Files: /opt/eidviewer/dependency/slf4j-*
+Copyright: http://www.slf4j.org
+License: Expat
+ See http://www.slf4j.org/license.html
+

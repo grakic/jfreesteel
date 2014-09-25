@@ -1,0 +1,6 @@
+?package(jfreesteel-eidviewer):\
+    needs="x11"\
+    section="Applications/Viewers"\
+    title="Serbian eID Viewer"\
+    icon="/opt/eidviewer/icon.xpm"\
+    command="/opt/eidviewer/eidviewer"

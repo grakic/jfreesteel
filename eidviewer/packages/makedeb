@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd deb
+sudo make -f ./debian/rules
+sudo make -f ./debian/rules clean

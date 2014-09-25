@@ -1,0 +1,31 @@
+#!/usr/bin/make -f
+
+build: clean build-stamp binary
+
+build-stamp:
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	dh_clean
+
+binary:
+	dh_testdir
+	dh_testroot
+	dh_prep
+	dh_installdirs
+	dh_install
+	dh_link
+	dh_installchangelogs
+	dh_installdocs
+	dh_installmenu
+	dh_compress
+	dh_fixperms
+	dh_gencontrol -- -v1.0-X-20140924
+	dh_installdeb
+	dh_lintian
+	dh_md5sums
+	dh_builddeb --destdir=../../target
+

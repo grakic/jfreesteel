@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+
+if [ -x /usr/bin/update-menus ] ; then update-menus ; fi
+
+if which update-icon-caches >/dev/null 2>&1 ; then
+	update-icon-caches /opt/eidviewer/icon.png
+fi

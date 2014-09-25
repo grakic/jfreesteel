@@ -1,0 +1,12 @@
+Source: jfreesteel-eidviewer
+Maintainer: Goran Rakic <grakic@devbase.net>
+
+Package: jfreesteel-eidviewer
+Section: utils
+Priority: optional
+Architecture: all
+Depends: default-jre | openjdk-6-jre | openjdk-7-jre | sun-java6-jre, pcscd, libpcsclite1
+Homepage: http://devbase.net/jfreesteel
+Description: Graphical interface to Serbian eID card.
+ The package contains an application to read card data.
+ .

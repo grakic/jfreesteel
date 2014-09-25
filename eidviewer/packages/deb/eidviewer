@@ -1,0 +1,7 @@
+#!/bin/sh
+
+SCRIPT_LOCATION="`readlink -f "$0"`"
+INSTALL_DIRECTORY="`dirname "$SCRIPT_LOCATION"`"
+
+cd "$INSTALL_DIRECTORY" && java -jar eidviewer-1.0.jar
+
