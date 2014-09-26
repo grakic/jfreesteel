@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sr-RS">{% include baseurl.var %}
+<html lang="sr-RS" prefix="og: http://ogp.me/ns#">{% include baseurl.var %}
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,6 +9,10 @@
 
     <meta name="description" content="{{ page.description }}">
     <link rel="canonical" href="http://jfreesteel.devbase.net{{ page.url | replace: "index.html", "" }}" />
+    <meta property="og:url" content="http://jfreesteel.devbase.net{{ page.url | replace: "index.html", "" }}" />
+    <meta property="og:site_name" content="JFreesteel" />
+{% if page.og_image %}    <meta property="og:image" content="http://jfreesteel.devbase.net/{{ page.og_image }}" />{% endif %}
+
     <link rel="icon" href="{{baseurl}}favicon.ico">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
