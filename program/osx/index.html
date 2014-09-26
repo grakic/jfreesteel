@@ -3,7 +3,7 @@ layout: default
 title: Програм eID Viewer за Mac OS X
 description: Преузмите инсталацију читача личне карте за Apple Mac OS X
 og_image: static/images/screens/osx_step4.png
-date: 2014-09-25 14:40:45
+date: 2014-09-26 17:43:45
 ---
 
 <div class="row features">
@@ -29,8 +29,8 @@ date: 2014-09-25 14:40:45
 <div class="row">
     <div class="col-lg-12 text-center">
 
-<a class="btn btn-lg btn-primary btn-download" href="https://github.com/grakic/jfreesteel/releases/download/eidviewer-1.0/jfreesteel-eidviewer-1.0.dmg"><img src="../../static/images/icon_dmg.png" width="32px" height="32px" /> JFreesteel eID Viewer 1.0
-<br/><small><b>2,3 MB</b> &mdash; 24.09.2014</small></a>
+<a class="btn btn-lg btn-primary btn-download" href="https://github.com/grakic/jfreesteel/releases/download/eidviewer-1.0-1/jfreesteel-eidviewer-1.0-1.dmg"><img src="../../static/images/icon_dmg.png" width="32px" height="32px" /> JFreesteel eID Viewer 1.0-1
+<br/><small><b>2,6 MB</b> &mdash; 26.09.2014</small></a>
 
     </div>
 
@@ -94,17 +94,24 @@ date: 2014-09-25 14:40:45
     Проверите да ли је читач исправно инсталиран на систему тако што у терминалу покренете наредбу <tt><a href="https://developer.apple.com/library/mac/documentation/Darwin/Reference/Manpages/man8/pcsctest.8.html">pcsctest</a></tt>. Наредба ће исписати
     информације о читачу укључујући и његов назив, а испис треба да „реагује“ када се картица убаци или извади из читача. Већина <abbr title="USB CCID читачи паметних картица">УСБ читача</abbr> би требало да раде одмах по укључивању, али за неке може бити потребан pcscd драјвер (ifhandler) из складишта пакета или са сајта произвођача.
     </p><p>
-    Програм би требало да захтева инсталацију Oracle Java радног окружења ако оно није инсталирано. Mac OS X 10.6 и 10.7 долазе са Јавом 1.6, али ту је у скрипт за покретање неопходно
-    додати параметар <tt>-d32</tt> како би Јава могла се повеже са читачем. Ако је одзив наредбе у терминалу исправан, претпостављајући да сте апликацију инсталирали у /Applications
-    покушајте да у терминалу покренете:
-    <pre>java -d32 -jar /Applications/JFreesteel\ eID\ Viewer.app/Contents/Java/eidviewer.jar</pre>
+    Програм би требало да захтева инсталацију Oracle Java радног окружења ако оно није инсталирано. Mac OS X 10.6 и 10.7 долазе са Apple Java 1.6 која би радила, али на 64-битним
+    системима неопходно је у скрипт за покретање додати параметар <tt>-d32</tt> како би Јава могла се повеже са читачем (на пример <tt>java -d32 -jar /Applications/JFreesteel*.app/Contents/Java/eidviewer.jar</tt>). 
+    Међутим, <abbr title="Apple's Java Mac OS X 2012-006 update">каснијим надоградњама</abbr> Apple је потпуно уклонио верзију 1.6 тако да је мало вероватно да је још увек користите!
     </p><p>
-    На Mac OS X 10.8 и новијем ова наредба ће захтевати инсталацију Oracle Java JDK развојног окружења. Уместо тога, ако сте инсталирали Oracle Java радно окружење (на пример са <a href="http://java.com">сајта java.com</a>) покушајте да у терминалу извршите:
-    <pre>/Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java -d32 -jar /Applications/JFreesteel\ eID\ Viewer.app/Contents/Java/eidviewer.jar</pre>   
-    <div class="alert alert-warning">Најбоље да наредбу означите и копирате у прозор терминала, пазите да исправно означите од почетка до краја. При куцању наредбе у терминалу код сваког дела наредбе можете да почнете са пар слова и онда притиснете тастер Tab. Наредбу треба унети у једном реду, у прозору терминала може да се сама преломи на крају прозора али немојте куцати тастер за нови ред!</div>
-    </p><p>
-    Уколико ово помогне, јавите резултат <a href="mailto:grakic@devbase.net">е-поштом</a>. 
+    Да проверите верзију и издање Јаве, можете да ред по ред прекопирате следеће наредбе у терминал:
+    <pre>
+/Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java -version
+/usr/libexec/java_home -v
+java -version
+    </pre>
+    Последња наредба може од вас тражити да инсталирате Oracle JDK, али то није неопходно за покретање програма.
     </p>
+<div class="alert alert-warning">
+    Издања пре Oracle Java 7u80, 8u20, и 9 <a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=7195480">имају више грешки у раду</a>
+    са читачима картица на OS X. Програм JFreesteel eID Viewer када препозна да је покренут на Apple OS X систему под ранијим верзијама користи
+    неколико заобилажења која могу да се одразе на перформансе, али не би требало да се одразе на функционисање. При покретању програма може да
+    се ретко догоди да се програм сруши на самом почетку пре излиставања читача картица. У том случају покрените програм поново.
+</div>
       </div>
     </div>
   </div>
@@ -184,10 +191,13 @@ date: 2014-09-25 14:40:45
 </div>
     
     <h3>Белешке о издању</h3>
-    <p>Датум објављивања: 24. септембар 2014. године<br/>
-    MD5 отисак: 71dd6c0a0612fcc1076443451ae93f29<br/>
-    Изворни код: <a href="https://github.com/grakic/jfreesteel/tree/eidviewer-1.0" data-toggle="tooltip" data-placement="top" title="Изворни код програма се налази у модулу eidviewer">tag:eidviewer-1.0</a></p>
+    <p>Датум објављивања: 26. септембар 2014. године<br/>
+    MD5 отисак: 99204444912bbb1a873661c40e51ce7a<br/>
+    Изворни код: <a href="https://github.com/grakic/jfreesteel/tree/eidviewer-1.0-1" data-toggle="tooltip" data-placement="top" title="Изворни код програма се налази у модулу eidviewer">tag:eidviewer-1.0-1</a></p>
     <ul>
+    <li><b class="text-success">Исправка!</b> Издање заобилази грешку у Oracle Java издањима ранијим од 7u80 / 8u20 / 9, <a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=7195480">#7195480</a>.
+       Ова грешка је спречавала програм да препозна да је картица убачена у читач. Сада је рад програма могућ и уз JRE, а не само уз JDK развојно окружење.
+       Хвала <a href="https://twitter.com/kondormit">Млађану Антићу</a> који је грешку пријавио и омогућио тестирање током исправки. <span class="glyphicon glyphicon-thumbs-up"></span></li>
     <li>Нови Mac OS X пакет, датотеке потребне за израду пакета су објављене у Гит складишту.</li>
     <li>Програм је потписан валидним Certum Code Sign сертификатом, али Apple подразумевано верује
     једино сертификатима из Apple Developer ID програма. Могуће је преузимање апликације преко
