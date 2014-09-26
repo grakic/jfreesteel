@@ -69,7 +69,7 @@ viewer is released under the GNU Affero GPLv3 license and has the iText library
 as a dependency.
 
 To download the current viewer release for Windows, GNU/Linux
-or Mac OS X please visit http://devbase.net/jfreesteel/
+or Mac OS X please visit http://jfreesteel.devbase.net
 
 
 Resources
@@ -79,7 +79,7 @@ Resources
     [Github](https://github.com/grakic/jfreesteel) (prefered) or 
     [Gitorious](https://gitorious.org/freesteel)
 
-  * Check out the library [web page](http://devbase.net/jfreesteel) (in Serbian)
+  * Check out the library [web page](http://jfreesteel.devbase.net) (in Serbian)
 
   * Browse the project's [wiki page](https://github.com/grakic/jfreesteel/wiki)
     
