@@ -1,0 +1,203 @@
+---
+layout: default
+title: ЈFreesteel - програм eID Viewer за Mac OS X
+description: Преузмите инсталацију читача личне карте за Apple Mac OS X
+date: 2014-09-25 14:40:45
+---
+
+<div class="row features">
+    <div class="col-lg-6 col-md-7">
+        <div class="screen">
+            <img src="../../static/images/screens/osx_step4.png" />
+            <div class="caption">Снимак екрана програма</div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-5">
+
+<h4>Могућности и познати недостаци:</h4>
+<ul>
+<li class="text-success">Препознаје убачену личну карту и успешно чита податке и слику
+<li>Омогућава чување ПДФ извештаја, али у извештај <b>уписује само слику</b>, не и друге податке
+<li><b>Не омогућава</b> проверу електронског потписа података на личној карти
+<li><b>Не омогућава</b> извоз личних сертификата са личне карте
+<li>При употреби већег системског фонта, приказ може бити исечен сдесна. Довољно је повећати прозор програма
+</ul>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 text-center">
+
+<a class="btn btn-lg btn-primary btn-download" href="https://github.com/grakic/jfreesteel/releases/download/eidviewer-1.0/jfreesteel-eidviewer-1.0.dmg"><img src="../../static/images/icon_dmg.png" width="32px" height="32px" /> JFreesteel eID Viewer 1.0
+<br/><small><b>2,3 MB</b> &mdash; 24.09.2014</small></a>
+
+    </div>
+
+    <div class="col-lg-12">
+    <h3>Упутство за инсталацију</h3>
+<div id="carousel" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="false">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#carousel" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel" data-slide-to="1"></li>
+    <li data-target="#carousel" data-slide-to="2"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    <div class="item active">
+      <img class="thumbnail" src="../../static/images/screens/osx_step1.png" width="700px" height="360px">
+      <div class="carousel-caption">
+        Двокликните преузету датотеку и превуците апликацију
+      </div>
+    </div>
+    <div class="item">
+      <img class="thumbnail" src="../../static/images/screens/osx_step2.png" width="700px" height="360px">
+      <div class="carousel-caption">
+        Пронађите програм у фасцикли
+      </div>
+    </div>
+    <div class="item">
+      <img class="thumbnail" src="../../static/images/screens/osx_step3.png" width="700px" height="360px">
+      <div class="carousel-caption">
+        Програм је спреман за рад
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>    
+    
+    
+    <h3>Могући проблеми</h3>
+
+<div class="panel-group" id="accordionP">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordionP" href="#collapseP1">
+          <b>#1</b> Програм приказује грешку да читач није препознат и затвара се
+        </a>
+      </h4>
+    </div>
+    <div id="collapseP1" class="panel-collapse collapse">
+      <div class="panel-body">
+    <img class="thumbnail" src="../../static/images/screens/osx_stepa.png" />
+    <p>
+    Проверите да ли је читач исправно инсталиран на систему тако што у терминалу покренете наредбу <tt><a href="https://developer.apple.com/library/mac/documentation/Darwin/Reference/Manpages/man8/pcsctest.8.html">pcsctest</a></tt>. Наредба ће исписати
+    информације о читачу укључујући и његов назив, а испис треба да „реагује“ када се картица убаци или извади из читача. Већина <abbr title="USB CCID читачи паметних картица">УСБ читача</abbr> би требало да раде одмах по укључивању, али за неке може бити потребан pcscd драјвер (ifhandler) из складишта пакета или са сајта произвођача.
+    </p><p>
+    Програм би требало да захтева инсталацију Oracle Java радног окружења ако оно није инсталирано. Mac OS X 10.6 и 10.7 долазе са Јавом 1.6, али ту је у скрипт за покретање неопходно
+    додати параметар <tt>-d32</tt> како би Јава могла се повеже са читачем. Ако је одзив наредбе у терминалу исправан, претпостављајући да сте апликацију инсталирали у /Applications
+    покушајте да у терминалу покренете:
+    <pre>java -d32 -jar /Applications/JFreesteel\ eID\ Viewer.app/Contents/Java/eidviewer.jar</pre>
+    </p><p>
+    На Mac OS X 10.8 и новијем ова наредба ће захтевати инсталацију Oracle Java JDK развојног окружења. Уместо тога, ако сте инсталирали Oracle Java радно окружење (на пример са <a href="http://java.com">сајта java.com</a>) покушајте да у терминалу извршите:
+    <pre>/Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java -d32 -jar /Applications/JFreesteel\ eID\ Viewer.app/Contents/Java/eidviewer.jar</pre>   
+    <div class="alert alert-warning">Најбоље да наредбу означите и копирате у прозор терминала, пазите да исправно означите од почетка до краја. При куцању наредбе у терминалу код сваког дела наредбе можете да почнете са пар слова и онда притиснете тастер Tab. Наредбу треба унети у једном реду, у прозору терминала може да се сама преломи на крају прозора али немојте куцати тастер за нови ред!</div>
+    </p><p>
+    Уколико ово помогне, јавите резултат <a href="mailto:grakic@devbase.net">е-поштом</a>. 
+    </p>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordionP" href="#collapseP2">
+          <b>#2</b> Програм се приказује на енглеском језику
+        </a>
+      </h4>
+    </div>
+    <div id="collapseP2" class="panel-collapse collapse">
+      <div class="panel-body">
+        <p>Програм ће се приказивати на српском уколико је српски подешен као подразумевани језик на систему. Отворите подешавања система и потражите листу у групи <nobr>Language & Region</nobr> или на старијим системима у групи <nobr>Language & Text</nobr> на првој картици Languages. Прво додајте српски у листу, а затим га превуците изнад енглеског. Може бити неопходно да рестартујете рачунар након што потврдите подешавања.</p>
+        <img class="thumbnail" src="../../static/images/screens/osx_language.png" />
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordionP" href="#collapseP3">
+          <b>#3</b> Програм не приказује никакву грешку, али се уопте не покреће
+        </a>
+      </h4>
+    </div>
+    <div id="collapseP3" class="panel-collapse collapse">
+      <div class="panel-body">
+        <p>Програм захтева инсталацију Oracle Java окружења. Због величине датотеке (преко 100MB) Јава окружење није укључено у пакет апликације. Требало би да уколико
+        на систему није већ инсталирана Јава (због покретања Јава аплета на пример) програм затражи инсталацију при првом покретању. У сваком случају покушајте да са
+        <a href="http://java.com">сајта java.com</a> преузмете и инсталирате Oracle Java окружење.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordionP" href="#collapseP4">
+          <b>#4</b> Приказује се грешка да није дозвољено покретање небезбедних програма
+        </a>
+      </h4>
+    </div>
+    <div id="collapseP4" class="panel-collapse collapse">
+      <div class="panel-body">
+        <p>Apple Gatekeeper може да онемогући покретање програма који нису аутентификовани кроз
+        Developer ID програм. Уколико кликнете десним тастером и из менија одаберете покретање
+        апликације требало би да се прикаже прозор у коме можете да потврдите изузетак и
+        наставите коришћење програма.
+        </p><p>
+        Gatekeeper подешавања се налазе у групи „Security & Privacy“. Apple Gatekeeper је користан
+        и немојте га олако искључивати. Али уколико имате проблем са покретањем ове апликације,
+        покушајте да привремено искључите, покушате да тада покренете програм и затим вратите подешавања
+        на претходну вредност.
+        </p><img class="thumbnail" src="../../static/images/screens/osx_gatekeeper.png" />
+        <p>Уколико поседујете Apple Developer ID сертификат, и желите да помогнете и њиме потпишете издања
+        програма JFreesteel eID Viewer, <a href="https://github.com/grakic/jfreesteel/blob/master/eidviewer/packages/makedmg">погледајте инструкције</a>
+        у Гит складишту и јавите се <a href="mailto:grakic@devbase.net">е-поштом</a>.</p>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordionP" href="#collapseP5">
+          <b>#5</b> Сачувани ПДФ извештај садржи само слику
+        </a>
+      </h4>
+    </div>
+    <div id="collapseP5" class="panel-collapse collapse">
+      <div class="panel-body">
+        <p>Програм тренутно не приказује остале податке у ПДФ извештају. Уколико познајете или тек учите Јаву, додавање ове функционалности у класу <a href="https://github.com/grakic/jfreesteel/blob/master/eidviewer/src/main/java/net/devbase/jfreesteel/viewer/PdfReport.java">viewer/PdfReport.java</a> може да буде забавно. Локације за редове текста у пикселима пронађите <a href="https://gitorious.org/freesteel/pyfreesteel/commit/029ec09209c6877a91017b4986162fd718e85669">овде</a>.</p>        
+        <p>Уколико успете, допуну пошаљите <a href="mailto:grakic@devbase.net">е-поштом</a> или кроз GitHub и функција ће се наћи у новом издању.</p>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    <h3>Белешке о издању</h3>
+    <p>Датум објављивања: 24. септембар 2014. године<br/>
+    MD5 отисак: 71dd6c0a0612fcc1076443451ae93f29<br/>
+    Изворни код: <a href="https://github.com/grakic/jfreesteel/tree/eidviewer-1.0" data-toggle="tooltip" data-placement="top" title="Изворни код програма се налази у модулу eidviewer">tag:eidviewer-1.0</a></p>
+    <ul>
+    <li>Нови Mac OS X пакет, датотеке потребне за израду пакета су објављене у Гит складишту.</li>
+    <li>Програм је потписан валидним Certum Code Sign сертификатом, али Apple подразумевано верује
+    једино сертификатима из Apple Developer ID програма. Могуће је преузимање апликације преко
+    <a href="https://grakic.github.io/jfreesteel/program/osx/">сигурне везе (HTTPS)</a>.</li>
+    </ul>
+    
+
+
+<script>
+$(function() {
+    $("[data-toggle='tooltip']").tooltip();
+});
+</script>
+

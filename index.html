@@ -1,25 +1,73 @@
-<html>
-<head>
-<title>JFreesteel</title>
-</head>
-<body>
+---
+layout: default
+title: Читач електронске личне карте за нас остале
+description: Слободна Јава библиотека отвореног кода за читање података са електронске личне карте и готова апликација.
+date: 2014-09-25 14:40:45
+header_img: static/images/header.jpg
+---
 
-<h3>ГНУ/Линукс</h3>
-<a href="https://github.com/grakic/jfreesteel/releases/download/eidviewer-1.0/jfreesteel-eidviewer_1.0_all.deb">eID Viewer (deb, 2.3MB)</a>
-<br>9433d1fb2f91b8f8cc5192b244a043ca  
+<!-- Jumbotron -->
+<div class="jumbotron">
+    <h1>Читач електронске личне карте за нас остале</h1>
 
-<h3>Mac OS X</h3>
-<a href="https://github.com/grakic/jfreesteel/releases/download/eidviewer-1.0/jfreesteel-eidviewer-1.0.dmg">eID Viewer (dmg, 2.6MB)</a>
-<br>71dd6c0a0612fcc1076443451ae93f29  
+    <p class="lead">Функционалан програм за ГНУ/Линукс, Mac OS X, Windows... као и Јава библиотека и
+    аплет које можете слободно да користите у сопственим програмима.</p>
 
-<h3>Microsoft Windows</h3>
-<a href="https://github.com/grakic/jfreesteel/releases/download/eidviewer-1.0/jfreesteel-eidviewer-1.0.exe">eID Viewer (instalacija, 2.5MB)</a>
-<br>e71a9cc6e817474355a46336aa13a253 
+    <p><a class="btn btn-lg btn-primary" href="program/" role="button">Преузимање програма</a><br/>
+    <small class="release">издање {{ site.latest.eidviewer.release }} &nbsp;&mdash;&nbsp; <nobr>{{ site.latest.eidviewer.release_date }}</nobr></small></p>
+</div>
 
-<h3>Остали</h3>
+<!-- Example row of columns -->
+<div class="row items">
+    <div class="col-lg-5 col-md-6">
+        <h2>Технологија</h2>
+        <p>
+        Библиотека користи <abbr title="Java Smart Card I/O API (JSR 268)">javax.smartcardio</abbr>
+        за приступ читачу паметних картица директно кроз системски PC/SC интерфејс тако да је
+        преносива на ГНУ/Линукс, Microsoft Windows и Apple Mac OS X платформу, тј. где год је
+        доступно јава радно окружење 1.6 и новије.
+        </p><p>
+        Андроид није подржан јер не имплементира <abbr title="javax.smartcardio API">JSR-268</abbr>,
+        али USB Host API и омотач (<a href="http://android.acs.com.hk/">ACS smartcard readers for
+        Android</a>, <a href="http://www.scdroid.com/software">SC & DROID</a>,...) дају могућност да
+        се и ту адаптира библиотека JFreesteel.
+        </p><p>
+        Јава аплет технологија омогућава читање личне карте у веб апликацијама преко јаваскрипта
+        кроз „невидљиви“ аплет на свим системима и прегледачима где је могуће покретање Јава аплета.
+        </p>
+    </div>
+    <div class="col-lg-4 col-md-6">
+        <h2>Право коришћења</h2>
+        <img src="static/images/lgplv3.png" width="147px" height="51px" class="pull-right" />
+        <p>JFreesteel библиотека је објављена под 
+        <a href="http://www.gnu.org/licenses/lgpl.html">GNU LGPLv3</a>. Ова лиценца дозвољава
+        коришћење у слободним или власничким, бесплатним или комерцијалним решењима.
+        </p><p>          
+        Уколико буде потребно да измените библиотеку и такву дистрибуирате корисницима у обавези сте
+        да тај измењени код библиотеке, а не и остатак вашег програма, поделите под истом лиценцом.
+        </p><p>
+        Готов програм за читање личне карте је објављен под 
+        <a href="http://www.gnu.org/licenses/agpl-3.0.html">GNU AGPLv3</a> лиценцом.
+        </p>
+    </div>
+    <div class="col-lg-3 col-md-12 evrc">
+        <h2>Саобраћајне дозволе!</h2>
+        <p>
+        Јава библиотека и аплет за <a href="#">читање саобраћајне дозволе</a> су такође доступни
+        програмерима.
+        </p><p>
+        Пројекат <a href="https://github.com/grakic/jevrc">JEvrc</a> омогућава читање података о
+        возилу и власнику возила помоћу читача картица директно из ваших програма и веб апликација.
+        </p>
+    </div>
+</div>
 
-<a href="https://github.com/grakic/jfreesteel/releases/download/eidviewer-1.0/jfreesteel-eidviewer-1.0.zip">eID Viewer (zip, 2.3MB)</a>
-<br>45106336bb6e8a43faf66d5508df322b
+<div class="row items">
+    <div class="col-lg-12">
+        <div class="alert alert-warning" role="alert">
+        <strong>Новости:</strong> Најновије издање омогућава читање и старих и нових личних карата
+        (издатих после 18. августа 2014. године) користећи исти програм и АПИ.
+        </div>
+    </div>
+</div>
 
-</body>
-</html>

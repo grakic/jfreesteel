@@ -1,0 +1,11 @@
+{% capture __ignore__ %}
+{% if page.url == "/404.html" %}
+    {% assign baseurl = "/" %}
+{% else %}
+    {% assign baseurl="" %}
+    {% assign paths = page.url | split:"/" | size %}
+    {% for i in (3..paths) %}
+        {% assign baseurl = baseurl | append:"../" %}
+    {% endfor %}
+{% endif %}
+{% endcapture %}

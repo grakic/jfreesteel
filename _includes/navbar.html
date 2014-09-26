@@ -1,0 +1,34 @@
+        <div class="navbar navbar-inverse" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    </button>
+                    <a class="{% if page.url == "/index.html" %}active {% endif %}navbar-brand" href="{{baseurl}}">JFreesteel</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li{% if page.url == "/program/index.html" %} class="active"{% endif %}><a href="{{{baseurl}}program/">Инсталација програма</a></li>
+                        <li><a href="{{baseurl}}applet/">Демонстрација аплета</a></li>
+                        <li><a href="https://github.com/grakic/jfreesteel/wiki">За програмере</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right hidden-sm">
+                        <li><a href="https://github.com/grakic/jfreesteel/">GitHub пројекат</a></li>
+                        <li><a href="mailto:grakic@devbase.net"><span class="glyphicon glyphicon-send"></span> Контакт</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        {% if page.header_img %}
+            <img src="{{ baseurl }}{{ page.header_img }}" width="1138px" height="240px" />
+        {% elsif page.header_html %}
+            {{ page.header_html }}
+        {% else %}
+            {% assign _ = page.url | truncate: 9, '' %}{% if _ == "/program/" %}
+                {% include program_platform.html %}
+            {% endif %}
+        {% endif %}
+        </div>

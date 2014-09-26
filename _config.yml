@@ -1,0 +1,13 @@
+exclude: ["vendor"]
+
+latest:
+    eidviewer:
+        release: 1.0
+        release_date: 24. септембар 2014.
+
+sass:
+    sass_dir: static/_sass/
+    style: :compressed
+
+gems:
+  - jekyll-sitemap

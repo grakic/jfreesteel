@@ -1,0 +1,9 @@
+{% assign platforms = "ubuntu:Убунту (deb пакет)|zip:Остали системи (zip архива)|osx:Apple Mac OS X|win:Microsoft Windows" | split: "|" %}
+    <div class="row platforms">
+{% for p in platforms %}{% assign p_dir = p | split: ":" | first %}{% assign p_dsc = p | split: ":" | last %}{% assign p_url = "/program/$0/index.html" | replace: "$0", p_dir %}
+    <div class="col col-md-3 col-sm-6">
+      <a class="{% if page.url == p_url %}active {% endif %}btn btn-default" href="{{baseurl}}program/{{ p_dir }}/">
+        <img src="{{baseurl}}static/images/icon_{{ p_dir }}.png"/> {{ p_dsc }}</a>
+    </div>
+{% endfor %}
+    </div>

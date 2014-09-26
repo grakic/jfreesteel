@@ -1,0 +1,135 @@
+---
+layout: default
+title: ЈFreesteel - програм eID Viewer за Windows
+description: Преузмите инсталацију незваничног читача личне карте за Microsoft Windows
+date: 2014-09-25 14:40:45
+---
+
+<div class="row features">
+    <div class="col-lg-6 col-md-7">
+        <div class="screen">
+            <img src="../../static/images/screens/ubuntu_step6.png" />
+            <div class="caption">Снимак екрана програма</div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-5">
+
+<h4>Могућности и познати недостаци:</h4>
+<ul>
+<li class="text-success">Препознаје убачену личну карту и успешно чита податке и слику
+<li>Омогућава чување ПДФ извештаја, али у извештај <b>уписује само слику</b>, не и друге податке
+<li><b>Не омогућава</b> проверу електронског потписа података на личној карти
+<li><b>Не омогућава</b> извоз личних сертификата са личне карте
+<li>При употреби већег системског фонта, приказ може бити исечен сдесна. Довољно је повећати прозор програма
+</ul>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 text-center">
+
+<a class="btn btn-lg btn-primary btn-download" href="https://github.com/grakic/jfreesteel/releases/download/eidviewer-1.0/jfreesteel-eidviewer-1.0.zip"><img src="../../static/images/icon_zip.png" width="32px" height="32px" /> JFreesteel eID Viewer 1.0
+<br/><small><b>2,3 MB</b> &mdash; 24.09.2014</small></a>
+
+    </div>
+
+    <div class="col-lg-12">
+
+    <h3>Упутство за инсталацију</h3>
+<ol>
+<li>Подесите читач паметних картица и PC/SC компоненту на систему</li>
+<li>Инсталирајте Јава радно окружење (Oracle Java или OpenJDK JRE, или друга варијанта све док
+је имплементиран Java Smart Card I/O API односно JSR-268)</li>
+<li>Проверите да су Јава радно окружење и PC/SC компонента
+<a data-toggle="collapse" data-parent="#accordionP" href="#collapseP1">исправно повезани</a></ли>
+<li>Распакујте преузету архиву</li>
+<li>Уколико ваш систем омогућава покретање JAR архива двокликните
+на eidviewer.jar. У противном на Униксоликим системима покрените шел-скрипту eidviewer или покрените
+архиву из терминала наредбом: <tt>java -jar ./eidviewer.jar</tt>.
+</li>
+</ol>
+    
+    <h3>Могући проблеми</h3>
+
+<div class="panel-group" id="accordionP">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordionP" href="#collapseP1">
+          <b>#1</b> Програм приказује грешку да читач није препознат и затвара се
+        </a>
+      </h4>
+    </div>
+    <div id="collapseP1" class="panel-collapse collapse">
+      <div class="panel-body">
+    <img class="thumbnail" src="../../static/images/screens/ubuntu_stepa.png" />
+    <p>
+    Проверите да ли је читач исправно инсталиран на систему и да ли Java Smart Card I/O API остварује
+    комуникацију са системском PC/SC компонентом.
+    </p><p>
+    <b>Упутства за решавање зависе од оперативног система</b>. На ГНУ/Линуксу систем користи pcscd из pcsc-lite, а читач захтева и
+    посебан pcsc-lite драјвер (ifhandler). Већина УСБ читача подржавају CCID протокол и раде са
+    libccid драјвером из pcsc-lite пројекта. Потражите и инсталирајте пакете pcsc-lite и libccid за
+    вашу дистрибуцију, односно додатне ifhandler драјвере из складишта или са сајта произвођача
+    читача. Можете да користите <tt>pcsc_scan</tt> из пројекта pcsc-tools да проверите да ли је читач
+    коректно инсталиран. Програм у терминалу исписује информације о читачима, а требало би да „реагује“
+    када се картица убаци или извади из читача.
+    </p><p>
+    Програм захтева Јава радно окружење (Oracle Java или OpenJDK JRE) за Јаву 6 или новију.
+    </p><p>
+    Повезивање pcscd и Јаве реализује се преко библиотеке libpcsclite.so. Већина варијанти Јаве
+    тражи ову библиотеку у директоријумима /usr/lib/ или /usr/lib64/ али тачне поставке могу да
+    зависе од дистрибуције.
+    </p>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordionP" href="#collapseP2">
+          <b>#2</b> Програм се приказује на енглеском језику
+        </a>
+      </h4>
+    </div>
+    <div id="collapseP2" class="panel-collapse collapse">
+      <div class="panel-body">
+        <p>Програм ће се приказивати на српском уколико је активан српски локалитет.</p>
+        <p>На ГНУ/Линуксу поставите LANG променљиву на sr_RS.</p>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordionP" href="#collapseP3">
+          <b>#3</b> Сачувани ПДФ извештај садржи само слику
+        </a>
+      </h4>
+    </div>
+    <div id="collapseP3" class="panel-collapse collapse">
+      <div class="panel-body">
+        <p>Програм тренутно не приказује остале податке у ПДФ извештају. Уколико познајете или тек учите Јаву, додавање ове функционалности у класу <a href="https://github.com/grakic/jfreesteel/blob/master/eidviewer/src/main/java/net/devbase/jfreesteel/viewer/PdfReport.java">viewer/PdfReport.java</a> може да буде забавно. Локације за редове текста у пикселима пронађите <a href="https://gitorious.org/freesteel/pyfreesteel/commit/029ec09209c6877a91017b4986162fd718e85669">овде</a>.</p>        
+        <p>Уколико успете, допуну пошаљите <a href="mailto:grakic@devbase.net">е-поштом</a> или кроз GitHub и функција ће се наћи у новом издању.</p>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    <h3>Белешке о издању</h3>
+    <p>Датум објављивања: 24. септембар 2014. године<br/>
+    MD5 отисак: 45106336bb6e8a43faf66d5508df322b<br/>
+    Изворни код: <a href="https://github.com/grakic/jfreesteel/tree/eidviewer-1.0" data-toggle="tooltip" data-placement="top" title="Изворни код програма се налази у модулу eidviewer">tag:eidviewer-1.0</a></p>
+    <ul>
+    <li>Могуће је преузимање архиве преко
+    <a href="https://grakic.github.io/jfreesteel/program/zip/">сигурне везе (HTTPS)</a>.</li>
+    </ul>
+    
+
+
+<script>
+$(function() {
+    $("[data-toggle='tooltip']").tooltip();
+});
+</script>
+

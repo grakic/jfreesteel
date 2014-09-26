@@ -1,0 +1,159 @@
+body {
+padding-top: 40px;
+padding-bottom: 20px;
+line-height: 170%;
+}
+
+.navbar {
+margin-bottom: 20px;
+overflow: hidden;
+}
+.navbar-inverse .navbar-nav>li>a {
+color: #aaa;
+}
+
+.jumbotron {
+text-align: center;
+background-color: transparent;
+}
+.jumbotron h1 {
+font-size: 43px;
+}
+.jumbotron .btn {
+padding: 14px 24px;
+font-size: 21px;
+margin-top: 20px;
+}
+.jumbotron .release {
+line-height: 40px;
+color: #666;
+font-size: 12px;
+}
+
+.footer {
+margin-top: 40px;
+padding-top: 20px;
+border-top: 2px solid #ddd;
+}
+.footer .small, .footer .small a {
+color: #888;
+line-height: 120%;
+}
+
+.items h2 {
+font-size: 21px;
+}
+.items {
+margin-bottom: 40px;
+}
+
+.alert  {
+background: none !important;
+}
+
+.platforms .btn {
+border: 0 !important;
+width: 100%;
+border-radius: 0;
+text-align: left;
+padding-left: 20px;
+}
+.platforms .btn img {
+margin: 5px;
+}
+.platforms .col {
+padding: 0;
+}
+.platforms .btn.active {
+background: #ddd;
+}
+
+.features {
+margin: 60px 0;
+}
+.features ul {
+padding-left: 20px;
+}
+.features li {
+padding-bottom: 10px;
+}
+.features h4 {
+margin-top: 0;
+}
+.features .screen {
+text-align: center;
+margin: 0 20px 20px;
+}
+
+.caption {
+color: #888;
+font-size: small;
+}
+
+tt {
+background: #ddd;
+border-radius: 3px;
+padding: 3px;
+}
+
+.carousel .thumbnail {
+margin: auto;
+}
+.carousel-caption {
+position: static;
+text-shadow: none;
+color: #333;
+}
+.carousel-indicators {
+bottom: -10px;
+}
+.carousel-indicators li {
+border-color: #ccc;
+}
+.carousel-indicators li.active {
+background-color: #ccc;
+}
+.carousel .thumbnail {
+border: 0;
+}
+
+h3 {
+margin-top: 50px;
+}
+
+.btn-download {
+text-align: left;
+}
+.btn-download img {
+float: left;
+margin-right: 15px;
+margin-top: 5px;
+}
+
+.thumbnaillist {
+margin-top: 20px;
+}
+.thumbnaillist .thumbnail {
+float: left;
+margin-right: 20px;
+width: 330px;
+height: 200px;
+overflow: hidden;
+}
+.thumbnaillist .thumbnail img {
+margin: 10px;
+}
+
+@media (min-width: 1200px) {
+    .evrc {
+    text-align: right;
+    }
+}
+
+@media (min-width: 768px){
+    .platforms .btn {
+    text-align: center;
+    padding-left: 0;
+    }
+}
+
