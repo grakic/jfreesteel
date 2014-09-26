@@ -20,6 +20,8 @@ package net.devbase.jfreesteel;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -175,5 +177,46 @@ public class Utils {
         int i = 0;
         while(i < bytes.length && bytes[i] == needle) i++;
         return i == bytes.length;
+    }    
+    
+    /* Compares two java version strings */
+    static public int compareVersions(String v1, String v2) throws RuntimeException {
+
+        final Pattern versionPattern = Pattern.compile("([0-9]+)\\.([0-9]+)\\.([0-9]+)(_([0-9]+))?");
+        Matcher m1 = versionPattern.matcher(v1);
+        Matcher m2 = versionPattern.matcher(v2);
+
+        if (m1.matches() && m2.matches()) {
+            int p1, p2;
+
+            // Feature major
+            p1 = Integer.parseInt(m1.group(1));
+            p2 = Integer.parseInt(m2.group(1));
+            if (p1 != p2) return p2-p1;
+
+            // Feature minor
+            p1 = Integer.parseInt(m1.group(2));
+            p2 = Integer.parseInt(m2.group(2));
+            if (p1 != p2) return p2-p1;
+
+            // Maintenance
+            p1 = Integer.parseInt(m1.group(3));
+            p2 = Integer.parseInt(m2.group(3));
+            if (p1 != p2) return p2-p1;
+
+            // Update
+            String u1 = m1.group(5);
+            String u2 = m2.group(5);
+            if (u1 == null && u2 == null) return 0;
+            if (u1 != null && u2 == null) return -1;
+            if (u1 == null && u1 != null) return 1;
+
+            p1 = Integer.parseInt(u1.replaceFirst ("^0*", ""));
+            p2 = Integer.parseInt(u2.replaceFirst ("^0*", ""));
+            return p2-p1;
+
+        } else {
+            throw new RuntimeException("Can not compare version "+v1+" to "+v2);
+        }
     }    
 }

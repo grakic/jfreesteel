@@ -21,9 +21,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
+import javax.smartcardio.Card;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.devbase.jfreesteel.Utils;
 
 /**
  * Reader class maintains the connection with the terminal and provides an
@@ -80,8 +83,14 @@ public class Reader {
         listenerThread = new Thread(new Runnable() {
             public void run() {
                 try {
-                    // sometimes reader is not blocking on waitForCard*
+                    // sometimes reader is not blocking on waitForCard*, we start with inf. timeout
                     int timeoutMs = 0;
+
+                    // fix issues with Java on Mac OS X
+                    boolean buggyJava = isMacWithBuggyJava();
+                    if (buggyJava) {
+                        logger.info("Working with buggy Java, doing my best");
+                    }
 
                     // main thread loop
                     while (true) {
@@ -89,22 +98,27 @@ public class Reader {
                         boolean statusChanged = true;
 
                         try {
-                            // wait for a status change
-                            if (eidcard == null) {
-                                logger.info("EidCard is null, wait for insertion");
-                                terminal.waitForCardPresent(timeoutMs);
-                            } else {
-                                logger.info("EidCard not null, wait for removal");
-                                terminal.waitForCardAbsent(timeoutMs);
+
+                            if(!buggyJava) {
+                                // wait for a status change
+                                if (eidcard == null) {
+                                    logger.info("EidCard is null, wait for insertion");
+                                    terminal.waitForCardPresent(timeoutMs);
+                                } else {
+                                    logger.info("EidCard not null, wait for removal");
+                                    terminal.waitForCardAbsent(timeoutMs);
+                                }
                             }
 
                             // change the status
-                            if (eidcard == null && terminal.isCardPresent()) {
+                            if (eidcard == null && isCardPresent(buggyJava)) {
                                 connect();
-                            } else if (eidcard != null && !terminal.isCardPresent()) {
+                            } else if (eidcard != null && !isCardPresent(buggyJava)) {
                                 disconnect();
                             } else {
-                                // this looks like a bug in PC/SC with waitForCard*(0) not blocking!
+                                // either we are with buggyJava, or there is another bug in PC/SC
+                                // and waitForCard*(0) is not blocking and returns immediately!
+                                // Increase the timeout not to burn cpu
                                 timeoutMs = 3000;
                                 statusChanged = false;
                             }
@@ -114,7 +128,7 @@ public class Reader {
                             eidcard = null;
 
                             // try to reconnect if card is present and continue the loop
-                            if (terminal.isCardPresent()) {
+                            if (isCardPresent(buggyJava)) {
                                 logger.info("RE-CONNECT");
                                 // will step out on repeated exception
                                 connect();
@@ -123,6 +137,14 @@ public class Reader {
 
                         if (statusChanged) {
                             notifyListeners();
+                        }
+
+                        if (buggyJava) {
+                            try {
+                                Thread.sleep(300);
+                            } catch(InterruptedException ex) {
+                                Thread.currentThread().interrupt();
+                            }
                         }
                     }
                 } catch (CardException e2) {
@@ -137,6 +159,7 @@ public class Reader {
                     notifyCardListener(listener, false);
                 }
             }
+
         });
         listenerThread.start();
     }
@@ -183,4 +206,37 @@ public class Reader {
         eidcard.disconnect();
         eidcard = null;
     }
+
+    /**
+     * JDK bug #7195480: http://bugs.java.com/bugdatabase/view_bug.do?bug_id=7195480
+     *
+     * pcscd runs in 32bit mode, and 64bit Oracle Java is not compiled correctly and mistakes message
+     * sizes and what else not... terminal.isCardPresent() always returns false, terminal.waitForCard()
+     * and terminals.waitForChange() do not wait, and terminals.list() occasionally causes SIGSEGV!
+     *
+     *All should be fixed in JRE 7u80, 8u20, and 9
+     */
+    private boolean isMacWithBuggyJava() {
+        final String os = System.getProperty("os.name").toLowerCase();
+        final String version = System.getProperty("java.version");
+
+        return (os.indexOf("mac") >= 0) && (
+            (version.startsWith("1.7") && Utils.compareVersions("1.7.0_80", version) < 0) ||
+            (version.startsWith("1.8") && Utils.compareVersions("1.8.0_20", version) < 0)
+        );
+    }
+
+    private boolean isCardPresent(boolean buggyJava) throws CardException {
+        if (!buggyJava) return terminal.isCardPresent();
+
+	    try {
+            Card card = terminal.connect("*");
+            card.disconnect(false);
+            return true;
+        } catch (CardException e) {
+            return false;
+        }
+    }
+
 }
+
