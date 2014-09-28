@@ -132,6 +132,7 @@ date: 2014-09-29 01:33:26
 <script>
 $(function() {
     $("[data-toggle='tooltip']").tooltip();
+    location.hash && $(location.hash + '.collapse').collapse('show');
 });
 </script>
 

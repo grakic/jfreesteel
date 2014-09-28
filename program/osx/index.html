@@ -209,6 +209,7 @@ java -version
 <script>
 $(function() {
     $("[data-toggle='tooltip']").tooltip();
+    location.hash && $(location.hash + '.collapse').collapse('show');
 });
 </script>
 
