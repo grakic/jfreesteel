@@ -1,4 +1,4 @@
-; Installer for Serbian eID Viewer Application
+; Installer for "JFreesteel eID Viewer"
 
 ;======================================================
 ; Includes
@@ -21,7 +21,7 @@
 ;======================================================
 ; Version Tab information for Setup.exe properties
 
-  VIProductVersion 0.9.0.1
+  VIProductVersion ${PROJECT_VERSION}
   VIAddVersionKey ProductName "${PROJECT_NAME}"
   VIAddVersionKey ProductVersion "${PROJECT_VERSION}"
   VIAddVersionKey CompanyName "${PROJECT_ORGANIZATION_NAME}"
