@@ -1,13 +1,23 @@
 #!/bin/bash
 
-VERSION="1.0"
-OUTPUT="jfreesteel-eidviewer-$VERSION"
-TARGET="../target"
+cd `dirname $0`
+. common_vars
 
-rm -f "$TARGET/$OUTPUT/$OUTPUT.zip"
-mkdir -p "$TARGET/$OUTPUT"
-cp "$TARGET/eidviewer-$VERSION.jar" "$TARGET/$OUTPUT"
-cp deb/eidviewer "$TARGET/$OUTPUT"
-cp -r "$TARGET/dependency" "$TARGET/$OUTPUT"
-pushd "$TARGET" && zip -r "$OUTPUT.zip" "$OUTPUT" && popd
-rm -fr "$TARGET/$OUTPUT"
+ZIPNAME="jfreesteel-eidviewer-$VERSION"
+
+
+echo "Building zip $ZIPNAME.zip"
+
+rm -fr "$TARGET/$ZIPNAME"
+mkdir "$TARGET/$ZIPNAME"
+
+cp "$TARGET/eidviewer-$VERSION.jar" "$TARGET/$ZIPNAME"
+cp -r "$TARGET/dependency" "$TARGET/$ZIPNAME"
+
+cat zip/eidviewer.in | sed -e "s/\${VERSION}/$VERSION/" > "$TARGET/$ZIPNAME/eidviewer"
+
+pushd "$TARGET" && zip -r "$ZIPNAME.zip" "$ZIPNAME" && popd
+rm -fr "$TARGET/$ZIPNAME"
+
+
+echo "Done building $TARGET/$ZIPNAME.zip"
