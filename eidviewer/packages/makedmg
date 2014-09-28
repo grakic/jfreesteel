@@ -1,23 +1,107 @@
 #!/bin/bash
 
-cd dmg
-APP="../../target/JFreesteel eID Viewer.app"
+cd `dirname $0`
+. common_vars
+
+export APPNAME="JFreesteel eID Viewer"
+
+TARGET_APPDIR="$TARGET/$APPNAME.app"
+TARGET_DMG="$TARGET/jfreesteel-eidviewer-$VERSION.dmg"
 
 # FIXME: sign with Apple Developer ID
 ALIAS="Open Source Developer, Goran Rakic"
 
+
+echo "Building appbundle $APPNAME signed with alias $ALIAS"
+
 # build app
-ant appbundle
-cp -r ../../target/dependency "$APP/Contents/Java/"
+rm -fr "$TARGET_APPDIR"
+(cd dmg && ant appbundle)
+cp -r $TARGET/dependency "$TARGET_APPDIR/Contents/Java/"
 
 # sign app: content and launcher
-find "$APP" -type f \( -name '*.dylib' -or -name '*.jar' \) -exec codesign -d -vv --timestamp -f -s "$ALIAS" {} \;
-codesign -d -vv --timestamp -f -s "$ALIAS" "$APP"
+find "$TARGET_APPDIR" -type f \( -name '*.dylib' -or -name '*.jar' \) -exec codesign -d -vv --timestamp -f -s "$ALIAS" {} \;
+codesign -d -vv --timestamp -f -s "$ALIAS" "$TARGET_APPDIR"
 
-# FIXME: automate?
-echo "use iDMG and create read-write dmg file from dmg_template, with 'JFreesteel eID Viewer' label"
-echo "mount it to add background, hide toolbar, resize window and adjust icon locations"
 
-# build dmg
-hdiutil convert -format UDZO -o ../../target/jfreesteel-eidviewer-1.0.dmg dmg_template.dmg
+echo "Building dmg file $TARGET_DMG"
 
+source dmg/dmg_background.conf
+WINDOW_ORIGIN_X=405
+WINDOW_ORIGIN_Y=265
+WINDOW_BOTTOM_X=`expr $WINDOW_ORIGIN_X + $WIDTH`
+WINDOW_BOTTOM_Y=`expr $WINDOW_ORIGIN_Y + $HEIGHT`
+
+# create dmg content
+rm -fr "$TARGET/dmg"
+mkdir "$TARGET/dmg"
+cp -r "$TARGET_APPDIR" "$TARGET/dmg/"
+
+# build dmg template
+DMG_TEMPLATE=/tmp/template.dmg
+rm -f $DMG_TEMPLATE
+hdiutil create -volname "$APPNAME" -srcfolder "$TARGET/dmg" -ov -format UDRW $DMG_TEMPLATE
+
+# attach as volume $APPNAME
+hdiutil info | egrep "^/dev/.*$APPNAME" | awk '{print $1}' | while read DEVICE; do
+    hdiutil detach $DEVICE
+done
+DEVICE=`hdiutil attach -readwrite -noverify -noautoopen $DMG_TEMPLATE | egrep '^/dev/' | sed 1q | awk '{print $1}'`
+VOLUME="/Volumes/$APPNAME"
+
+# copy background
+mkdir "$VOLUME/.background"
+cp dmg/dmg_background.png "$VOLUME/.background/background.png"
+
+# link to applications
+ln -s /Applications "$VOLUME/Applications"
+
+# dmg icon
+# cp dmg/dmg_icon.icns "$VOLUME/.volume.icns
+# SetFile -c icnC $VOLUME/.volume.icns
+
+echo "
+delay 3
+tell application \"Finder\"
+  tell disk \"$APPNAME\"
+ 
+  open
+  tell container window
+    set current view to icon view 
+    set toolbar visible to false
+    set statusbar visible to false
+    set the bounds to {$WINDOW_ORIGIN_X, $WINDOW_ORIGIN_Y, $WINDOW_BOTTOM_X, $WINDOW_BOTTOM_Y}
+  end tell
+
+  set opts to the icon view options of the container window
+  tell opts
+    set arrangement to not arranged
+    set the icon size to $ICONSIZE
+  end tell
+  set background picture of opts to file \".background:background.png\"
+
+  set extension hidden of item \"$APPNAME\" to true
+  set position of item \"$APPNAME\" to {`expr $APP_X + $ICONSIZE / 2`, `expr $APP_Y + $ICONSIZE / 2`}
+  set position of item \"Applications\" to {`expr $APPLICATIONS_X + $ICONSIZE / 2`, `expr $APPLICATIONS_Y + $ICONSIZE / 2`}
+
+  close
+  open
+
+  update without registering applications
+
+ end tell
+end tell
+" |  osascript
+
+# wait for .DS_Store
+while [ ! -f "$VOLUME/.DS_Store" ]; do
+    sleep 1
+done
+
+hdiutil detach $DEVICE
+rm -f $TARGET_DMG
+hdiutil convert $DMG_TEMPLATE -format UDZO -imagekey zlib-level=9 -o "$TARGET_DMG"
+rm -f $DMG_TEMPLATE
+
+
+echo "Done buidling $TARGET_DMG"

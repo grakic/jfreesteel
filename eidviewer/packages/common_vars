@@ -1,0 +1,9 @@
+export TARGET=`(cd "../target" && pwd -P)`
+export VERSION=`ls -t $TARGET/eidviewer-*.jar | head -1 | sed 's/.*eidviewer-\(.*\).jar/\1/'`
+
+if [ "x$VERSION" == "x" ]; then
+  echo "eidviewer version not found in directory $TARGET"
+  exit
+fi
+
+echo "Building package for $VERSION using target directory $TARGET"

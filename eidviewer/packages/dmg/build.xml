@@ -9,17 +9,17 @@
 
     <target name="appbundle">
         <bundleapp outputdirectory="../../target"
-            name="JFreesteel eID Viewer"
-            displayname="JFreesteel eID Viewer"
+            name="${env.APPNAME}"
+            displayname="${env.APPNAME}"
             icon="eidviewer.icns"
             identifier="net.devbase.jfreesteel.viewer"
-            shortversion="1.0"
+            shortversion="${env.VERSION}"
             applicationCategory="public.app-category.utilities"
             mainclassname="net.devbase.jfreesteel.viewer.EidViewer">
 
-            <classpath file="../../target/eidviewer-1.0.jar"/>
+            <classpath file="../../target/eidviewer-${env.VERSION}.jar"/>
 <!--
-            <runtime dir="${env.JAVA_HOME}" />
+            <runtime dir="" />
             <classpath dir="../../target">
                 <include name="dependency/**"/>
             </classpath>
