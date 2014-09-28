@@ -1,5 +1,14 @@
 #!/bin/bash
 
+cd `dirname $0`
+. common_vars
+
 cd deb
+
+# make install
+cat debian/install.in > debian/install
+echo "../../target/eidviewer-$VERSION.jar /opt/eidviewer" >> debian/install
+ls ../../target/dependency/* | awk '{ print $0, "/opt/eidviewer/dependency" }' >> debian/install
+
 sudo make -f ./debian/rules
 sudo make -f ./debian/rules clean

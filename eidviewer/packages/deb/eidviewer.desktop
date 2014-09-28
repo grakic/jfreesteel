@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 GenericName=eidviewer
-Name=Serbian eID viewer
+Name=JFreesteel eID viewer
 Name[sr_RS]=Читач електронске личне карте
 Name[sr_RS@latin]=Čitač elektronske lične karte
 Exec=/opt/eidviewer/eidviewer
