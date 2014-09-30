@@ -11,7 +11,7 @@ date: 2014-09-25 14:40:45
 <h1 class="text-danger">
 Ускоро...
 <br/>
-<small>Погледајте <a href="https://github.com/grakic/jfreesteel/blob/master/eidapplet/eidapplet-demo.html">eidapplet/eidapplet-demo.html</a></small>
+<small>За пример изворног кода погледајте <a href="https://github.com/grakic/jfreesteel/blob/master/eidapplet/eidapplet-demo.html">eidapplet/eidapplet-demo.html</a></small>
 </h1>
 
 <h3>Примери употребе аплета у веб апликацијама</h3>
@@ -25,6 +25,7 @@ date: 2014-09-25 14:40:45
 читање података са личне карте.</p>
 </div>
 </div>
+
 <div class="thumbnail">
 <img src="../static/images/savaosiguranje.png" />
 <div class="caption">
@@ -32,7 +33,43 @@ date: 2014-09-25 14:40:45
 аплет за брзо попуњавање личних података очитавањем са личне карте.</p>
 </div>
 </div>
+<br clear="both" />
 </div>
 
+<h3>Напомене</h3>
+<h4>Јава и 64-битни Windows</h4>
+<p>
+Windows у 64-битној варијанти омогућава покретање како 64-битних тако и
+32-битних програма. За исправно учитавање Јава аплета 32/64-битна варијанта
+Јава радног окружења мора да се поклопи са варијантом прегледача. То значи
+да Јава окружење и прегледач морају бити или оба 32-битни или оба 64-битни.
+</p><p>
+На сајту java.com <a href="http://www.java.com/en/download/faq/java_win64bit.xml#verify%20browser">доступан је водич</a>
+како да проверите коју варијанту прегледача користите.
+</p><p>
+За преузимање 64-битног Јава окружења покрените 64-битни прегледач и 
+изаберите <a href="http://www.java.com/en/download/manual.jsp">Windows Offline</a>
+инсталацију. Уколико прегледач буде исправно препознат преузета датотека ће
+у имену имати „<b>x64</b>“, а неће имати „i586“. Уколико добијате погрешну датотеку,
+за инсталацију Јава 7 преузмите .exe датотеку под ознаком 
+<a href="http://www.oracle.com/technetwork/java/javase/downloads/jre7-downloads-1880261.html">Windows x64</a>
+што би требало да буде претпоследња ставка на тој страници. Пре клика на линк
+прихватите лиценцу кликом на „Accept License Agreement“.
+</p><p>
+Уколико користите и 32-битни и 64-битни прегледач, без проблема можете да инсталирате обе
+варијанте Јава окружења.
+</p>
+
+<h4>Google Chrome на системима ГНУ/Линукс и Mac OS X</h4>
+<p>
+Google Chrome 35 и новији не подржава NPAPI додатке <b>на ГНУ/Линуксу</b>
+укључујући и додатак за Јава аплете (Oracle Java Plugin или IcedTea-Web). 
+Користите Мозила Фајерфокс или други прегледач који је заснован на њему.
+</p><p>
+Google Chrome 37 и ранији <b>на Mac OS X</b> долази само у 32-битној варијанти
+док је за покретање јава аплета (Oracle Java Plugin) неопходан 64-битни
+прегледач. Користите Мозила Фајерфокс, Apple Safari или Google Chrome 38
+или новији.
+</p>
     </div>
 </div>
