@@ -22,7 +22,14 @@ date: 2014-09-25 14:40:45
 <div class="caption">
 <p>Популарна услуга <a href="http://www.euprava.gov.rs/eusluge/opis_usluge?generatedServiceId=1822">замене
 саобраћајне дозволе за нову (картичну)</a> на порталу <nobr>Е-Управа</nobr> користи JFreesteel аплет за
-читање података са личне карте.</p>
+читање података са личне карте.  <a href="#" tabindex="0" data-toggle="popover" title="Аплет и Mac OS X" data-html="true"
+data-trigger="focus" data-content="<p>Oracle Java на Mac OS X пре верзије 7u80, 8u20, или 9 има неколико 
+<a href='http://bugs.java.com/bugdatabase/view_bug.do?bug_id=7195480'>грешки</a> при раду
+са читачима картица.</p><p>У новој верзији JFreesteel аплета додато је 
+<a href='https://github.com/grakic/jfreesteel/commit/2c0c6bab90a9ca9b841238ce53ad84c685b58f96'>заобилазно решење</a>
+међутим на порталу еУправа се користи код из старије верзије.</p><p>Све док програмери не интегришу ову
+исправку, или док новија Oracle Java не постане доступна, очитавање картице за ову услугу на Mac OS X
+неће радити.</p>">Напомена за Mac OS X</a>.</p>
 </div>
 </div>
 
@@ -73,3 +80,11 @@ Google Chrome 37 и ранији <b>на Mac OS X</b> долази само у 3
 </p>
     </div>
 </div>
+
+
+
+<script>
+$(function() {
+    $("[data-toggle='popover']").popover();
+});
+</script>
