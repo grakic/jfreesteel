@@ -209,7 +209,7 @@ public class Utils {
             String u2 = m2.group(5);
             if (u1 == null && u2 == null) return 0;
             if (u1 != null && u2 == null) return -1;
-            if (u1 == null && u1 != null) return 1;
+            if (u1 == null && u2 != null) return 1;
 
             p1 = Integer.parseInt(u1.replaceFirst ("^0*", ""));
             p2 = Integer.parseInt(u2.replaceFirst ("^0*", ""));
