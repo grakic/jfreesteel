@@ -23,7 +23,7 @@ binary:
 	dh_installmenu
 	dh_compress
 	dh_fixperms
-	dh_gencontrol -- -v$VERSION
+	dh_gencontrol -- -v${VERSION}
 	dh_installdeb
 	dh_lintian
 	dh_md5sums
