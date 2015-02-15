@@ -8,106 +8,138 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import net.devbase.jfreesteel.EidInfo;
+
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfImportedPage;
-import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
 
 /**
  * Added info printing
  *
  * @edited_by Svetislav Marković <svetam.sd@gmail.com>
- * @date 06.01.2014
  */
 public class PdfReport
 {
-	java.awt.Image photo;
-	EidInfo info;
-	
-    protected final String REPORT = getClass().getResource("/net/devbase/jfreesteel/viewer/report.pdf").toString();
+    java.awt.Image photo;
+    EidInfo info;
 
     public PdfReport(EidInfo info, java.awt.Image photo)
     {
-		this.info = info;
-		this.photo = photo;
-	}
-    
+        this.info = info;
+        this.photo = photo;
+    }
+
     /**
      * Creates a PDF with information about the movies
-     * @param    filename the name of the PDF file that will be created.
-     * @throws    DocumentException 
-     * @throws    IOException
+     * 
+     * @param filename the name of the PDF file that will be created.
+     * @throws DocumentException
+     * @throws IOException
      */
     public void write(final String filename) throws IOException, DocumentException
     {
 
-    	Document document = new Document();
-    	document.setPageSize(PageSize.A4);
-    	PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
+        Document document = new Document();
+        document.setPageSize(PageSize.A4);
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
+        document.open();
 
-        PdfReader reader = new PdfReader(REPORT);
-        PdfImportedPage page = writer.getImportedPage(reader, 1);
-        
-    	document.open();
-    	
-    	// Read from byte stream, as otherwise photo gets wash out
-    	ByteArrayOutputStream bas = new ByteArrayOutputStream();
-    	ImageIO.write((BufferedImage) photo, "jpeg", bas);
-    	byte[] data = bas.toByteArray();    		
+        // Write image: Read from byte stream, as otherwise photo gets wash out
+        ByteArrayOutputStream bas = new ByteArrayOutputStream();
+        ImageIO.write((BufferedImage) photo, "jpeg", bas);
+        byte[] data = bas.toByteArray();
         Image image = Image.getInstance(data);
-        
-        image.setAbsolutePosition(58, 570);
-        image.scaleAbsolute(123, 165);
+        image.setAbsolutePosition(60, 572);
+        image.setBorder(Image.BOX);
+        image.setBorderWidth(1f);
+        image.scaleAbsolute(119, 158);
         writer.getDirectContent().addImage(image);
-        
+
         // Write info
         PdfContentByte cb = writer.getDirectContent();
-        writeTextToPdfContentByte(cb, info.getSurname(), 200, 513);
-        writeTextToPdfContentByte(cb, info.getGivenName(), 200, 489);
-        writeTextToPdfContentByte(cb, info.getParentGivenName(), 200, 463);
-        writeTextToPdfContentByte(cb, info.getDateOfBirth(), 200, 440);
-        writeTextToPdfContentByte(cb, info.getPlaceOfBirthFull().replace("\n", ", "), 200, 408);
-        writeTextToPdfContentByte(cb,
-                                  info.getStreet() + ", "
-                                  + info.getHouseNumber() + ", "
-                                  + info.getCommunity() + ", "
-                                  + info.getPlace() + ", "
-                                  + info.getState(), 200, 370);
-        writeTextToPdfContentByte(cb, info.getPersonalNumber(), 200, 340);
-        writeTextToPdfContentByte(cb, info.getSex(), 200, 316);
-        writeTextToPdfContentByte(cb, info.getIssuingAuthority(), 200, 267);
-        writeTextToPdfContentByte(cb, info.getDocRegNo(), 200, 243);
-        writeTextToPdfContentByte(cb, info.getIssuingDate(), 200, 220);
-        writeTextToPdfContentByte(cb, info.getExpiryDate(), 200, 195);
-        
-        writer.getDirectContentUnder().addTemplate(page, 0, 0);
-        
+
+        drawRulers(cb, 2f, 782, 747);
+        drawRulers(cb, 1.5f, 554, 529, 304, 279);
+
+        String fontPath = getClass().getResource("/net/devbase/jfreesteel/viewer/DejaVuSans.ttf").toString();
+        BaseFont bf = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        cb.beginText();
+
+        cb.setFontAndSize(bf, 15);
+        writeText(cb, "ЧИТАЧ  ЕЛЕКТРОНСКЕ  ЛИЧНЕ  КАРТЕ: ШТАМПА  ПОДАТАКА", 62, 760);
+
+        cb.setFontAndSize(bf, 11);
+        writeLabel(cb, "Подаци о грађанину", 537);
+        writeLabel(cb, "Подаци о документу", 288);
+
+        cb.setFontAndSize(bf, 10);
+        writeLine(cb, "Презиме:", info.getSurname(), 513);
+        writeLine(cb, "Име:", info.getGivenName(), 489);
+        writeLine(cb, "Име једног родитеља:", info.getParentGivenName(), 463);
+        writeLine(cb, "Датум рођења:", info.getDateOfBirth(), 440);
+        writeLabel(cb, "Место рођења,", 415);
+        writeLabel(cb, "општина и држава:", 403);
+        writeLine(cb, "", info.getPlaceOfBirthFull().replace("\n", ", "), 408);
+        writeLabel(cb, "Пребивалиште и", 380);
+        writeLabel(cb, "адреса стана:", 368);
+        writeLine(cb, "", info.getStreet() + ", " + info.getHouseNumber()
+                + ", " + info.getCommunity() + ", " + info.getPlace() + ", "
+                + info.getState(), 370);
+        writeLine(cb, "ЈМБГ:", info.getPersonalNumber(), 340);
+        writeLine(cb, "Пол:", info.getSex(), 316);
+
+        writeLine(cb, "Документ издаје:", info.getIssuingAuthority(), 262);
+        writeLine(cb, "Број документа:", info.getDocRegNo(), 238);
+        writeLine(cb, "Датум издавања:", info.getIssuingDate(), 215);
+        writeLine(cb, "Важи до:", info.getExpiryDate(), 190);
+
+        cb.endText();
+
         document.close();
     }
-    
+
+    private void drawRulerLine(PdfContentByte cb, int height)
+    {
+        cb.moveTo(59, height);
+        cb.lineTo(536, height);
+        cb.stroke();
+    }
+
+    private void drawRulers(PdfContentByte cb, float weight, int... heights)
+    {
+        cb.setLineWidth(weight);
+        for (int height : heights)
+            drawRulerLine(cb, height);
+    }
+
     /**
-     * Used to write text into PdfContentByte
+     * Write text into PdfContentByte
      *
      * @param cb PDF Content
      * @param text String to be drawn
-     * @param x X Position
-     * @param y Y Position
+     * @param height Y Position
      * @throws DocumentException
      * @throws IOException
-     * @author Svetislav Marković <svetam.sd@gmail.com>
      */
-    private void writeTextToPdfContentByte(PdfContentByte cb, String text, int x, int y) throws DocumentException, IOException {
-        String fontPath = getClass().getResource("/net/devbase/jfreesteel/viewer/arialuni.ttf").toString();
-        BaseFont bf = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-        cb.beginText();
+    private void writeText(PdfContentByte cb, String text, int x, int y) throws DocumentException, IOException
+    {
         cb.setTextMatrix(x, y);
-        cb.setFontAndSize(bf, 10);
         cb.showText(text);
-        cb.endText();
     }
+
+    private void writeLabel(PdfContentByte cb, String text, int height) throws DocumentException, IOException
+    {
+        writeText(cb, text, 68, height);
+    }
+
+    private void writeLine(PdfContentByte cb, String label, String text, int height) throws DocumentException, IOException
+    {
+        writeLabel(cb, label, height);
+        writeText(cb, text, 200, height);
+    }
+
 }
