@@ -3,7 +3,7 @@ layout: default
 title: Програм eID Viewer за ГНУ/Линукс и друге системе
 description: Преузмите инсталацију незваничног читача личне карте
 og_image: static/images/screens/ubuntu_step6.png
-date: 2014-09-29 01:33:26
+date: 2015-02-15 05:01:04
 ---
 
 <div class="row features">
@@ -18,7 +18,7 @@ date: 2014-09-29 01:33:26
 <h4>Могућности и познати недостаци:</h4>
 <ul>
 <li class="text-success">Препознаје убачену личну карту и успешно чита податке и слику
-<li>Омогућава чување ПДФ извештаја, али у извештај <b>уписује само слику</b>, не и друге податке
+<li class="text-success">Омогућава чување ПДФ извештаја, укључујући податке и слику
 <li><b>Не омогућава</b> проверу електронског потписа података на личној карти
 <li><b>Не омогућава</b> извоз личних сертификата са личне карте
 <li>При употреби већег системског фонта, приказ може бити исечен сдесна. Довољно је повећати прозор програма
@@ -29,8 +29,8 @@ date: 2014-09-29 01:33:26
 <div class="row">
     <div class="col-lg-12 text-center">
 
-<a class="btn btn-lg btn-primary btn-download" href="https://github.com/grakic/jfreesteel/releases/download/eidviewer-1.0/jfreesteel-eidviewer-1.0.zip"><img src="../../static/images/icon_zip.png" width="32px" height="32px" /> JFreesteel eID Viewer 1.0
-<br/><small><b>2,3 MB</b> &mdash; 24.09.2014</small></a>
+<a class="btn btn-lg btn-primary btn-download" href="https://github.com/grakic/jfreesteel/releases/download/eidviewer-1.1/jfreesteel-eidviewer-1.1.zip"><img src="../../static/images/icon_zip.png" width="32px" height="32px" /> JFreesteel eID Viewer 1.1
+<br/><small><b>2,6 MB</b> &mdash; 15.02.2015</small></a>
 
     </div>
 
@@ -44,7 +44,7 @@ date: 2014-09-29 01:33:26
 <li>Проверите да су Јава радно окружење и PC/SC компонента
 <a data-toggle="collapse" data-parent="#accordionP" href="#collapseP1">исправно повезани</a></ли>
 <li>Распакујте преузету архиву</li>
-<li>Уколико ваш систем омогућава покретање JAR архива двокликните на eidviewer.jar. У противном на Униксоликим системима покрените шел-скрипту <tt>eidviewer</tt> која претпоставља да је java наредба доступна у стандардној путањи.<br/><br/>Уколико не можете да покренете шел-скрипт или се java 
+<li>Уколико ваш систем омогућава покретање JAR архива двокликните на eidviewer.jar. У противном на Униксоликим системима покрените шел-скрипту <tt>eidviewer</tt> која претпоставља да је java наредба доступна у стандардној путањи.<br/><br/>Уколико не можете да покренете шел-скрипт или се java
 наредба налази на нестандардној путањи, у терминалу пређите у локацију где сте распаковали архиву и покрените програм наредбом: <tt>java -jar ./eidviewer.jar</tt> односно сличном, додајући одговарајућу путању до java наредбе.
 </li>
 </ol>
@@ -56,7 +56,7 @@ date: 2014-09-29 01:33:26
 </p>
 <p class="lead text-center" style="margin-bottom: 0">
 <img class="thumbnail" src="../../static/images/eidviewer.png" width="64px" style="display: inline-block; margin-bottom: 0;">
-&nbsp; 
+&nbsp;
 <a href="https://github.com/grakic/jfreesteel/raw/master/eidviewer/packages/deb/icon.png">png</a> –
 <a href="https://github.com/grakic/jfreesteel/raw/master/eidviewer/packages/win/eidviewer.ico">ico</a> –
 <a href="https://github.com/grakic/jfreesteel/raw/master/eidviewer/src_misc/eidviewer.svg">svg</a> –
@@ -65,7 +65,7 @@ date: 2014-09-29 01:33:26
 </p>
 </div>
 
-    
+
     <h3>Могући проблеми</h3>
 
 <div class="panel-group" id="accordionP">
@@ -84,9 +84,9 @@ date: 2014-09-29 01:33:26
     Проверите да ли је читач исправно инсталиран на систему и да ли Java Smart Card I/O API остварује
     комуникацију са системском PC/SC компонентом.
     </p><p>
-    <b>Упутства за решавање зависе од оперативног система</b>. 
+    <b>Упутства за решавање зависе од оперативног система</b>.
     </p><p>
-    На ГНУ/Линуксу систем користи pcscd из pcsc-lite, а читач захтева и посебан pcsc-lite драјвер (ifhandler). 
+    На ГНУ/Линуксу систем користи pcscd из pcsc-lite, а читач захтева и посебан pcsc-lite драјвер (ifhandler).
     Већина УСБ читача подржавају CCID протокол и раде са libccid драјвером из pcsc-lite пројекта. Потражите и
     инсталирајте пакете pcsc-lite и libccid за вашу дистрибуцију, односно додатне ifhandler драјвере из складишта
     дистрибуције или са сајта произвођача читача. Можете да користите <tt>pcsc_scan</tt> из пројекта pcsc-tools
@@ -97,7 +97,7 @@ date: 2014-09-29 01:33:26
     дистрибуцију користите, прочитајте како да исправно успоставите везу између Јаве и ове библиотеке
     у <a href="../ubuntu/#collapseP1">одељку за Убунту ГНУ/Линукс дистрибуцију</a>.
     </p><p>
-    За информације како да проблем решите на системима <a href="../osx/#collapseP1">Apple Mac OS X</a> и 
+    За информације како да проблем решите на системима <a href="../osx/#collapseP1">Apple Mac OS X</a> и
     <a href="../win/#collapseP1">Microsoft Windows</a> погледајте посебне странице на сајту.
     </p>
       </div>
@@ -118,32 +118,21 @@ date: 2014-09-29 01:33:26
       </div>
     </div>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordionP" href="#collapseP3">
-          <b>#3</b> Сачувани ПДФ извештај садржи само слику
-        </a>
-      </h4>
-    </div>
-    <div id="collapseP3" class="panel-collapse collapse">
-      <div class="panel-body">
-        <p>Програм тренутно не приказује остале податке у ПДФ извештају. Уколико познајете или тек учите Јаву, додавање ове функционалности у класу <a href="https://github.com/grakic/jfreesteel/blob/master/eidviewer/src/main/java/net/devbase/jfreesteel/viewer/PdfReport.java">viewer/PdfReport.java</a> може да буде забавно. Локације за редове текста у пикселима пронађите <a href="https://gitorious.org/freesteel/pyfreesteel/commit/029ec09209c6877a91017b4986162fd718e85669">овде</a>.</p>        
-        <p>Уколико успете, допуну пошаљите <a href="mailto:grakic@devbase.net">е-поштом</a> или кроз GitHub и функција ће се наћи у новом издању.</p>
-      </div>
-    </div>
-  </div>
 </div>
-    
+
     <h3>Белешке о издању</h3>
-    <p>Датум објављивања: 24. септембар 2014. године<br/>
-    MD5 отисак: 45106336bb6e8a43faf66d5508df322b<br/>
-    Изворни код: <a href="https://github.com/grakic/jfreesteel/tree/eidviewer-1.0" data-toggle="tooltip" data-placement="top" title="Изворни код програма се налази у модулу eidviewer">tag:eidviewer-1.0</a></p>
+    <p>Датум објављивања: 15. фебруар 2015. године<br/>
+    MD5 отисак: c2349bc0e7c52ceaa6bc868c565ae10d<br/>
+    Изворни код: <a href="https://github.com/grakic/jfreesteel/tree/eidviewer-1.1" data-toggle="tooltip" data-placement="top" title="Изворни код програма се налази у модулу eidviewer">tag:eidviewer-1.1</a></p>
     <ul>
+    <li>Чување извештаја у ПДФ формату. Хвала Светиславу Марковићу који је довршио испис података у ПДФ.
+    <span class="glyphicon glyphicon-thumbs-up"></span>
+    Хвала и С. Петковићу и Д. Шегану који су у 2013. и 2014. години чување ПДФ извештаја независно додали у пајтон скриптицу која је претходила пројекту JFreesteel.
+    </li>
     <li>Могуће је преузимање архиве преко
     <a href="https://grakic.github.io/jfreesteel/program/zip/">сигурне везе (HTTPS)</a>.</li>
     </ul>
-    
+
 
 
 <script>
@@ -152,4 +141,3 @@ $(function() {
     location.hash && $(location.hash + '.collapse').collapse('show');
 });
 </script>
-

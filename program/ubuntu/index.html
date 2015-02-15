@@ -3,7 +3,7 @@ layout: default
 title: Програм eID Viewer за Убунту (deb пакет)
 description: Преузмите инсталацију читача личне карте за Убунту ГНУ/Линукс
 og_image: static/images/screens/ubuntu_step6.png
-date: 2014-09-25 14:40:45
+date: 2015-02-15 05:01:04
 ---
 
 <div class="row features">
@@ -18,7 +18,7 @@ date: 2014-09-25 14:40:45
 <h4>Могућности и познати недостаци:</h4>
 <ul>
 <li class="text-success">Препознаје убачену личну карту и успешно чита податке и слику
-<li>Омогућава чување ПДФ извештаја, али у извештај <b>уписује само слику</b>, не и друге податке
+<li class="text-success">Омогућава чување ПДФ извештаја, укључујући податке и слику
 <li><b>Не омогућава</b> проверу електронског потписа података на личној карти
 <li><b>Не омогућава</b> извоз личних сертификата са личне карте
 <li>При употреби већег системског фонта, приказ може бити исечен сдесна. Довољно је повећати прозор програма
@@ -29,8 +29,8 @@ date: 2014-09-25 14:40:45
 <div class="row">
     <div class="col-lg-12 text-center">
 
-<a class="btn btn-lg btn-primary btn-download" href="https://github.com/grakic/jfreesteel/releases/download/eidviewer-1.0/jfreesteel-eidviewer_1.0_all.deb"><img src="../../static/images/icon_deb.png" width="32px" height="32px" /> JFreesteel eID Viewer 1.0
-<br/><small><b>2,3 MB</b> &mdash; 24.09.2014</small>
+<a class="btn btn-lg btn-primary btn-download" href="https://github.com/grakic/jfreesteel/releases/download/eidviewer-1.1/jfreesteel-eidviewer_1.1.all.deb"><img src="../../static/images/icon_deb.png" width="32px" height="32px" /> JFreesteel eID Viewer 1.1
+<br/><small><b>2,6 MB</b> &mdash; 15.02.2015</small>
 </a>
 
 
@@ -82,9 +82,9 @@ date: 2014-09-25 14:40:45
   <a class="right carousel-control" href="#carousel" role="button" data-slide="next">
     <span class="glyphicon glyphicon-chevron-right"></span>
   </a>
-</div>    
-    
-    
+</div>
+
+
     <h3>Могући проблеми</h3>
 
 <div class="panel-group" id="accordionP">
@@ -105,10 +105,10 @@ date: 2014-09-25 14:40:45
     Уколико инсталирате посебан драјвер, подешавања pcscd су у датотеци /etc/reader.conf.
     </p><p>
     Ако је одзив наредбе у реду, могуће да инсталирана Јава не проналази библиотеку libpcsclite за комуникацију са читачем (грешка <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=500762">#500762</a>).
-    </p><p>    
+    </p><p>
     <b>Покушајмо да разјаснимо проблем.</b> Oracle Java на ГНУ/Линуксу тражи библиотеку у датотеци „libpcsclite.so“ на путањи /usr/lib/ за 32-битне или /usr/lib64/ за 64-битне системе. Ова датотека не садржи ознаку верзије, па ако би аутори pcsc-lite пројекта икада нешто променили Oracle Java би престала да ради. Они не желе да други програми тако користе библиотеку  већ захтевају да се користи датотека са верзијом, „libpcsclite.so.1“. На Дебиан и Убунту дистрибуцијама „libpcsclite.so.1“ долази у пакету <b>libpcsclite1</b> који ће се инсталирати аутоматски уз наш deb пакет као међузависност.
     </p><p>
-Осим имена имамо проблем и са путањом, од како Дебиан и Убунту користе <a href="http://ludovicrousseau.blogspot.com/2012/06/debian-multi-arch-and-pcsc-lite.html">Multiarch</a> 
+Осим имена имамо проблем и са путањом, од како Дебиан и Убунту користе <a href="http://ludovicrousseau.blogspot.com/2012/06/debian-multi-arch-and-pcsc-lite.html">Multiarch</a>
 библиотеке се сада налазе на путањи /lib/i386-linux-gnu/ за 32-битне и /lib/x86_64-linux-gnu/ за 64-битне системе, што нису путање где Oracle Java тражи libpcsclite.
     </p><p>
 Јава која се подразумевано налази у складишту пакета дистрибуције (OpenJDK JRE) је преправљена тако да нађе libpcsclite на правом месту и под правим именом, и ако користите OpenJDK JRE неће бити проблема. Међутим ако користите Oracle Javu (преко пакета или ручно са java.com сајта) у том случају морате да направите симболичке линкове:
@@ -120,7 +120,7 @@ date: 2014-09-25 14:40:45
 </ul>
 <br/>
     <p>
-    На <b>старијим верзијама Убунту система</b> који не користе Multiarch (пре 11.04!), библиотека ће бити на правом месту али не под именом које Oracle Java очекује. Зато и ту ако желите Oracle Javu направите линкове: 
+    На <b>старијим верзијама Убунту система</b> који не користе Multiarch (пре 11.04!), библиотека ће бити на правом месту али не под именом које Oracle Java очекује. Зато и ту ако желите Oracle Javu направите линкове:
     </p>
 <ul><li>За 32-битни систем, ако сте пронашли библиотеку у /lib/libpcsclite.so.1:<br>
     <pre>sudo ln -s /lib/libpcsclite.so.1 /usr/lib/libpcsclite.so</pre></li>
@@ -152,34 +152,21 @@ date: 2014-09-25 14:40:45
       </div>
     </div>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordionP" href="#collapseP3">
-          <b>#3</b> Сачувани ПДФ извештај садржи само слику
-        </a>
-      </h4>
-    </div>
-    <div id="collapseP3" class="panel-collapse collapse">
-      <div class="panel-body">
-        <p>Програм тренутно не приказује остале податке у ПДФ извештају. Уколико познајете или тек учите Јаву, додавање ове функционалности у класу <a href="https://github.com/grakic/jfreesteel/blob/master/eidviewer/src/main/java/net/devbase/jfreesteel/viewer/PdfReport.java">viewer/PdfReport.java</a> може да буде забавно. Локације за редове текста у пикселима пронађите <a href="https://gitorious.org/freesteel/pyfreesteel/commit/029ec09209c6877a91017b4986162fd718e85669">овде</a>.</p>        
-        <p>Уколико успете, допуну пошаљите <a href="mailto:grakic@devbase.net">е-поштом</a> или кроз GitHub и функција ће се наћи у новом издању.</p>
-      </div>
-    </div>
-  </div>
 </div>
-    
+
 
     <h3>Белешке о издању</h3>
-    <p>Датум објављивања: 24. септембар 2014. године<br/>
-    MD5 отисак: 9433d1fb2f91b8f8cc5192b244a043ca<br/>
-    Изворни код: <a href="https://github.com/grakic/jfreesteel/tree/eidviewer-1.0" data-toggle="tooltip" data-placement="top" title="Изворни код програма се налази у модулу eidviewer">tag:eidviewer-1.0</a></p>
+    <p>Датум објављивања: 15. фебруар 2015. године<br/>
+    MD5 отисак: b7eb50d73bc97335ffd8a4dbbeadcff7<br/>
+    Изворни код: <a href="https://github.com/grakic/jfreesteel/tree/eidviewer-1.1" data-toggle="tooltip" data-placement="top" title="Изворни код програма се налази у модулу eidviewer">tag:eidviewer-1.1</a></p>
     <ul>
-    <li>Нови Убунту пакет, датотеке потребне за израду пакета су објављене у Гит складишту.</li>
-    <li>Верзија пакета је <nobr>„1.0-X-20140924“</nobr> како би могао да надогради претходну верзију која је несрећно обележена као <nobr>„1.0-SNAPSHOT-20140917“</nobr>. Следећа радна верзија ће бити <nobr>„1.01-SNAPSHOT-...“</nobr> тако да ће будући пакет са верзијом <nobr>„1.1“</nobr> моћи да га надогради без ових компликација.</li>
+    <li>Чување извештаја у ПДФ формату. Хвала Светиславу Марковићу који је довршио испис података у ПДФ.
+    <span class="glyphicon glyphicon-thumbs-up"></span>
+    Хвала и С. Петковићу и Д. Шегану који су у 2013. и 2014. години чување ПДФ извештаја независно додали у пајтон скриптицу која је претходила пројекту JFreesteel.
+    </li>
     <li>Пакет и програм нису потписани, али је могуће преузимање преко <a href="https://grakic.github.io/jfreesteel/program/ubuntu/">сигурне везе (HTTPS)</a>.</li>
     </ul>
-    
+
 
 
 <script>
@@ -187,4 +174,3 @@ $(function() {
     $("[data-toggle='tooltip']").tooltip();
 });
 </script>
-

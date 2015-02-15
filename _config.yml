@@ -2,8 +2,8 @@ exclude: ["vendor"]
 
 latest:
     eidviewer:
-        release: 1.0
-        release_date: 24. септембар 2014.
+        release: 1.1
+        release_date: 15. фебруар 2015.
 
 sass:
     sass_dir: static/_sass/
