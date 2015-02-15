@@ -34,7 +34,8 @@ public class UtilsTest extends EidTestCase {
 
     public void testMap2UTF8String() {
     	
-    	HashMap testmap = new HashMap() {{
+    	@SuppressWarnings("serial")
+		HashMap<Integer, byte[]> testmap = new HashMap<Integer, byte[]>() {{
             put(0x01, "АБВГДЂ".getBytes(StandardCharsets.UTF_8));
             put(0x02, "ЕЖЗИЈК".getBytes(StandardCharsets.UTF_8));
             put(0x03, "\uffff\uffff\uffff".getBytes(StandardCharsets.ISO_8859_1));

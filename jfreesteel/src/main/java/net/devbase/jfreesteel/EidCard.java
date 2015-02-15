@@ -206,7 +206,8 @@ public abstract class EidCard {
     }
 
     // tags: 1545 - 1553
-    static final Map<Integer, Tag> DOCUMENT_TAGMAPPER = new HashMap<Integer, Tag>() {{
+    @SuppressWarnings("serial")
+	static final Map<Integer, Tag> DOCUMENT_TAGMAPPER = new HashMap<Integer, Tag>() {{
         put(1545, Tag.NULL); // = SRB (issuing authority country code?)
         put(1546, Tag.DOC_REG_NO);
         put(1547, Tag.NULL); // = ID
@@ -219,7 +220,8 @@ public abstract class EidCard {
     }};
 
     // tags: 1558 - 1567
-    static final Map<Integer, Tag> PERSONAL_TAGMAPPER = new HashMap<Integer, Tag>() {{
+    @SuppressWarnings("serial")
+	static final Map<Integer, Tag> PERSONAL_TAGMAPPER = new HashMap<Integer, Tag>() {{
         put(1558, Tag.PERSONAL_NUMBER);
         put(1559, Tag.SURNAME);
         put(1560, Tag.GIVEN_NAME);
@@ -233,7 +235,8 @@ public abstract class EidCard {
     }};
 
     // tags: 1568 .. 1578
-    static final Map<Integer, Tag> RESIDENCE_TAGMAPPER = new HashMap<Integer, Tag>() {{
+    @SuppressWarnings("serial")
+	static final Map<Integer, Tag> RESIDENCE_TAGMAPPER = new HashMap<Integer, Tag>() {{
         put(1568, Tag.STATE);
         put(1569, Tag.COMMUNITY);
         put(1570, Tag.PLACE);

@@ -8,8 +8,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import net.devbase.jfreesteel.EidInfo;
-import net.devbase.jfreesteel.Utils;
-
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;

@@ -64,6 +64,7 @@ public class JFreesteel {
 
                 c = in.nextInt();
                 if (c > 0 && c <= terminals.size()) {
+                	in.close();
                     return terminals.get(c-1);
                 }
             }

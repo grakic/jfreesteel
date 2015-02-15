@@ -379,7 +379,8 @@ public class EidInfo {
         return out.toString();
     }
 
-    public JSONObject toJSON() {
+    @SuppressWarnings("unchecked")
+	public JSONObject toJSON() {
         JSONObject obj = new JSONObject();
         obj.put("name_full", getNameFull());
         obj.put("place_full", getPlaceFull("ulaz %s", "%s. sprat", "br. %s"));
