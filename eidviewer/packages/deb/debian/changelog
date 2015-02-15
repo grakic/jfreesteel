@@ -1,3 +1,10 @@
+jfreesteel-eidviewer (1.1) stable; urgency=medium
+
+  * 1.1 release.
+  * PDF report
+
+ -- Goran Rakic <grakic@devbase.net>  Sun, 14 Feb 2015 04:27:21 +0100
+
 jfreesteel-eidviewer (1.0-X-20140924) stable; urgency=medium
 
   * 1.0 release.

@@ -21,7 +21,7 @@
 ;======================================================
 ; Version Tab information for Setup.exe properties
 
-  VIProductVersion ${PROJECT_VERSION}
+  VIProductVersion 1.1.0.1
   VIAddVersionKey ProductName "${PROJECT_NAME}"
   VIAddVersionKey ProductVersion "${PROJECT_VERSION}"
   VIAddVersionKey CompanyName "${PROJECT_ORGANIZATION_NAME}"

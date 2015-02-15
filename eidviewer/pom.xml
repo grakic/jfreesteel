@@ -9,9 +9,9 @@
     <artifactId>eidviewer</artifactId>
     <name>JFreesteel eID Viewer</name>
     <description>Serbian eID viewer application using the JFreesteel library</description>
-    <version>1.0</version>
+    <version>1.1</version>
     <properties>
-        <windowsProductVersion>1.0.0.2</windowsProductVersion>
+        <windowsProductVersion>1.1.0.1</windowsProductVersion>
         <windowsProductName>JFreesteel eID Viewer</windowsProductName>
     </properties>
     <build>
@@ -65,7 +65,7 @@
                                 <addDependencies>true</addDependencies>
                             </classPath>
                             <jre>
-                                <minVersion>1.6.0</minVersion>
+                                <minVersion>1.7.0</minVersion>
                             </jre>
                             <versionInfo>
                                 <fileVersion>${windowsProductVersion}</fileVersion>
