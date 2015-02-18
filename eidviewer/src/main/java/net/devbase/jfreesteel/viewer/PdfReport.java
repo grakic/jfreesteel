@@ -83,12 +83,10 @@ public class PdfReport
         writeLine(cb, "Датум рођења:", info.getDateOfBirth(), 440);
         writeLabel(cb, "Место рођења,", 415);
         writeLabel(cb, "општина и држава:", 403);
-        writeLine(cb, "", info.getPlaceOfBirthFull().replace("\n", ", "), 408);
+        writeLine(cb, "", info.getPlaceOfBirthFull().replace("\n", ", "), 409);
         writeLabel(cb, "Пребивалиште и", 380);
         writeLabel(cb, "адреса стана:", 368);
-        writeLine(cb, "", info.getStreet() + ", " + info.getHouseNumber()
-                + ", " + info.getCommunity() + ", " + info.getPlace() + ", "
-                + info.getState(), 370);
+        writePlace(cb, info);
         writeLine(cb, "ЈМБГ:", info.getPersonalNumber(), 340);
         writeLine(cb, "Пол:", info.getSex(), 316);
 
@@ -100,6 +98,22 @@ public class PdfReport
         cb.endText();
 
         document.close();
+    }
+
+    private void writePlace(PdfContentByte cb, EidInfo info) throws DocumentException, IOException {
+
+        String place[] = info.getPlaceFull("/ %s", "%s. sprat", "stan %s").split("\n");
+
+        if (place.length > 1) {
+            for(int i=2; i<place.length; i++)
+                place[1] += ", " + place[i];
+
+            writeLine(cb, "", place[0], 380);
+            writeLine(cb, "", place[1], 368);
+        } 
+        else {
+            writeLine(cb, "", place[0], 374);
+        }
     }
 
     private void drawRulerLine(PdfContentByte cb, int height)
