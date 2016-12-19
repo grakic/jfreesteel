@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JFreesteel Web Extensions Demo</title>
+<style type="text/css">
+body {
+   font-family: sans-serif;
+   padding: 30px;
+}
+#eid {
+   width: 640px;
+   height: 320px;
+   margin: 0 auto;
+   border: 1px solid #ccc;
+   border-radius: 15px;
+   box-shadow: 3px 3px 3px #ccc;
+   overflow: hidden;
+}
+#eid h1 {
+   -webkit-background-clip: text;
+   -moz-background-clip: text;
+   background-clip: text;
+   color: transparent;
+   text-shadow: rgba(255,255,255,0.5) 0px 3px 3px;
+   color: #333;
+   font-size: 18pt;
+}
+#eid h1, #eid small {
+    padding: 20px;
+    padding-left: 260px;
+    word-wrap: break-word;
+}
+#eid small {
+    color: #aaa;
+    font-size: 8pt;
+    display: block;
+}
+#eid img {
+   float: left;
+}
+
+#error {
+    width: 620px;
+    margin: 15px auto;
+    border: 1px solid red;
+    padding: 3px 10px;
+    border-radius: 5px;
+    color: red;
+    display: none;
+}
+</style>
+<script type="text/javascript">
+var nameNode;
+var infoNode;
+var photoNode;
+var errorNode;
+
+function inserted(eidInfo, photo) {
+  nameNode.innerHTML = eidInfo.name_full;
+  infoNode.innerHTML = JSON.stringify(eidInfo);
+  photoNode.src = "data:image/png;base64,"+photo;
+}
+function removed() {
+  nameNode.innerHTML = "";
+  infoNode.innerHTML = "";
+  photoNode.src = "eidapplet.gif";
+}
+
+function error(message) {
+    errorNode.innerHTML += "<p>" + message + "</p>";
+    errorNode.style.display = "block";
+}
+
+function openHost() {
+    sendCommand("");
+}
+
+/**
+ * Send command to content to be forwarded via background to the host app
+ *
+ * @param command
+ */
+function sendCommand(command) {
+    var message = {
+        source: "page",
+        target: "net.devbase.jfreesteel.eidnativemessaging",
+        command: command
+    }
+    window.postMessage(message, "*");
+}
+
+window.onload = function() {
+    nameNode = document.getElementById("name");
+    infoNode = document.getElementById("info");
+    photoNode = document.getElementById("photo");
+    errorNode = document.getElementById("error");
+
+    window.addEventListener("message", function(event) {
+
+        var message = event.data;
+
+        if(event.source !== window
+            || !message.target || message.target != "net.devbase.jfreesteel.eidnativemessaging"
+            || !message.source || message.source != "content")
+            return;
+
+        console.log("Page received from content", message);
+
+        if (message.error) {
+            error(message.error);
+        } else if (message.event && message.event == "removed") {
+            alert("Card removed from " + message.terminal);
+            removed();
+        } else {
+            alert("Card inserted in " + message.terminal);
+            inserted(message.info, message.photo);
+        }
+    });
+
+    openHost();
+}
+</script>
+</head>
+<body>
+
+<div id="error"></div>
+
+<div id="eid">
+  <img id="photo" src="eidapplet.gif" />
+  <h1 id="name"></h1>
+  <small id="info"></small>
+</div>
+
+</body>
+</html>

@@ -31,5 +31,6 @@
         <module>jfreesteel</module>
         <module>eidviewer</module>
         <module>eidapplet</module>
+        <module>eidnativemessaging</module>
     </modules>
 </project>

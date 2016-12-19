@@ -1,0 +1,12 @@
+{
+  "name": "net.devbase.jfreesteel.eidnativemessaging",
+  "description": "POC for accessing Serbian eID from Web Extension",
+  "path": "${HOST_PATH}",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://${GOOGLE_EXT_ID}/"
+  ],
+  "allowed_extensions": [
+    "eidnativemessaging@jfreesteel.devbase.net"
+  ]
+}

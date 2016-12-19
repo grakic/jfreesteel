@@ -1,0 +1,24 @@
+{
+  // Extension ID: kolbcmohalkekmijgobpfaaofdgpbgjfg
+  //"key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7GzwoGKnCLOh818zGIsJYGxrv9aw/gzjKTBRd1OvqWkxUyGX8fDzQvYYscmhndZO59tXATgffcNfrAESrwiBCdrN6UZ3b8DoPSKPPaGZf4KdgF4yYhkSQv8AtlNxAinzxz5FxL1yM6Ux+pbLPH+eqaBCC4qs170x2OigTm6bnujBgaDrKhzP/FLmAlGoxx1rM11i87idZsMWTRKCJs9rO6iH8tMGgB0y9uOai4SkhWchC7aBybgGt0bp4sks51m2QT62Mz+/iLnO2QEKKOVF95W+bytYqx/3vrfU9yrd5tAhIdcfE2L6/e2cna9jwT6gpA3wMUjcloSa+hORAFalUwIDAQAB",
+  "name": "JFreesteel Web Extension",
+  "description": "POC for accessing Serbian eID from Web Extension",
+  "version": "1.0",
+  "manifest_version": 2,
+  "icons": {
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [{
+      "matches": ["*://*/*", "file:///*"],
+      "js": ["content.js"],
+      "run_at": "document_end",
+      "all_frames": true
+  }],
+  "permissions": [
+    "nativeMessaging"
+  ]
+}

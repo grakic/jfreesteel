@@ -180,6 +180,25 @@ public class Utils {
         return valueBytes;
     }
 
+    public static byte[] int2Bytes(int value) {
+        byte bytes[] = new byte[4];
+        bytes[0] = asByte(value >> 0);
+        bytes[1] = asByte(value >> 8);;
+        bytes[2] = asByte(value >> 16);
+        bytes[3] = asByte(value >> 24);
+        return bytes;
+    }
+
+    public static int bytes2Int(byte... bytes) {
+        int value = 0;
+        int shift = 0;
+        for(byte b : bytes) {
+            value |= (0xff & b) << shift;
+            shift+=8;
+        }
+        return value;
+    }
+
     public static boolean allEquals(int needle, byte... bytes) {
         int i = 0;
         while(i < bytes.length && bytes[i] == needle) i++;
