@@ -26,8 +26,6 @@ import javax.smartcardio.Card;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.devbase.jfreesteel.Utils;
-
 /**
  * Reader class maintains the connection with the terminal and provides an
  * interface for your code to receive card insertion/removal events.
@@ -82,9 +80,13 @@ public class Reader {
         // start card connection in a new thread
         listenerThread = new Thread(new Runnable() {
             public void run() {
+
+                logger.info(String.format("Init Reader on terminal %s", terminal.getName()));
                 try {
                     // sometimes reader is not blocking on waitForCard*, we start with inf. timeout
                     int timeoutMs = 0;
+
+                    boolean wrongCardPresent = false;
 
                     // fix issues with Java on Mac OS X
                     boolean buggyJava = isMacWithBuggyJava();
@@ -96,32 +98,47 @@ public class Reader {
                     while (true) {
 
                         boolean statusChanged = true;
+                        logger.info("Loop entry");
 
                         try {
 
-                            if(!buggyJava) {
-                                // wait for a status change
-                                if (eidcard == null) {
-                                    logger.info("EidCard is null, wait for insertion");
+                            logger.info("Inside try...");
+                            boolean cardPresent = isCardPresent(buggyJava);
+                            logger.info(String.format("Card present %b", cardPresent));
+
+                            // wait for status change if not on buggy java
+                            if (!buggyJava) {
+                                if (!cardPresent) {
+                                    logger.info("Card not present, wait for insertion");
                                     terminal.waitForCardPresent(timeoutMs);
-                                } else {
-                                    logger.info("EidCard not null, wait for removal");
+                                } else if ((eidcard != null || wrongCardPresent) && cardPresent) {
+                                    logger.info("Card present, wait for removal");
                                     terminal.waitForCardAbsent(timeoutMs);
                                 }
+                                cardPresent = isCardPresent(buggyJava);
                             }
 
                             // change the status
-                            if (eidcard == null && isCardPresent(buggyJava)) {
+                            if (eidcard == null && cardPresent) {
                                 connect();
-                            } else if (eidcard != null && !isCardPresent(buggyJava)) {
+                            } else if (eidcard != null && !cardPresent) {
                                 disconnect();
-                            } else {
+                            } else if (!wrongCardPresent){
                                 // either we are with buggyJava, or there is another bug in PC/SC
                                 // and waitForCard*(0) is not blocking and returns immediately!
                                 // Increase the timeout not to burn cpu
+                                logger.info("Setting timeout to 3 seconds");
                                 timeoutMs = 3000;
                                 statusChanged = false;
+                            } else {
+                                statusChanged = false;
                             }
+
+                        } catch (IllegalArgumentException e1) {
+                            // wrong card
+                            logger.info("WRONG CARD");
+                            statusChanged = false;
+                            wrongCardPresent = true;
 
                         } catch (CardException e1) {
                             // force "disconnect"
@@ -226,7 +243,7 @@ public class Reader {
         );
     }
 
-    private boolean isCardPresent(boolean buggyJava) throws CardException {
+    private synchronized boolean isCardPresent(boolean buggyJava) throws CardException {
         if (!buggyJava) return terminal.isCardPresent();
 
 	    try {
