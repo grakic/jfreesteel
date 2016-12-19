@@ -5,3 +5,5 @@
 *.jks
 keys/
 sign.sh
+.idea/
+*.iml
