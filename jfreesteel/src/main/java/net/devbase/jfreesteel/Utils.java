@@ -18,6 +18,10 @@
 
 package net.devbase.jfreesteel;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -25,6 +29,9 @@ import java.util.regex.Matcher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.imageio.ImageIO;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  * Functions to print and convert bytes into strings.
@@ -178,7 +185,24 @@ public class Utils {
         while(i < bytes.length && bytes[i] == needle) i++;
         return i == bytes.length;
     }    
-    
+
+    public static String image2Base64String(Image image) {
+        BufferedImage bufferedImage = new BufferedImage(
+                image.getWidth(null), image.getHeight(null),
+                BufferedImage.TYPE_INT_BGR);
+        bufferedImage.createGraphics().drawImage(image, 0, 0, null);
+
+        try {
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "jpg", output);
+            byte[] bytes = output.toByteArray();
+            return DatatypeConverter.printBase64Binary(bytes);
+        } catch (IOException e) {
+            log.warn("Error writing image to byte array", e);
+        }
+        return null;
+    }
+
     /* Compares two java version strings */
     static public int compareVersions(String v1, String v2) throws RuntimeException {
 

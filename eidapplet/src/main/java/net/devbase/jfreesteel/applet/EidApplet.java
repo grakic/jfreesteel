@@ -20,6 +20,7 @@ import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
 import javax.xml.bind.DatatypeConverter;
 
+import net.devbase.jfreesteel.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,16 +83,7 @@ public class EidApplet extends Applet implements ReaderListener {
             String infoJson = info.toJSON().toString();
 
             Image image = card.readEidPhoto();
-
-            BufferedImage bufferedImage = new BufferedImage(
-                image.getWidth(null), image.getHeight(null),
-                BufferedImage.TYPE_INT_BGR);
-            bufferedImage.createGraphics().drawImage(image, 0, 0, null);
-
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
-            ImageIO.write(bufferedImage, "jpg", output);
-            byte[] bytes = output.toByteArray();
-            String photo = DatatypeConverter.printBase64Binary(bytes);
+            String photo = Utils.image2Base64String(image);
 
             window.call(insertedCallback, new Object[] {infoJson, photo});
         } catch (Exception e) {
