@@ -52,6 +52,17 @@ For more API details, you may find these slides useful (in Serbian):
 [CardTerminal]: http://docs.oracle.com/javase/7/docs/jre/api/security/smartcardio/spec/javax/smartcardio/CardTerminal.html
 
 
+WebExtension (Native Messaging)
+-------------------------------
+
+Proof-of-concept WebExtension implementation (tested in Google Chrome) is available
+in the **eidnativemessaging module**. The code is given as-is and more work is required
+to package and distribute Java host application and Google Chrome extension. Sample
+web page is provided that is using this extension to read public data from the smartcard.
+
+  * [Čitanje lične karte bez Java apleta](http://blog.goranrakic.com/2016/12/citanje-licne-karte-bez-java-apleta.html) (in Serbian)
+
+
 Applet
 ------
 
