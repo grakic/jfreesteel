@@ -50,4 +50,13 @@
           <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+  	<repository>
+  		<id>maven-repository</id>
+                <name>Temporary Staging Repository</name>
+  		<url>file://${project.build.directory}/repo</url>
+  	</repository>
+    </distributionManagement>
+
 </project>

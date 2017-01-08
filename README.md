@@ -52,6 +52,28 @@ For more API details, you may find these slides useful (in Serbian):
 [CardTerminal]: http://docs.oracle.com/javase/7/docs/jre/api/security/smartcardio/spec/javax/smartcardio/CardTerminal.html
 
 
+### Maven Repository
+
+    <repositories>
+        <repository>
+            <id>jfreesteel-repository</id>
+            <name>JFreesteel Maven Repository</name>
+            <url>http://jfreesteel.devbase.net/maven/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>net.devbase.jfreesteel</groupId>
+            <artifactId>jfreesteel</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+
+
 WebExtension (Native Messaging)
 -------------------------------
 

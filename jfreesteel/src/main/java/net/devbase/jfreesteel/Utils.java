@@ -106,8 +106,10 @@ public class Utils {
      * Example:
      *
      * <pre>
+     * {@code
      * 42 = Hello World ()
-     * <pre>
+     * }
+     * </pre>
      *
      * @param <T> a comparable key type (comparable for sorting)
      * @param map the map to format
