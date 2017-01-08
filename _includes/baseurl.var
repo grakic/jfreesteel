@@ -8,4 +8,7 @@
         {% assign baseurl = baseurl | append:"../" %}
     {% endfor %}
 {% endif %}
+
+{% assign baseurl = "/" %}
+
 {% endcapture %}
