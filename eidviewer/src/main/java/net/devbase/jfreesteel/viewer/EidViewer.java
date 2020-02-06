@@ -171,9 +171,9 @@ public class EidViewer extends JPanel implements ReaderListener {
         List<Image> icons = new ArrayList<Image>();
         for (String iconFile : ICON_FILES) {
             try {
-                icons.add(ImageIO.read(frame.getClass().getResource(
+                icons.add(ImageIO.read(EidViewer.class.getResource(
                     "/net/devbase/jfreesteel/viewer/" + iconFile)));
-            } catch (IOException e) {
+            } catch (IOException | IllegalArgumentException e) {
                 logger.error("Could not find icon file "+iconFile, e);
             }
         }
