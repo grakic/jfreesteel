@@ -4,7 +4,7 @@ before_install:
 install:
   - sudo apt-get install -y nsis libc6:i386
   - plugin_jar=`find /usr -type f -name plugin.jar | head -1`
-  - pushd .. && mvn install:install-file -DgroupId=local-java -DartifactId=local-java-plugin -Dversion=0.0.0 -Dpackaging=jar -Dfile=$plugin_jar && popd
+  - pushd .. && mvn -T 1C install:install-file -DgroupId=local-java -DartifactId=local-java-plugin -Dversion=0.0.0 -Dpackaging=jar -Dfile=$plugin_jar && popd
 before_script:
   - cd eidapplet
   - keytool -genkey -alias signFiles -keystore signing.jks -keypass changeme -dname "cn=TravisCI" -storepass changeme
