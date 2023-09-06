@@ -34,9 +34,16 @@ public class EidCardSmartCafeExpert7 extends EidCard {
         (byte) 0x47, (byte) 0x43, (byte) 0x4E, (byte) 0x33, (byte) 0x5E
     };
 
+	public static final byte[] CARD_ATR2 = {
+		(byte) 0x3B, (byte) 0x9E, (byte) 0x96, (byte) 0x80, (byte) 0x31, (byte) 0xFE, (byte) 0x45,
+		(byte) 0x53, (byte) 0x43, (byte) 0x45, (byte) 0x20, (byte) 0x38, (byte) 0x2E, (byte) 0x30,
+		(byte) 0x2D, (byte) 0x43, (byte) 0x31, (byte) 0x56, (byte) 0x30, (byte) 0x0D, (byte) 0x0A,
+		(byte) 0x6F
+	};
+
     /** Factory "selection" method */
     protected static boolean isKnownAtr(byte[] atrBytes) {
-        return Arrays.equals(atrBytes, CARD_ATR);
+        return Arrays.equals(atrBytes, CARD_ATR) || Arrays.equals(atrBytes, CARD_ATR2);
     }
 
     static final byte[] LICNA_KARTA_AID = {
