@@ -1,11 +1,22 @@
+> ⚠️ **Looking for a ready-to-use application?**
+>
+> This repository provides a developer-oriented Java library for integrating Serbian smart-card support.
+>
+> End users looking for a standalone desktop application should use **[Baš Čelik](https://github.com/ubavic/bas-celik)** instead.
+>
+> Baš Čelik supports:
+> - Serbian electronic ID cards (eID)
+> - Health insurance cards
+> - Vehicle registration cards
+> - SmartBox emulation for ePorezi (when used with the [srb-id-pkcs11](https://github.com/ubavic/srb-id-pkcs11) PKCS#11 module)
+
+
 JFreesteel
 ==========
 
 JFreesteel is a reusable open-source Java library for reading public data from
 the Serbian eID card. It is built on top of javax.smartcardio and released under
 the GNU LGPLv3 license.
-
-[![Build Status](https://travis-ci.org/grakic/jfreesteel.svg?branch=master)](https://travis-ci.org/grakic/jfreesteel)
 
 Using this library your Java desktop applications and general web applications
 running in a browser (via "invisible" Java applet) can access the smartcard
@@ -109,8 +120,7 @@ Resources
 ---------
 
   * Get the source code from the Git repository at 
-    [Github](https://github.com/grakic/jfreesteel) (prefered) or 
-    [Gitorious](https://gitorious.org/freesteel)
+    [Github](https://github.com/grakic/jfreesteel)
 
   * Check out the library [web page](http://jfreesteel.devbase.net) (in Serbian)
 
