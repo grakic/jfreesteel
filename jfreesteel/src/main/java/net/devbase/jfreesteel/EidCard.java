@@ -92,6 +92,9 @@ public abstract class EidCard {
         if(EidCardGemalto.isKnownAtr(atrBytes))
             return new EidCardGemalto(card);
 
+        if(EidCardSmartCafeExpert7.isKnownAtr(atrBytes))
+            return new EidCardSmartCafeExpert7(card);
+        
         throw new IllegalArgumentException(
                 String.format("EidCard: Card is not recognized as Serbian eID. Card ATR: %s",
                         Utils.bytes2HexString(atrBytes)));
@@ -247,6 +250,7 @@ public abstract class EidCard {
         put(1575, Tag.FLOOR);
         put(1578, Tag.APPARTMENT_NUMBER);
         put(1580, Tag.ADDRESS_DATE); // = default 01010001
+        put(1581, Tag.PERMANENT_RESIDENCE);
         // AddressLabel ?
     }};
 

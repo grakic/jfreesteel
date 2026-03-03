@@ -93,7 +93,8 @@ public class EidInfo {
         /** The appartment number of the person residence */
         APPARTMENT_NUMBER(409, "appartment_number", "Appartment number"),
         /** Address update date */
-        ADDRESS_DATE(410, "address_date", "Address date");
+        ADDRESS_DATE(410, "address_date", "Address date"),
+        PERMANENT_RESIDENCE(411, "prebivalište", "Permanent residence");
 
         private final int code;
         private final String key;
@@ -368,8 +369,11 @@ public class EidInfo {
         if (value == null || value.equals("01010001"))
             return null;
         return formatDate(get(Tag.APPARTMENT_NUMBER));
+    }    
+    public String getPeremanentResidence() {
+        return get(Tag.PERMANENT_RESIDENCE);
     }
-
+    
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
